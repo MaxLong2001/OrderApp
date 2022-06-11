@@ -98,42 +98,85 @@ public class Database {
      * @param order 订单
      * @throws SQLException 数据库查询错误
      */
-    //TODO: 添加或修改订单
     public static void insertOrder(Order order) throws SQLException {
         String customerName = order.getNameOfCustomer();
         String OwnerName = order.getNameOfOwner();
         double totalPrice = order.getPrice();
+        boolean completed = order.isCompleted();
         HashMap<String, Integer> dishes = order.getDishes();
-        String sqlFindCustomerId = "SELECT id FROM customer WHERE name = '" + customerName + "'";
-        String sqlFindOwnerId = "SELECT id FROM owner WHERE name = '" + OwnerName + "'";
-        stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery(sqlFindCustomerId);
-        int customerId = 0;
-        while (rs.next()) {
-            customerId = rs.getInt("id");
-        }
-        rs.close();
-        rs = stmt.executeQuery(sqlFindOwnerId);
-        int ownerId = 0;
-        while (rs.next()) {
-            ownerId = rs.getInt("id");
-        }
-        rs.close();
-        String sqlInsertOrders = "INSERT INTO orders (customer_id, owner_id, total) VALUES ('" + customerId + "', '" + ownerId + "', " + totalPrice + ")";
-        stmt.executeUpdate(sqlInsertOrders);
 
-        for (Map.Entry<String, Integer> stringIntegerEntry : dishes.entrySet()) {
-            String dishName = (String) ((Map.Entry<?, ?>) stringIntegerEntry).getKey();
-            int dishCount = (int) ((Map.Entry<?, ?>) stringIntegerEntry).getValue();
-            String sqlFindDishId = "SELECT id FROM dish WHERE name = '" + dishName + "'";
-            rs = stmt.executeQuery(sqlFindDishId);
-            int dishId = 0;
+        String sqlFindThisOrder = "SELECT id FROM orders WHERE customer_id IN (SELECT id FROM customer WHERE name = '" + customerName + "' AND completed = false ORDER BY id DESC LIMIT 1)";
+        stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sqlFindThisOrder);
+
+        if (rs.next()) {
+            int orderId = rs.getInt("id");
+
+            String sqlUpdateTotal = "UPDATE orders SET total = " + totalPrice + " WHERE id = " + orderId;
+            stmt.executeUpdate(sqlUpdateTotal);
+
+            String sqlUpdateCompleted = "UPDATE orders SET completed = " + completed + " WHERE id = " + orderId;
+            stmt.executeUpdate(sqlUpdateCompleted);
+
+            String deleteOrderDish = "DELETE FROM order_dish WHERE orders_id = " + orderId;
+            stmt.executeUpdate(deleteOrderDish);
+
+            for (Map.Entry<String, Integer> entry : dishes.entrySet()) {
+                String dishName = entry.getKey();
+                int dishAmount = entry.getValue();
+
+                String sqlFindDishId = "SELECT id FROM dish WHERE name = '" + dishName + "'";
+                ResultSet rs2 = stmt.executeQuery(sqlFindDishId);
+                int dishId = 0;
+                while (rs2.next()) {
+                    dishId = rs2.getInt("id");
+                }
+                rs2.close();
+
+                String sqlInsertDish = "INSERT INTO order_dish (orders_id, dish_id, amount) VALUES (" + orderId + ", " + dishId + ", " + dishAmount + ")";
+                stmt.executeUpdate(sqlInsertDish);
+            }
+            stmt.close();
+            rs.close();
+        } else {
+            String sqlFindCustomerId = "SELECT id FROM customer WHERE name = '" + customerName + "'";
+            String sqlFindOwnerId = "SELECT id FROM owner WHERE name = '" + OwnerName + "'";
+            stmt = conn.createStatement();
+
+            rs = stmt.executeQuery(sqlFindCustomerId);
+            int customerId = 0;
             while (rs.next()) {
-                dishId = rs.getInt("id");
+                customerId = rs.getInt("id");
             }
             rs.close();
-            String sqlInsertOrderDishes = "INSERT INTO order_dish (orders_id, dish_id, amount) VALUES ((SELECT id FROM orders WHERE customer_id = '" + customerId + "' ORDER BY id DESC LIMIT 1), '" + dishId + "', " + dishCount + ")";
-            stmt.executeUpdate(sqlInsertOrderDishes);
+
+            rs = stmt.executeQuery(sqlFindOwnerId);
+            int ownerId = 0;
+            while (rs.next()) {
+                ownerId = rs.getInt("id");
+            }
+            rs.close();
+
+            String sqlInsertOrders = "INSERT INTO orders (customer_id, owner_id, total, completed) VALUES ('" + customerId + "', '" + ownerId + "', '" + totalPrice + "', " + completed + ")";
+            stmt.executeUpdate(sqlInsertOrders);
+
+            for (Map.Entry<String, Integer> entry : dishes.entrySet()) {
+                String dishName = entry.getKey();
+                int dishAmount = entry.getValue();
+
+                String sqlFindDishId = "SELECT id FROM dish WHERE name = '" + dishName + "'";
+                rs = stmt.executeQuery(sqlFindDishId);
+                int dishId = 0;
+                while (rs.next()) {
+                    dishId = rs.getInt("id");
+                }
+                rs.close();
+
+                String sqlInsertOrderDishes = "INSERT INTO order_dish (orders_id, dish_id, amount) VALUES ((SELECT id FROM orders WHERE customer_id = '" + customerId + "' ORDER BY id DESC LIMIT 1), '" + dishId + "', '" + dishAmount + "')";
+                stmt.executeUpdate(sqlInsertOrderDishes);
+            }
+            stmt.close();
+            rs.close();
         }
     }
 

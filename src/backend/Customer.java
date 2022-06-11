@@ -1,6 +1,5 @@
 package backend;
 
-import javax.swing.*;
 import java.util.ArrayList;
 
 /**
@@ -46,6 +45,12 @@ public class Customer {
      * 为了保证属性的安全性，我将变量设为了私有。
      */
     private Dish dish;
+
+    /**
+     * 这个属性是用户在浏览商家过程中生成的临时订单。
+     * 为了保证属性的安全性，我将变量设为了私有。
+     */
+    private Customer tmp_order;
 
     /**
      * 这个初始化方法可以初始化顾客的基本属性。
@@ -97,7 +102,7 @@ public class Customer {
      * 注：此方法应在图形化界面中用户点击商家时使用。
      */
     public void SetOwner(Owner arg_owner){
-        this.owner = arg_owner;
+        owner = arg_owner;
     }
 
     /**
@@ -105,7 +110,7 @@ public class Customer {
      * 注：此方法应该在图形化界面中用户退出商家时使用。
      */
     public void ResetOwner(){
-        this.owner = null;
+        owner = null;
     }
 
     /**
@@ -114,14 +119,14 @@ public class Customer {
      * 注：此方法应该在顾客点击菜品之后使用。
      */
     public void SetDish(Dish arg_dish){
-        this.dish = arg_dish;
+        dish = arg_dish;
     }
 
     /**
      * 这个方法是用户未使用菜品方法，将用户当前菜品属性设置为null。
      */
     public void ResetDish(){
-        this.dish = null;
+        dish = null;
     }
 
     /**

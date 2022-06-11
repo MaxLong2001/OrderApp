@@ -26,13 +26,13 @@ public class Customer {
      * 通过初始化订单，可以获取到数据。
      * 特别注意的是，这个订单应该是顾客已完成的订单列表。我们采取横线式进行处理。
      */
-    private ArrayList<Customer> orders_finished;
+    private ArrayList<Order> orders_finished;
 
     /**
      * 有已完成的订单，那么这个属性返回的是未完成的订单。
      * 处于安全性考虑，我将变量设为了私有。
      */
-    private ArrayList<Customer> orders_unfinished;
+    private ArrayList<Order> orders_unfinished;
 
     /**
      * 这个属性是用户专属商家的变量，通过这一变量的使用，用户可以确定自己正在浏览哪一家餐厅。
@@ -82,7 +82,7 @@ public class Customer {
      * 另外，此函数应该不需要传参。
      * 注：这个方法应在图形化查看已完成订单时使用。
      */
-    public ArrayList ShowFinished(){
+    public ArrayList<Order> ShowFinished(){
         return this.orders_finished;
     }
 
@@ -92,7 +92,7 @@ public class Customer {
      * 注：这个方法应该在图形化查看未完成订单时使用。
      */
 
-    public ArrayList ShowUnFinished(){
+    public ArrayList<Order> ShowUnFinished(){
         return this.orders_unfinished;
     }
 
@@ -135,7 +135,7 @@ public class Customer {
      * 往后，只要顾客发生点击事件，
      * 那么应该向临时订单中实时生成菜品。
      */
-    public void CreateOrder(){
+    public void AddOrder(){
 
     }
 
@@ -143,8 +143,8 @@ public class Customer {
      * 未完成订单查询方法：如果用户点击商家开始点餐，
      * 如果用户在此商家尚有未完成订单，那么返回未完成订单对象。
      */
-    public void ReturnUnFinished(){
-
+    public Order ReturnUnFinished(){
+        return null;
     }
 
     /**

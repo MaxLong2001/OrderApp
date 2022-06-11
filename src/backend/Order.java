@@ -1,14 +1,14 @@
 package backend;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Order {
-    public HashMap<String,Integer> dishes;
+    public HashMap<String, Integer> dishes;
     public String nameOfCustomer;
     public String nameOfOwner;
     public double price;
-    public boolean status;
+    public boolean completed;
+    public boolean cooked;
 
     /**
      * 这个方法用于返回菜品列表和对应的数量
@@ -70,14 +70,28 @@ public class Order {
     /**
      * 这个方法用来查看订单是否完成
      */
-    public boolean isStatus() {
-        return status;
+    public boolean isCompleted() {
+        return completed;
     }
 
     /**
      * 这个方法用来改变订单是否完成的状态
      */
-    public void setStatus(boolean status) {
-        this.status = status;
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
+
+    /**
+     * 这个方法用来查看订单是否烹饪完成
+     */
+    public boolean isCooked() {
+        return cooked;
+    }
+
+    /**
+     * 这个方法用来改变订单是否烹饪完成的状态
+     */
+    public void setCooked(boolean cooked) {
+        this.cooked = cooked;
     }
 }

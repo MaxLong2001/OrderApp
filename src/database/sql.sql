@@ -32,8 +32,10 @@ create table orders
     id          int primary key auto_increment,
     customer_id int not null,
     owner_id    int not null,
-    total       double  default 0.0,
-    finished    boolean default false,
+    total       double   default 0.0,
+    order_time  datetime default now(),
+    completed   boolean  default false,
+    cooked      boolean  default false,
     foreign key (owner_id) references owner (id) on delete cascade,
     foreign key (customer_id) references customer (id) on delete cascade
 );
@@ -42,7 +44,7 @@ create table order_dish
 (
     orders_id int,
     dish_id   int,
-    count     int,
+    amount    int,
     foreign key (orders_id) references orders (id) on delete cascade,
     foreign key (dish_id) references dish (id) on delete cascade
 );

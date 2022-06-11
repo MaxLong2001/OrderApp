@@ -9,6 +9,5 @@ public class Main {
         new Frontend();
 
         Database.init();
-        Database.test_select();
     }
 }

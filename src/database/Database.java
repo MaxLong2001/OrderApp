@@ -8,10 +8,10 @@ import java.util.List;
 
 public class Database {
     /**
-     * ±¾µØÊı¾İ¿âÁ¬½ÓĞÅÏ¢
-     * ¸ù¾İ±¾µØÇé¿öĞŞ¸Ä
+     * æœ¬åœ°æ•°æ®åº“è¿æ¥ä¿¡æ¯
+     * æ ¹æ®æœ¬åœ°æƒ…å†µä¿®æ”¹
      * <p>
-     * »ò¿É¿¼ÂÇÔÚ·şÎñÆ÷ÉÏ´î½¨Êı¾İ¿â
+     * æˆ–å¯è€ƒè™‘åœ¨æœåŠ¡å™¨ä¸Šæ­å»ºæ•°æ®åº“
      */
     static final String URL = "jdbc:mysql://rm-bp10c5dfstb3h6q96mo.mysql.rds.aliyuncs.com/order_app";
     static final String USER = "user";
@@ -28,132 +28,132 @@ public class Database {
     }
 
     /**
-     * ¸ù¾İÓÃ»§Ãû²éÑ¯Ç®°üÓà¶î
+     * æ ¹æ®ç”¨æˆ·åæŸ¥è¯¢é’±åŒ…ä½™é¢
      *
-     * @param userName ÓÃ»§Ãû
-     * @return Ç®°üÓà¶î
-     * @throws SQLException Êı¾İ¿â²éÑ¯´íÎó
+     * @param userName ç”¨æˆ·å
+     * @return é’±åŒ…ä½™é¢
+     * @throws SQLException æ•°æ®åº“æŸ¥è¯¢é”™è¯¯
      */
     public static double getWallet(String userName) throws SQLException {
         return 0;
     }
 
     /**
-     * ²éÑ¯ÓÃ»§¶©µ¥ÁĞ±í
+     * æŸ¥è¯¢ç”¨æˆ·è®¢å•åˆ—è¡¨
      *
-     * @param userName ÓÃ»§Ãû
-     * @return ¶©µ¥ÁĞ±í
-     * @throws SQLException Êı¾İ¿â²éÑ¯´íÎó
+     * @param userName ç”¨æˆ·å
+     * @return è®¢å•åˆ—è¡¨
+     * @throws SQLException æ•°æ®åº“æŸ¥è¯¢é”™è¯¯
      */
     public static List<Order> getUserOrderList(String userName) throws SQLException {
         return null;
     }
 
     /**
-     * Ìí¼Ó»òĞŞ¸Ä¶©µ¥
+     * æ·»åŠ æˆ–ä¿®æ”¹è®¢å•
      *
-     * @param order ¶©µ¥
-     * @throws SQLException Êı¾İ¿â²éÑ¯´íÎó
+     * @param order è®¢å•
+     * @throws SQLException æ•°æ®åº“æŸ¥è¯¢é”™è¯¯
      */
     public static void addOrder(Order order) throws SQLException {
 
     }
 
     /**
-     * É¾³ı¶©µ¥
+     * åˆ é™¤è®¢å•
      *
-     * @param order ¶©µ¥
-     * @throws SQLException Êı¾İ¿â²éÑ¯´íÎó
+     * @param order è®¢å•
+     * @throws SQLException æ•°æ®åº“æŸ¥è¯¢é”™è¯¯
      */
     public static void deleteOrder(Order order) throws SQLException {
 
     }
 
     /**
-     * ¸üĞÂÇ®°üÓà¶î
+     * æ›´æ–°é’±åŒ…ä½™é¢
      *
-     * @param userName ÓÃ»§Ãû
-     * @param amount   ½ğ¶î
-     * @throws SQLException Êı¾İ¿â²éÑ¯´íÎó
+     * @param userName ç”¨æˆ·å
+     * @param amount   é‡‘é¢
+     * @throws SQLException æ•°æ®åº“æŸ¥è¯¢é”™è¯¯
      */
     public static void updateWallet(String userName, double amount) throws SQLException {
 
     }
 
     /**
-     * ¸üĞÂÉÌ¼ÒÆÀ·Ö
+     * æ›´æ–°å•†å®¶è¯„åˆ†
      *
-     * @param userName  ÓÃ»§Ãû
-     * @param ownerName ÉÌ¼ÒÃû
-     * @param rating    ÆÀ·Ö
-     * @param comment   ÆÀÂÛ
-     * @throws SQLException Êı¾İ¿â²éÑ¯´íÎó
+     * @param userName  ç”¨æˆ·å
+     * @param ownerName å•†å®¶å
+     * @param rating    è¯„åˆ†
+     * @param comment   è¯„è®º
+     * @throws SQLException æ•°æ®åº“æŸ¥è¯¢é”™è¯¯
      */
     public static void updateOwnerRating(String userName, String ownerName, double rating, String comment) throws SQLException {
 
     }
 
     /**
-     * ¸üĞÂÉÌ¼ÒÆÀ·Ö
+     * æ›´æ–°å•†å®¶è¯„åˆ†
      *
-     * @param ownerName ÉÌ¼ÒÃû
-     * @return ÉÌ¼ÒÆÀ·Ö
-     * @throws SQLException Êı¾İ¿â²éÑ¯´íÎó
+     * @param ownerName å•†å®¶å
+     * @return å•†å®¶è¯„åˆ†
+     * @throws SQLException æ•°æ®åº“æŸ¥è¯¢é”™è¯¯
      */
     public static double getOwnerRating(String ownerName) throws SQLException {
         return 0;
     }
 
     /**
-     * »ñÈ¡²ËÆ·ÁĞ±í
+     * è·å–èœå“åˆ—è¡¨
      *
-     * @param ownerName ÉÌ¼ÒÃû
-     * @return ²ËÆ·ÁĞ±í
-     * @throws SQLException Êı¾İ¿â²éÑ¯´íÎó
+     * @param ownerName å•†å®¶å
+     * @return èœå“åˆ—è¡¨
+     * @throws SQLException æ•°æ®åº“æŸ¥è¯¢é”™è¯¯
      */
     public static List<Dish> getDishList(String ownerName) throws SQLException {
         return null;
     }
 
     /**
-     * »ñÈ¡¶©µ¥ÁĞ±í
+     * è·å–è®¢å•åˆ—è¡¨
      *
-     * @param ownerName ÉÌ¼ÒÃû
-     * @return ¶©µ¥ÁĞ±í
-     * @throws SQLException Êı¾İ¿â²éÑ¯´íÎó
+     * @param ownerName å•†å®¶å
+     * @return è®¢å•åˆ—è¡¨
+     * @throws SQLException æ•°æ®åº“æŸ¥è¯¢é”™è¯¯
      */
     public static List<Order> getOwnerOrderList(String ownerName) throws SQLException {
         return null;
     }
 
     /**
-     * ÉÌ¼ÒÌí¼Ó²ËÆ·
+     * å•†å®¶æ·»åŠ èœå“
      *
-     * @param ownerName ÉÌ¼ÒÃû
-     * @param dish      ²ËÆ·
-     * @throws SQLException Êı¾İ¿â²éÑ¯´íÎó
+     * @param ownerName å•†å®¶å
+     * @param dish      èœå“
+     * @throws SQLException æ•°æ®åº“æŸ¥è¯¢é”™è¯¯
      */
     public static void addDish(String ownerName, Dish dish) throws SQLException {
 
     }
 
     /**
-     * ÉÌ¼ÒĞŞ¸Ä²ËÆ·
+     * å•†å®¶ä¿®æ”¹èœå“
      *
-     * @param ownerName ÉÌ¼ÒÃû
-     * @param dish      ²ËÆ·
-     * @throws SQLException Êı¾İ¿â²éÑ¯´íÎó
+     * @param ownerName å•†å®¶å
+     * @param dish      èœå“
+     * @throws SQLException æ•°æ®åº“æŸ¥è¯¢é”™è¯¯
      */
     public static void changeDish(String ownerName, Dish dish) throws SQLException {
 
     }
 
     /**
-     * ÉÌ¼ÒÉ¾³ı²ËÆ·
+     * å•†å®¶åˆ é™¤èœå“
      *
-     * @param ownerName ÉÌ¼ÒÃû
-     * @param dish      ²ËÆ·
-     * @throws SQLException Êı¾İ¿â²éÑ¯´íÎó
+     * @param ownerName å•†å®¶å
+     * @param dish      èœå“
+     * @throws SQLException æ•°æ®åº“æŸ¥è¯¢é”™è¯¯
      */
     public static void deleteDish(String ownerName, Dish dish) throws SQLException {
 

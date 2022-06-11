@@ -103,6 +103,7 @@ public class Database {
         String OwnerName = order.getNameOfOwner();
         double totalPrice = order.getPrice();
         boolean completed = order.isCompleted();
+        Date orderTime = order.getOrderTime();
         HashMap<String, Integer> dishes = order.getDishes();
 
         String sqlFindThisOrder = "SELECT id FROM orders WHERE customer_id IN (SELECT id FROM customer WHERE name = '" + customerName + "' AND completed = false ORDER BY id DESC LIMIT 1)";
@@ -117,6 +118,9 @@ public class Database {
 
             String sqlUpdateCompleted = "UPDATE orders SET completed = " + completed + " WHERE id = " + orderId;
             stmt.executeUpdate(sqlUpdateCompleted);
+
+            String sqlUpdateDate = "UPDATE orders SET order_time = '" + orderTime + "' WHERE id = " + orderId;
+            stmt.executeUpdate(sqlUpdateDate);
 
             String deleteOrderDish = "DELETE FROM order_dish WHERE orders_id = " + orderId;
             stmt.executeUpdate(deleteOrderDish);
@@ -155,7 +159,7 @@ public class Database {
             }
             rs.close();
 
-            String sqlInsertOrders = "INSERT INTO orders (customer_id, owner_id, total, completed) VALUES ('" + customerId + "', '" + ownerId + "', '" + totalPrice + "', " + completed + ")";
+            String sqlInsertOrders = "INSERT INTO orders (customer_id, owner_id, total, completed, order_time) VALUES (" + customerId + ", " + ownerId + ", " + totalPrice + ", " + completed + ", '" + orderTime + "')";
             stmt.executeUpdate(sqlInsertOrders);
 
             for (Map.Entry<String, Integer> entry : dishes.entrySet()) {

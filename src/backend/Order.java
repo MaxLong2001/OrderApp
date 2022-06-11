@@ -1,5 +1,6 @@
 package backend;
 
+import java.sql.Date;
 import java.util.HashMap;
 
 public class Order {
@@ -9,6 +10,8 @@ public class Order {
     public double price;
     public boolean completed;
     public boolean cooked;
+
+    public Date orderTime;
 
     /**
      * 这个方法用于返回菜品列表和对应的数量
@@ -93,5 +96,19 @@ public class Order {
      */
     public void setCooked(boolean cooked) {
         this.cooked = cooked;
+    }
+
+    /**
+     * 这个方法用来返回订单的时间
+     */
+    public Date getOrderTime() {
+        return orderTime;
+    }
+
+    /**
+     * 这个方法用来设置订单的时间
+     */
+    public void setOrderTime(Date orderTime) {
+        this.orderTime = orderTime;
     }
 }

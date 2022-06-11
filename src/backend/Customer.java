@@ -97,7 +97,7 @@ public class Customer {
      * 注：此方法应在图形化界面中用户点击商家时使用。
      */
     public void SetOwner(Owner arg_owner){
-        this.owner = arg_owner;
+        owner = arg_owner;
     }
 
     /**
@@ -105,7 +105,7 @@ public class Customer {
      * 注：此方法应该在图形化界面中用户退出商家时使用。
      */
     public void ResetOwner(){
-        this.owner = null;
+        owner = null;
     }
 
     /**
@@ -114,14 +114,14 @@ public class Customer {
      * 注：此方法应该在顾客点击菜品之后使用。
      */
     public void SetDish(Dish arg_dish){
-        this.dish = arg_dish;
+        dish = arg_dish;
     }
 
     /**
      * 这个方法是用户未使用菜品方法，将用户当前菜品属性设置为null。
      */
     public void ResetDish(){
-        this.dish = null;
+        dish = null;
     }
 
     /**

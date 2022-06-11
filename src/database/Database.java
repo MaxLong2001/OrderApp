@@ -136,8 +136,6 @@ public class Database {
                 String sqlInsertDish = "INSERT INTO order_dish (orders_id, dish_id, amount) VALUES (" + orderId + ", " + dishId + ", " + dishAmount + ")";
                 stmt.executeUpdate(sqlInsertDish);
             }
-            stmt.close();
-            rs.close();
         } else {
             String sqlFindCustomerId = "SELECT id FROM customer WHERE name = '" + customerName + "'";
             String sqlFindOwnerId = "SELECT id FROM owner WHERE name = '" + OwnerName + "'";
@@ -175,9 +173,9 @@ public class Database {
                 String sqlInsertOrderDishes = "INSERT INTO order_dish (orders_id, dish_id, amount) VALUES ((SELECT id FROM orders WHERE customer_id = '" + customerId + "' ORDER BY id DESC LIMIT 1), '" + dishId + "', '" + dishAmount + "')";
                 stmt.executeUpdate(sqlInsertOrderDishes);
             }
-            stmt.close();
-            rs.close();
         }
+        stmt.close();
+        rs.close();
     }
 
 

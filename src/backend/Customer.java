@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.util.*;
 
+import backend.AppException.AppException;
 import backend.CustomerException.Comment.UnQualified;
 import backend.CustomerException.Order.AmountIllegal;
 import backend.CustomerException.Order.DishUndefined;
@@ -64,15 +65,30 @@ public class Customer {
     private Order tmp_order;
 
     /**
+     * 这个类方法是注册专属的，
+     * 用来专门向数据库中加入对应用户的数据信息。
+     * @param name 注册用户的名字
+     * @throws AppException 注册失败异常
+     */
+    public static void Register(String name) throws AppException{
+        // 首先尝试将用户插入用户表中。
+        try{
+            Database.insertCustomer(name);
+        }catch (SQLException e){
+            throw new AppException("注册失败！！");
+        }
+    }
+
+    /**
      * 这个初始化方法可以初始化顾客的基本属性。
      * 这个方法中传入的参数来自登录注册界面中的用户名。
      * 通过用户名向数据库请求订单列表，方法可以自动将
      * 订单分成已完成订单和未完成订单列表。
      * 注：这个方法应该在图形化登录时使用。
      * @param name 用户名
-     * @throws SQLException 数据库异常
+     * @throws AppException 数据库异常
      */
-    public Customer(String name) throws SQLException {
+    public Customer(String name) throws AppException {
 
         // 设置临时订单列表变量用于分类
         List<Order> tmp_orders;
@@ -80,14 +96,19 @@ public class Customer {
         // 在这里将顾客的用户名设为登录注册页面传入的用户名。
         this.name = name;
 
-        // 首先尝试将用户插入用户表中。
-        Database.insertCustomer(name);
-
         // 尝试从用户订单中获取电子钱包数额
-        this.wallet = Database.getWallet(name);
+        try{
+            this.wallet = Database.getWallet(name);
+        }catch (SQLException e){
+            throw new AppException("获取电子钱包数额失败！！");
+        }
 
         // 尝试导出订单列表。
-        tmp_orders = Database.getUserOrderList(name);
+        try{
+            tmp_orders = Database.getUserOrderList(name);
+        }catch(SQLException e){
+            throw new AppException("导出订单列表失败！！");
+        }
 
         // 初始化order_finished和order_unfinished
         this.orders_finished = new ArrayList<>();
@@ -197,9 +218,9 @@ public class Customer {
      * 在顾客进入此商家第一次点击时应该生成一个新的订单，
      * 往后，只要顾客发生点击事件，
      * 那么应该向临时订单中实时生成菜品。
-     * @throws SQLException 订单保存异常
+     * @throws AppException 订单保存异常
      */
-    public void AddOrder() throws SQLException {
+    public void AddInOrder() throws AppException {
 
         // 如果当前订单尚未初始化，那么应该初始化订单
         if(this.tmp_order == null){
@@ -232,7 +253,11 @@ public class Customer {
         this.tmp_order.price += dish.price;
 
         // 实时向数据库中保存当前订单内容
-        Database.insertOrder(tmp_order);
+        try {
+            Database.insertOrder(tmp_order);
+        }catch (SQLException e){
+            throw new AppException("向数据库中保存订单内容失败！！");
+        }
     }
 
     /**
@@ -275,15 +300,19 @@ public class Customer {
      * 电子钱包充值方法，顾客可以向自己的电子钱包中充值，
      * 充值后电子钱包数据会自动更新。并将更新返回到前端。
      * @param charge_amount 充值的数额
-     * @throws SQLException 数据库异常
+     * @throws AppException 更新电子钱包失败
      */
-    public void ChargeWallet(double charge_amount) throws SQLException {
+    public void ChargeWallet(double charge_amount) throws AppException {
 
         // 更新顾客的电子钱包数额
         this.wallet += charge_amount;
 
         // 实时向数据库中更新电子钱包数据
-        Database.updateWallet(this.name, this.wallet);
+        try {
+            Database.updateWallet(this.name, this.wallet);
+        }catch (SQLException e){
+            throw new AppException("更新电子钱包失败！！");
+        }
     }
 
     /**
@@ -293,7 +322,7 @@ public class Customer {
      * 这里还需要设置一些异常来供前端显示，需要对完成的订单进行一些测试
      * 笔记：对于一个订单来说，异常的数量应该是“有限类”
      */
-    public String Swift(){
+    public String Submit(){
 
         // 设置当前商家的菜品列表
         List<Dish> tmp_dishes;
@@ -348,15 +377,19 @@ public class Customer {
 
     /**
      * 退出订单方法：如果用户在途中退出或是点击了返回按键，应当应用此方法。
-     * @throws SQLException 数据库异常
+     * @throws AppException 数据库异常
      */
-    public void QuitOrder() throws SQLException {
+    public void QuitOrder() throws AppException {
 
         // 向未完成订单列表中保存tmp_order
         this.orders_unfinished.add(tmp_order);
 
         // 向数据库中更新订单列表
-        Database.insertOrder(tmp_order);
+        try{
+            Database.insertOrder(tmp_order);
+        }catch (SQLException e){
+            throw new AppException("退出订单时向数据库保存失败！！");
+        }
     }
 
     /**
@@ -367,10 +400,10 @@ public class Customer {
      * 也可以输入评分内容。
      * @param rating 前端对商家的评分
      * @param comment 前端对商家的评分内容
-     * @throws SQLException 数据库插入异常
+     * @throws AppException 数据库插入评论异常
      * @throws backend.CustomerException.Comment.UnQualified 用户没有资格评价异常
      */
-    public void Comment(double rating, String comment) throws UnQualified, SQLException{
+    public void Comment(double rating, String comment) throws UnQualified, AppException{
 
         // 查看用户已完成订单中是否有当前商家的订单，这里需要遍历订单列表
         int i;
@@ -389,16 +422,20 @@ public class Customer {
         }
 
         // 如果用户有资格评论，将评论插入数据库
+        try{
         Database.updateOwnerRating(this.name, this.owner.name, rating, comment);
+        }catch (SQLException e){
+            throw new AppException("向数据库中插入评论失败！！");
+        }
     }
 
     /**
      * 注意：我的设想是用户点击订单之后才可能会有删除订单动作
      * 删除订单方法：顾客可以删除订单，
      * 远程数据库实时保存信息。
-     * @throws SQLException 数据库更新异常
+     * @throws AppException 删除订单异常
      */
-    public void DeleteOrder() throws SQLException{
+    public void DeleteOrder() throws AppException{
 
         // 如果已完成订单列表中存在元素
         orders_finished.remove(tmp_order);
@@ -407,6 +444,10 @@ public class Customer {
         orders_unfinished.remove(tmp_order);
 
         // 从数据库中删除对应元素
-        Database.deleteOrder(tmp_order);
+        try{
+            Database.deleteOrder(tmp_order);
+        }catch (SQLException e){
+            throw new AppException("删除订单失败！！");
+        }
     }
 }

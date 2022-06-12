@@ -430,6 +430,30 @@ public class Database {
     }
 
     /**
+     * 获取菜品详细信息
+     *
+     * @param dishName 菜品名
+     * @return 菜品详细信息
+     */
+    public static Dish getDish(String dishName) throws SQLException {
+        String sql = "SELECT * FROM dish WHERE name = '" + dishName + "'";
+        stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        Dish dish = new Dish();
+        while (rs.next()) {
+            dish.setName(rs.getString("name"));
+            dish.setPrice(rs.getDouble("price"));
+            dish.setIntroduction(rs.getString("introduction"));
+            dish.setSalesQuantity(rs.getInt("sales"));
+            dish.setRemainQuantity(rs.getInt("remain"));
+            dish.setType(rs.getString("type"));
+        }
+        rs.close();
+        stmt.close();
+        return dish;
+    }
+
+    /**
      * 商家修改菜品
      *
      * @param ownerName 商家名

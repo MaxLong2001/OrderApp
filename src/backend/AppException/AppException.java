@@ -8,6 +8,7 @@ package backend.AppException;
 
 public class AppException extends Exception{
 
+
     /**
      * 这个类需要一个通俗易懂的标识符，
      * 需要用一个私有属性来表示

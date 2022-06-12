@@ -71,14 +71,17 @@ public class Database {
      * 添加菜品
      * 根据方法传入的菜品名、菜品介绍、菜品价格、菜品分类、菜品所属商家名将其加入数据库
      *
-     * @param dishName     菜品名
-     * @param introduction 菜品介绍
-     * @param price        菜品价格
-     * @param category     菜品类别
-     * @param ownerName    菜品所属店家
+     * @param dish      菜品对象
+     * @param ownerName 商家名
      * @throws SQLException SQL异常
      */
-    public static void insertDish(String dishName, String introduction, double price, int category, String ownerName) throws SQLException {
+    public static void insertDish(Dish dish, String ownerName) throws SQLException {
+        String dishName = dish.getName();
+        String introduction = dish.getIntroduction();
+        double price = dish.getPrice();
+        int sales = dish.getSalesQuantity();
+        int remain = dish.getRemainQuantity();
+        String type = dish.getType();
         String sqlFindOwnerId = "SELECT id FROM owner WHERE name = '" + ownerName + "'";
         stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(sqlFindOwnerId);
@@ -87,7 +90,7 @@ public class Database {
             ownerId = rs.getInt("id");
         }
         rs.close();
-        String sql = "INSERT INTO dish (name, introduction, price, category, owner_id) VALUES ('" + dishName + "', '" + introduction + "', " + price + ", " + category + ", '" + ownerId + "')";
+        String sql = "INSERT INTO dish(name, introduction, price, sales, remain, type, owner_id) VALUES ('" + dishName + "', '" + introduction + "', " + price + ", " + sales + ", " + remain + ", '" + type + "', " + ownerId + ")";
         stmt.executeUpdate(sql);
         stmt.close();
     }
@@ -204,6 +207,20 @@ public class Database {
     }
 
     /**
+     * 更新钱包余额
+     *
+     * @param userName 用户名
+     * @param amount   金额
+     * @throws SQLException 数据库查询错误
+     */
+    public static void updateWallet(String userName, double amount) throws SQLException {
+        String sql = "UPDATE customer SET wallet = " + amount + " WHERE name = '" + userName + "'";
+        stmt = conn.createStatement();
+        stmt.executeUpdate(sql);
+        stmt.close();
+    }
+
+    /**
      * 查询用户订单列表
      *
      * @param userName 用户名
@@ -217,13 +234,20 @@ public class Database {
         List<Order> orderList = new ArrayList<>();
         while (rs.next()) {
             Order order = new Order();
+
             order.setNameOfCustomer(userName);
+
             String sqlFindOwnerName = "SELECT name FROM owner WHERE id = '" + rs.getInt("owner_id") + "'";
             ResultSet rsFindOwnerName = stmt.executeQuery(sqlFindOwnerName);
             while (rsFindOwnerName.next()) {
                 order.setNameOfOwner(rsFindOwnerName.getString("name"));
             }
+
             order.setPrice(rs.getDouble("total"));
+            order.setCompleted(rs.getBoolean("completed"));
+            order.setCooked(rs.getBoolean("cooked"));
+            order.setOrderTime(rs.getDate("order_time"));
+
             String sqlFindDishList = "SELECT dish_id, amount FROM order_dish WHERE orders_id = '" + rs.getInt("id") + "'";
             ResultSet rsFindDishList = stmt.executeQuery(sqlFindDishList);
             HashMap<String, Integer> dishList = new HashMap<>();
@@ -235,7 +259,53 @@ public class Database {
                 }
             }
             order.setDishes(dishList);
+
             orderList.add(order);
+        }
+        rs.close();
+        stmt.close();
+        return orderList;
+    }
+
+    /**
+     * 获取订单列表
+     *
+     * @param ownerName 商家名
+     * @return 订单列表
+     * @throws SQLException 数据库查询错误
+     */
+    public static List<Order> getOwnerOrderList(String ownerName) throws SQLException {
+        String sql = "SELECT * FROM orders WHERE owner_id = (SELECT id FROM owner WHERE name = '" + ownerName + "')";
+        stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        List<Order> orderList = new ArrayList<>();
+        while (rs.next()) {
+            Order order = new Order();
+
+            order.setOrderTime(rs.getDate("order_time"));
+            order.setNameOfCustomer(rs.getString("customer_name"));
+            order.setNameOfOwner(rs.getString("owner_name"));
+            order.setPrice(rs.getDouble("total_price"));
+            order.setCompleted(rs.getBoolean("completed"));
+            order.setCooked(rs.getBoolean("cooked"));
+
+            String sqlFindDishList = "SELECT * FROM order_dish WHERE orders_id = '" + rs.getInt("id") + "'";
+            ResultSet rsFindDishList = stmt.executeQuery(sqlFindDishList);
+            HashMap<String, Integer> dishes = new HashMap<>();
+            while (rsFindDishList.next()) {
+                String dishId = rsFindDishList.getString("dish_id");
+                int quantity = rsFindDishList.getInt("quantity");
+                String sqlGetDishName = "SELECT name FROM dish WHERE id = '" + dishId + "'";
+                ResultSet rsGetDishName = stmt.executeQuery(sqlGetDishName);
+                String dishName = "";
+                while (rsGetDishName.next()) {
+                    dishName = rsGetDishName.getString("name");
+                }
+                rsGetDishName.close();
+                dishes.put(dishName, quantity);
+            }
+            rsFindDishList.close();
+            order.setDishes(dishes);
         }
         rs.close();
         stmt.close();
@@ -249,18 +319,10 @@ public class Database {
      * @throws SQLException 数据库查询错误
      */
     public static void deleteOrder(Order order) throws SQLException {
-
-    }
-
-    /**
-     * 更新钱包余额
-     *
-     * @param userName 用户名
-     * @param amount   金额
-     * @throws SQLException 数据库查询错误
-     */
-    public static void updateWallet(String userName, double amount) throws SQLException {
-
+        String sql = "DELETE FROM orders WHERE order_time = '" + order.getOrderTime() + "'";
+        stmt = conn.createStatement();
+        stmt.executeUpdate(sql);
+        stmt.close();
     }
 
     /**
@@ -272,9 +334,26 @@ public class Database {
      * @param comment   评论
      * @throws SQLException 数据库查询错误
      */
-    public static void updateOwnerRating(String userName, String ownerName, double rating, String comment) throws
-            SQLException {
+    public static void updateOwnerRating(String userName, String ownerName, double rating, String comment) throws SQLException {
+        String sqlAddComment = "INSERT INTO comments (customer_id, owner_id, rating, content) VALUES ((SELECT id FROM customer WHERE name = '" + userName + "'), (SELECT id FROM owner WHERE name = '" + ownerName + "'), '" + rating + "', '" + comment + "')";
+        stmt = conn.createStatement();
+        stmt.executeUpdate(sqlAddComment);
 
+        double totalRating = 0;
+        int count = 0;
+        String sqlFindRating = "SELECT rating FROM comments WHERE owner_id = (SELECT id FROM owner WHERE name = '" + ownerName + "')";
+        ResultSet rsFindRating = stmt.executeQuery(sqlFindRating);
+        while (rsFindRating.next()) {
+            totalRating += rsFindRating.getDouble("rating");
+            count++;
+        }
+        rsFindRating.close();
+
+        double averageRating = totalRating / count;
+        String sqlUpdateRating = "UPDATE owner SET rating = '" + averageRating + "' WHERE name = '" + ownerName + "'";
+        stmt.executeUpdate(sqlUpdateRating);
+
+        stmt.close();
     }
 
     /**
@@ -285,7 +364,16 @@ public class Database {
      * @throws SQLException 数据库查询错误
      */
     public static double getOwnerRating(String ownerName) throws SQLException {
-        return 0;
+        String sql = "SELECT rating FROM owner WHERE name = '" + ownerName + "'";
+        stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        double rating = 0;
+        while (rs.next()) {
+            rating = rs.getDouble("rating");
+        }
+        rs.close();
+        stmt.close();
+        return rating;
     }
 
     /**
@@ -296,29 +384,25 @@ public class Database {
      * @throws SQLException 数据库查询错误
      */
     public static List<Dish> getDishList(String ownerName) throws SQLException {
-        return null;
-    }
+        String sql = "SELECT * FROM dish WHERE owner_id = (SELECT id FROM owner WHERE name = '" + ownerName + "')";
+        stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        List<Dish> dishList = new ArrayList<>();
+        while (rs.next()) {
+            Dish dish = new Dish();
 
-    /**
-     * 获取订单列表
-     *
-     * @param ownerName 商家名
-     * @return 订单列表
-     * @throws SQLException 数据库查询错误
-     */
-    public static List<Order> getOwnerOrderList(String ownerName) throws SQLException {
-        return null;
-    }
+            dish.setName(rs.getString("name"));
+            dish.setPrice(rs.getDouble("price"));
+            dish.setIntroduction(rs.getString("introduction"));
+            dish.setSalesQuantity(rs.getInt("sales"));
+            dish.setRemainQuantity(rs.getInt("remain"));
+            dish.setType(rs.getString("type"));
 
-    /**
-     * 商家添加菜品
-     *
-     * @param ownerName 商家名
-     * @param dish      菜品
-     * @throws SQLException 数据库查询错误
-     */
-    public static void addDish(String ownerName, Dish dish) throws SQLException {
-
+            dishList.add(dish);
+        }
+        rs.close();
+        stmt.close();
+        return dishList;
     }
 
     /**
@@ -329,7 +413,10 @@ public class Database {
      * @throws SQLException 数据库查询错误
      */
     public static void changeDish(String ownerName, Dish dish) throws SQLException {
-
+        String sql = "UPDATE dish SET name = '" + dish.getName() + "', price = '" + dish.getPrice() + "', introduction = '" + dish.getIntroduction() + "', type = '" + dish.getType() + "', sales = '" + dish.getSalesQuantity() + "', remain = '" + dish.getRemainQuantity() + "' WHERE owner_id = (SELECT id FROM owner WHERE name = '" + ownerName + "') AND name = '" + dish.getName() + "'";
+        stmt = conn.createStatement();
+        stmt.executeUpdate(sql);
+        stmt.close();
     }
 
     /**
@@ -340,7 +427,10 @@ public class Database {
      * @throws SQLException 数据库查询错误
      */
     public static void deleteDish(String ownerName, Dish dish) throws SQLException {
-
+        String sql = "DELETE FROM dish WHERE owner_id = (SELECT id FROM owner WHERE name = '" + ownerName + "') AND name = '" + dish.getName() + "'";
+        stmt = conn.createStatement();
+        stmt.executeUpdate(sql);
+        stmt.close();
     }
 
     public static void test_select() throws SQLException {

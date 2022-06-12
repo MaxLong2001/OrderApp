@@ -20,8 +20,8 @@ create table dish
     introduction varchar(255) default null,
     price        double,
     sales        int          default 0,
-    remaining    int          default 0,
-    category     int,
+    remain       int          default 0,
+    type         varchar(50),
     picture      varchar(255),
     owner_id     int         not null,
     foreign key (owner_id) references owner (id)

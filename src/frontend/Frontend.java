@@ -5,15 +5,14 @@ import java.awt.*;
 
 public class Frontend extends JFrame{
     /**
-     * Ê¹ÓÃ¸Ã¹¹Ôì·½·¨Ö±½Ó¹¹ÔìÒ»¸ö¹º²ÍÏµÍ³µÄÍ¼ĞÎ»¯½çÃæ
+     * ä½¿ç”¨è¯¥æ„é€ æ–¹æ³•ç›´æ¥æ„é€ ä¸€ä¸ªè´­é¤ç³»ç»Ÿçš„å›¾å½¢åŒ–ç•Œé¢
      */
     public Frontend(){
         setSize(1024, 768);
-        setTitle("¹º²ÍÏµÍ³");
-        
+        setTitle("è´­é¤ç³»ç»Ÿ");
         Container content = getContentPane();
         content.add(new Welcome());
-//        JButton btn = new JButton("µã»÷Ö´ĞĞÒ»¸öÃüÁî");
+//        JButton btn = new JButton("ç‚¹å‡»æ‰§è¡Œä¸€ä¸ªå‘½ä»¤");
         setVisible(true);
     }
 

@@ -361,12 +361,12 @@ public class Customer {
      * 如果数据库中已有记录，那么保存相应的更改。
      * 如果用户在当前商家里没有订单，那么抛出一个评分异常。
      * 也可以输入评分内容。
-     * @param rate 前端对商家的评分
+     * @param rating 前端对商家的评分
      * @param comment 前端对商家的评分内容
      * @throws SQLException 数据库插入异常
      * @throws backend.CustomerException.Comment.UnQualified 用户没有资格评价异常
      */
-    public void Comment(int rate, String comment) throws UnQualified, SQLException{
+    public void Comment(double rating, String comment) throws UnQualified, SQLException{
 
         // 查看用户已完成订单中是否有当前商家的订单，这里需要遍历订单列表
         int i;
@@ -385,6 +385,7 @@ public class Customer {
         }
 
         // 如果用户有资格评论，将评论插入数据库
+        Database.updateOwnerRating(this.name, this.owner.name, rating, comment);
     }
 
     /**

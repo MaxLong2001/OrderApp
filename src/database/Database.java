@@ -2,6 +2,7 @@ package database;
 
 import backend.Dish;
 import backend.Order;
+import backend.Owner;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -61,7 +62,7 @@ public class Database {
      * @throws SQLException SQL异常
      */
     public static void insertOwner(String ownerName, String description) throws SQLException {
-        String sql = "INSERT INTO owner (name, description) VALUES ('" + ownerName + "', '" + description + "')";
+        String sql = "INSERT INTO owner (name, introduction) VALUES ('" + ownerName + "', '" + description + "')";
         stmt = conn.createStatement();
         stmt.executeUpdate(sql);
         stmt.close();
@@ -323,6 +324,29 @@ public class Database {
         stmt = conn.createStatement();
         stmt.executeUpdate(sql);
         stmt.close();
+    }
+
+    /**
+     * 查询所有商家
+     *
+     * @return 商家列表
+     * @throws SQLException 数据库查询错误
+     */
+    public static List<Owner> getAllOwner() throws SQLException {
+        String sql = "SELECT * FROM owner";
+        stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        List<Owner> ownerList = new ArrayList<>();
+        while (rs.next()) {
+            Owner owner = new Owner();
+            owner.setName(rs.getString("name"));
+            owner.setIntroduction(rs.getString("introduction"));
+            owner.setRating(rs.getDouble("rating"));
+            ownerList.add(owner);
+        }
+        rs.close();
+        stmt.close();
+        return ownerList;
     }
 
     /**

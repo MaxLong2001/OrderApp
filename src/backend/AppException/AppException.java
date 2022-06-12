@@ -12,7 +12,7 @@ public class AppException extends Exception{
      * 这个类需要一个通俗易懂的标识符，
      * 需要用一个私有属性来表示
      */
-    private String warning;
+    private final String warning;
 
     /**
      * 在构造方法中输入你想要的字符串，将字符串保存到私有属性中

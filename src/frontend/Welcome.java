@@ -5,9 +5,9 @@ import java.awt.*;
 
 public class Welcome extends JPanel {
     public Welcome(){
-        JLabel text = new JLabel("»¶Ó­À´µ½×ÔÖú¹º²ÍÏµÍ³");
-        JButton toLogin = new JButton("µÇÂ¼");
-        JButton toRegister = new JButton("×¢²á");
+        JLabel text = new JLabel("æ¬¢è¿æ¥åˆ°è‡ªåŠ©è´­é¤ç³»ç»Ÿ");
+        JButton toLogin = new JButton("ç™»å½•");
+        JButton toRegister = new JButton("æ³¨å†Œ");
         add(text);
         add(toLogin);
         add(toRegister);

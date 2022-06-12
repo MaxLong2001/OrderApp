@@ -197,8 +197,9 @@ public class Customer {
      * 在顾客进入此商家第一次点击时应该生成一个新的订单，
      * 往后，只要顾客发生点击事件，
      * 那么应该向临时订单中实时生成菜品。
+     * @throws SQLException 订单保存异常
      */
-    public void AddOrder(){
+    public void AddOrder() throws SQLException {
 
         // 如果当前订单尚未初始化，那么应该初始化订单
         if(this.tmp_order == null){
@@ -229,6 +230,9 @@ public class Customer {
 
         // 实时计算订单的价格
         this.tmp_order.price += dish.price;
+
+        // 实时向数据库中保存当前订单内容
+        Database.insertOrder(tmp_order);
     }
 
     /**
@@ -361,12 +365,12 @@ public class Customer {
      * 如果数据库中已有记录，那么保存相应的更改。
      * 如果用户在当前商家里没有订单，那么抛出一个评分异常。
      * 也可以输入评分内容。
-     * @param rate 前端对商家的评分
+     * @param rating 前端对商家的评分
      * @param comment 前端对商家的评分内容
      * @throws SQLException 数据库插入异常
      * @throws backend.CustomerException.Comment.UnQualified 用户没有资格评价异常
      */
-    public void Comment(int rate, String comment) throws UnQualified, SQLException{
+    public void Comment(double rating, String comment) throws UnQualified, SQLException{
 
         // 查看用户已完成订单中是否有当前商家的订单，这里需要遍历订单列表
         int i;
@@ -385,6 +389,7 @@ public class Customer {
         }
 
         // 如果用户有资格评论，将评论插入数据库
+        Database.updateOwnerRating(this.name, this.owner.name, rating, comment);
     }
 
     /**

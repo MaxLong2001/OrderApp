@@ -19,6 +19,7 @@ public class Database {
 
     /**
      * 数据库相关设置
+     * 在这里我们设置了数据库的URL、用户名、密码
      */
     static final String URL = "jdbc:mysql://rm-bp10c5dfstb3h6q96mo.mysql.rds.aliyuncs.com/order_app";
     static final String USER = "user";
@@ -28,6 +29,7 @@ public class Database {
 
     /**
      * 初始化数据库连接
+     * 设置数据库驱动程序并创建数据库连接
      *
      * @throws ClassNotFoundException 数据库驱动类不存在异常
      * @throws SQLException           数据库连接异常
@@ -42,7 +44,7 @@ public class Database {
 
     /**
      * 添加用户
-     * 根据方法传入的用户名将其加入数据库
+     * 根据传入的用户名和密码将其添加入数据库
      *
      * @param userName 用户名
      * @throws SQLException SQL异常
@@ -56,10 +58,13 @@ public class Database {
 
     /**
      * 根据用户名返回密码
+     * 根据传入的用户名在顾客表和商家表中分别查找密码
+     * 如果找到则返回密码，否则抛出异常
      *
      * @param userName 用户名
      * @return 用户对应的密码
      * @throws SQLException SQL异常
+     * @throws AppException 通用异常
      */
     public static String getPassword(String userName) throws SQLException, AppException {
         String sqlFromCustomer = "SELECT password FROM customer WHERE name = '" + userName + "'";
@@ -83,7 +88,7 @@ public class Database {
 
     /**
      * 添加商家
-     * 根据方法传入的商家名和商家描述将其加入数据库
+     * 根据传入的商家名和商家描述将其添加入数据库
      *
      * @param ownerName    商家名
      * @param introduction 商家介绍
@@ -99,7 +104,8 @@ public class Database {
 
     /**
      * 添加菜品
-     * 根据方法传入的菜品名、菜品介绍、菜品价格、菜品分类、菜品所属商家名将其加入数据库
+     * 根据传入的菜品对象和菜品所属商家名将其添加入数据库
+     * 在实现过程中，方法将根据传入的商家名自动检索其在数据库中的id，并将其作为外键与菜品表的owner_id字段关联
      *
      * @param dish      菜品对象
      * @param ownerName 商家名
@@ -127,6 +133,9 @@ public class Database {
 
     /**
      * 添加或修改订单
+     * 根据传入的订单对象和订单所属顾客名将其添加或修改入数据库
+     * 如果订单已存在，则将其修改为传入的订单对象，否则将其添加入数据库
+     * 在实现过程中，方法将根据传入的顾客名自动检索其在数据库中的id，并将其作为外键与订单表的customer_id字段关联
      *
      * @param order 订单
      * @throws SQLException 数据库查询错误
@@ -218,6 +227,7 @@ public class Database {
 
     /**
      * 根据用户名查询钱包余额
+     * 根据传入的用户名查询数据库中的钱包余额，并返回该钱包余额
      *
      * @param userName 用户名
      * @return 钱包余额
@@ -238,6 +248,7 @@ public class Database {
 
     /**
      * 更新钱包余额
+     * 根据传入的用户名将其钱包余额更新为传入的钱包余额
      *
      * @param userName 用户名
      * @param amount   金额
@@ -252,6 +263,7 @@ public class Database {
 
     /**
      * 查询用户订单列表
+     * 根据传入的顾客名查询数据库中的订单列表，并返回该订单列表
      *
      * @param userName 用户名
      * @return 订单列表
@@ -299,6 +311,7 @@ public class Database {
 
     /**
      * 获取订单列表
+     * 根据传入的商家名查询数据库中的订单列表，并返回该订单列表
      *
      * @param ownerName 商家名
      * @return 订单列表
@@ -344,6 +357,8 @@ public class Database {
 
     /**
      * 删除订单
+     * 根据传入的订单对象删除数据库中的订单
+     * 在实现过程中，将根据订单完成时间查找对应的订单记录，并删除
      *
      * @param order 订单
      * @throws SQLException 数据库查询错误
@@ -357,6 +372,7 @@ public class Database {
 
     /**
      * 查询所有商家
+     * 查询数据库中的所有商家，并返回该商家列表
      *
      * @return 商家列表
      * @throws SQLException 数据库查询错误
@@ -380,6 +396,8 @@ public class Database {
 
     /**
      * 更新商家评分
+     * 根据传入的商家名查询数据库中的商家记录，并添加传入的评分和评论
+     * 在实现过程中，将会自动计算并更新商家的评分
      *
      * @param userName  用户名
      * @param ownerName 商家名
@@ -410,7 +428,8 @@ public class Database {
     }
 
     /**
-     * 更新商家评分
+     * 查询商家评分
+     * 根据传入的商家名查询数据库中的商家记录，并返回该商家的评分
      *
      * @param ownerName 商家名
      * @return 商家评分
@@ -431,6 +450,7 @@ public class Database {
 
     /**
      * 获取菜品列表
+     * 根据传入的商家名查询数据库中的商家记录，并返回该商家的菜品列表
      *
      * @param ownerName 商家名
      * @return 菜品列表
@@ -460,9 +480,11 @@ public class Database {
 
     /**
      * 获取菜品详细信息
+     * 根据传入的菜品名查询数据库中的菜品记录，并返回该菜品的详细信息
      *
      * @param dishName 菜品名
      * @return 菜品详细信息
+     * @throws SQLException 数据库查询错误
      */
     public static Dish getDish(String dishName) throws SQLException {
         String sql = "SELECT * FROM dish WHERE name = '" + dishName + "'";
@@ -484,6 +506,7 @@ public class Database {
 
     /**
      * 商家修改菜品
+     * 根据传入的商家名和菜品对象查询数据库中的菜品记录，并修改该菜品的信息
      *
      * @param ownerName 商家名
      * @param dish      菜品
@@ -498,6 +521,7 @@ public class Database {
 
     /**
      * 商家删除菜品
+     * 根据传入的商家名和菜品对象查询数据库中的菜品记录，并删除该菜品
      *
      * @param ownerName 商家名
      * @param dish      菜品
@@ -510,6 +534,11 @@ public class Database {
         stmt.close();
     }
 
+    /**
+     * 测试用方法
+     *
+     * @throws SQLException 数据库查询错误
+     */
     public static void test_select() throws SQLException {
         stmt = conn.createStatement();
         String sql = "select id from test_table";

@@ -67,7 +67,7 @@ public class Database {
         stmt = conn.createStatement();
         ResultSet rsFromCustomer = stmt.executeQuery(sqlFromCustomer);
         ResultSet rsFromOwner = stmt.executeQuery(sqlFromOwner);
-        String password = null;
+        String password;
         if (rsFromCustomer.next()) {
             password = rsFromCustomer.getString("password");
         } else if (rsFromOwner.next()) {

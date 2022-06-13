@@ -1,11 +1,12 @@
 package frontend;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.EventObject;
 
-public class Welcome extends JPanel {
+public class Welcome extends MyPanel {
+
 
     public Welcome(){
         JLabel text = new JLabel("欢迎来到自助购餐系统");
@@ -14,15 +15,19 @@ public class Welcome extends JPanel {
         add(text);
         add(toLogin);
         add(toRegister);
-        toLogin.addActionListener(new btnActionListener());
+        toLogin.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispatchMyEvent(new ToLogin());
+            }
+        });
+        toRegister.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispatchMyEvent(new ToRegister());
+            }
+        });
     }
-    class btnActionListener implements ActionListener
-    {
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-            System.out.println("你点击了一个按钮用来测试！");
-
-        }
-    }
+    public class ToLogin extends MyEvent {}
+    public class ToRegister extends MyEvent {}
 }

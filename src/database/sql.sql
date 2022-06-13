@@ -1,15 +1,17 @@
 create table customer
 (
-    id     int primary key auto_increment,
-    name   varchar(20) not null unique,
-    wallet double default 0.0
+    id       int primary key auto_increment,
+    name     varchar(20) not null unique,
+    password varchar(20) not null,
+    wallet   double default 0.0
 );
 
 create table owner
 (
     id          int primary key auto_increment,
     name        varchar(20) not null unique,
-    description varchar(255) default null,
+    introduction varchar(255) default null,
+    password    varchar(20) not null,
     rating      double       default 5.0
 );
 

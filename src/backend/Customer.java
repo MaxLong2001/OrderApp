@@ -68,12 +68,13 @@ public class Customer {
      * 这个类方法是注册专属的，
      * 用来专门向数据库中加入对应用户的数据信息。
      * @param name 注册用户的名字
+     * @param password 注册用户的密码
      * @throws AppException 注册失败异常
      */
-    public static void Register(String name) throws AppException{
+    public static void Register(String name, String password) throws AppException{
         // 首先尝试将用户插入用户表中。
         try{
-            Database.insertCustomer(name);
+            Database.insertCustomer(name, password);
         }catch (SQLException e){
             throw new AppException("注册失败！！");
         }

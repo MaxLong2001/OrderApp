@@ -3,21 +3,21 @@ package backend.CustomerException.Order;
 import backend.Dish;
 
 /**
- * Èç¹û¹Ë¿Íµã»÷²ËÆ·µÄÊıÁ¿³¬¹ıÁËµ±Ç°²ËÆ·µÄÊıÁ¿£¬ÄÇÃ´ÎÒÃÇÒ²Ó¦¸ÃÅ×³öÒ»¸öÒì³£¡£
+ * å¦‚æœé¡¾å®¢ç‚¹å‡»èœå“çš„æ•°é‡è¶…è¿‡äº†å½“å‰èœå“çš„æ•°é‡ï¼Œé‚£ä¹ˆæˆ‘ä»¬ä¹Ÿåº”è¯¥æŠ›å‡ºä¸€ä¸ªå¼‚å¸¸ã€‚
  */
 
 public class AmountIllegal extends Exception{
 
     /**
-     * ÎªÁËÈ·¶¨ÊÇÄÄÒ»¸ö²ËÆ·ÊıÁ¿³¬¹ıÁË×ÜÁ¿£¬ÎÒÃÇ½¨Á¢ÁËË½ÓĞÊôĞÔ¡£
+     * ä¸ºäº†ç¡®å®šæ˜¯å“ªä¸€ä¸ªèœå“æ•°é‡è¶…è¿‡äº†æ€»é‡ï¼Œæˆ‘ä»¬å»ºç«‹äº†ç§æœ‰å±æ€§ã€‚
      */
     private final Dish dish;
     private final int amount;
 
     /**
-     * ¹¹Ôì·½·¨
-     * @param arg_dish ÄÄ¸ö²ËÆ·ÊıÁ¿³¬¶î
-     * @param amount µ±Ç°¹Ë¿ÍÑ¡Ôñ´Ë²ËÆ·µÄÊıÁ¿
+     * æ„é€ æ–¹æ³•
+     * @param arg_dish å“ªä¸ªèœå“æ•°é‡è¶…é¢
+     * @param amount å½“å‰é¡¾å®¢é€‰æ‹©æ­¤èœå“çš„æ•°é‡
      */
     public AmountIllegal(Dish arg_dish, int amount){
         dish = arg_dish;
@@ -25,12 +25,12 @@ public class AmountIllegal extends Exception{
     }
 
     /**
-     * ÖØĞ´Òì³£ºô³ö·½·¨
+     * é‡å†™å¼‚å¸¸å‘¼å‡ºæ–¹æ³•
      */
     @Override
     public String toString(){
-        return "²ËÆ·ÊıÁ¿³¬±ê£¡£¡\n" + "²ËÆ·£º" + dish.name + "\n"
-                + "ÊıÁ¿£º" + dish.getRemainQuantity() + "\n" +
-                "ÄúµãÁË£º" + amount;
+        return "èœå“æ•°é‡è¶…æ ‡ï¼ï¼\n" + "èœå“ï¼š" + dish.name + "\n"
+                + "æ•°é‡ï¼š" + dish.getRemainQuantity() + "\n" +
+                "æ‚¨ç‚¹äº†ï¼š" + amount;
     }
 }

@@ -14,6 +14,8 @@ public class Frontend extends JFrame{
         content.add(new Welcome());
 //        JButton btn = new JButton("点击执行一个命令");
         setVisible(true);
+        System.out.println("输出");
+        System.out.println("输出");
     }
 
 

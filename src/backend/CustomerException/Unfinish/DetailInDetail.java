@@ -5,15 +5,15 @@ import backend.Order;
 /**
  * @version 1.0
  * @author JiangXingru
- * Õâ¸öÀàµÄ´´½¨ÊÇÏë¸øÇ°¶Ë·µ»Ø¸ü¼ÓÏêÏ¸µÄÎ´Íê³É¶©µ¥ĞÅÏ¢£»
- * °üÀ¨Î´Íê³É¶©µ¥±¾ÉíºÍÒ»¸öÌáÊ¾Óï{@link UnfinishedException}
+ * è¿™ä¸ªç±»çš„åˆ›å»ºæ˜¯æƒ³ç»™å‰ç«¯è¿”å›æ›´åŠ è¯¦ç»†çš„æœªå®Œæˆè®¢å•ä¿¡æ¯ï¼›
+ * åŒ…æ‹¬æœªå®Œæˆè®¢å•æœ¬èº«å’Œä¸€ä¸ªæç¤ºè¯­{@link UnfinishedException}
  */
 
 public class DetailInDetail {
 
-    // ÌáÊ¾Óï
+    // æç¤ºè¯­
     public String warning;
 
-    // Î´Íê³ÉµÄ¶©µ¥
+    // æœªå®Œæˆçš„è®¢å•
     public Order missing;
 }

@@ -5,16 +5,16 @@ import backend.Dish;
 import java.util.List;
 
 /**
- * Õâ¸öÀàÓÃÓÚÅ×³ö¸÷ÖÖÒì³£½øĞĞÅĞ¶Ï
+ * è¿™ä¸ªç±»ç”¨äºæŠ›å‡ºå„ç§å¼‚å¸¸è¿›è¡Œåˆ¤æ–­
  */
 
 public class SettleAll{
 
     /**
-     * ÓÃÕâ¸ö·½·¨À´¼ìÑé²ËÆ·ÊÇ·ñ´æÔÚ
-     * @param arg_dishes ÉÌ¼Ò²ËÆ·ÁĞ±í
-     * @param name ÓÃ»§µã²ËÆ·Ãû
-     * @throws DishUndefined ²ËÆ·Î´¶¨ÒåÒì³£
+     * ç”¨è¿™ä¸ªæ–¹æ³•æ¥æ£€éªŒèœå“æ˜¯å¦å­˜åœ¨
+     * @param arg_dishes å•†å®¶èœå“åˆ—è¡¨
+     * @param name ç”¨æˆ·ç‚¹èœå“å
+     * @throws DishUndefined èœå“æœªå®šä¹‰å¼‚å¸¸
      */
     public static void TestExist(List<Dish> arg_dishes, String name) throws DishUndefined{
         int i;
@@ -30,11 +30,11 @@ public class SettleAll{
     }
 
     /**
-     * Õâ¸ö·½·¨ÓÃÀ´¼ì²âÓÃ»§µãµÄ²ËÆ·ÊÇ·ñ¹ıÁ¿
-     * @param arg_dishes µ±Ç°ÉÌ¼Ò²ËÆ·±í
-     * @param name ÓÃ»§µã²ËÆ·Ãû
-     * @param amount ÓÃ»§µã²ËÊıÁ¿
-     * @throws AmountIllegal ÊıÁ¿²»ºÏ·¨Òì³£
+     * è¿™ä¸ªæ–¹æ³•ç”¨æ¥æ£€æµ‹ç”¨æˆ·ç‚¹çš„èœå“æ˜¯å¦è¿‡é‡
+     * @param arg_dishes å½“å‰å•†å®¶èœå“è¡¨
+     * @param name ç”¨æˆ·ç‚¹èœå“å
+     * @param amount ç”¨æˆ·ç‚¹èœæ•°é‡
+     * @throws AmountIllegal æ•°é‡ä¸åˆæ³•å¼‚å¸¸
      */
     public static
     void TestAmount(List<Dish> arg_dishes, String name, int amount)

@@ -3,17 +3,17 @@ package backend.CustomerException.Unfinish;
 /**
  * @version 1.0
  * @author JiangXingru
- * ÕâÊÇÒ»¸öÅĞ¶Ï¶©µ¥ÖĞÉÌ¼ÒµÄÃû×ÖÊÇ·ñºÍÏÖÔÚÉÌ¼ÒÃû×ÖÏàÍ¬µÄÀà
- * Èç¹ûÏàÍ¬£¬Å×³öÒ»¸ö¶©µ¥Î´Íê³ÉÒì³£
+ * è¿™æ˜¯ä¸€ä¸ªåˆ¤æ–­è®¢å•ä¸­å•†å®¶çš„åå­—æ˜¯å¦å’Œç°åœ¨å•†å®¶åå­—ç›¸åŒçš„ç±»
+ * å¦‚æœç›¸åŒï¼ŒæŠ›å‡ºä¸€ä¸ªè®¢å•æœªå®Œæˆå¼‚å¸¸
  */
 
 public class Compare {
 
     /**
-     * Õâ¸ö·½·¨ÓÃÓÚÅĞ¶ÏÁ½¸öÃû×ÖÊÇ·ñÏàÍ¬
-     * @param a Ãû×Öa
-     * @param b Ãû×Öb
-     * @throws UnfinishedException Î´¶¨ÒåÒì³£
+     * è¿™ä¸ªæ–¹æ³•ç”¨äºåˆ¤æ–­ä¸¤ä¸ªåå­—æ˜¯å¦ç›¸åŒ
+     * @param a åå­—a
+     * @param b åå­—b
+     * @throws UnfinishedException æœªå®šä¹‰å¼‚å¸¸
      */
     public static void compare(String a, String b) throws UnfinishedException {
         if(a.equals(b)){

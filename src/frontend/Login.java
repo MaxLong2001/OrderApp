@@ -3,16 +3,12 @@ package frontend;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.EventListener;
-import java.util.EventObject;
-import java.util.List;
 
 
 /**
  * 当点击登录后该类如果获得登录的对象则传给
  */
-public class Login extends MyPanel {
+public class Login extends MyView {
 
 
     Object loginUser;

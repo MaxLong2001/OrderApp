@@ -1,23 +1,25 @@
 package frontend;
 
 import javax.swing.*;
-import javax.swing.event.EventListenerList;
 import java.awt.*;
-import java.util.EventObject;
 
 /**
  * 程序窗口
  */
 public class Frontend extends JFrame{
-    MyPanel nowView;
+    MyView nowView;
     Container content = getContentPane();
     /**
      * 使用该构造方法直接构造一个购餐系统的图形化界面
      */
     public Frontend(){
+//        FlowLayout layout = new FlowLayout();
+//        layout.setAlignment(FlowLayout.CENTER);
+//        setLayout(layout);
         setSize(1024, 768);
         setTitle("购餐系统");
         nowView = new Welcome();
+        nowView = new Order();
         content.add(nowView);
         setVisible(true);
         nowView.addMyListener(new MyListener() {
@@ -32,7 +34,7 @@ public class Frontend extends JFrame{
         });
     }
 
-    void changeView(MyPanel newView){
+    void changeView(MyView newView){
         remove(nowView);
         nowView = newView;
         add(nowView);

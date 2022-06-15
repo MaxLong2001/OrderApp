@@ -8,7 +8,12 @@ import java.util.List;
  * 基于swing的JPanel自定义的MyPanel
  * 额外具有的功能为抛出事件（内部使用）和添加事件监听器（外部使用）
  */
-public class MyPanel extends JPanel {
+public class MyView extends JPanel {
+    public MyView(){
+        super();
+//        setSize(1024, 300);
+    }
+
     List<MyListener> eventListenerList = new ArrayList<MyListener>();
 
     /**

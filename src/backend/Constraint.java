@@ -7,7 +7,7 @@ import backend.AppException.AppException;
  * @author JiangXingru
  * 这个类为了检验用户名和密码存在
  */
-public class CheckLogin {
+public class Constraint {
 
     /**
      * 这个类用来检验用户名

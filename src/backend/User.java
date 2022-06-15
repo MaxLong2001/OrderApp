@@ -66,7 +66,7 @@ public abstract class User {
      * @throws AppException 用户名格式异常
      */
     public void setName(String name) throws AppException{
-        CheckLogin.CheckUname(name);
+        Constraint.CheckUname(name);
         this.name = name;
     }
 
@@ -76,7 +76,7 @@ public abstract class User {
      * @throws AppException 密码格式异常
      */
     public void setPassword(String password) throws AppException {
-        CheckLogin.CheckPwd(password);
+        Constraint.CheckPwd(password);
         this.password = password;
     }
 }

@@ -458,6 +458,17 @@ public class Customer extends User{
     public void modifyName(String newName) throws AppException {
 
         // 检验用户名格式
+        Constraint.CheckUname(newName);
+
+        // 将用户名插入数据库
+        try{
+            Database.changeCustomerName(this.name, newName);
+        }catch (SQLException e){
+            throw new AppException("数据库异常！！");
+        }
+
+        // 更改用户的用户名
+        this.name = newName;
     }
 
     /**
@@ -468,5 +479,14 @@ public class Customer extends User{
     @Override
     public void modifyPwd(String newPwd) throws AppException {
 
+        // 检验密码格式
+        Constraint.CheckPwd(newPwd);
+
+        // 将新密码写入数据库
+        try{
+            Database.changeCustomerPassword(this.name, newPwd);
+        }catch (SQLException e){
+            throw new AppException("数据库异常！！");
+        }
     }
 }

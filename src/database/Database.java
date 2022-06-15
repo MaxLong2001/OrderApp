@@ -262,6 +262,96 @@ public class Database {
     }
 
     /**
+     * 修改顾客的用户名
+     *
+     * @param oldName 旧用户名
+     * @param newName 新用户名
+     * @throws AppException 新用户名已存在
+     * @throws SQLException 数据库查询错误
+     */
+    public static void changeCustomerName(String oldName, String newName) throws SQLException, AppException {
+        String sqlCheckFromCustomer = "SELECT name FROM customer WHERE name = '" + newName + "'";
+        String sqlCheckFromOwner = "SELECT name FROM owner WHERE name = '" + newName + "'";
+        ResultSet rsCustomer = stmt.executeQuery(sqlCheckFromCustomer);
+        ResultSet rsOwner = stmt.executeQuery(sqlCheckFromOwner);
+        if (rsCustomer.next() || rsOwner.next()) {
+            throw new AppException("新用户名已存在");
+        }
+        rsCustomer.close();
+        rsOwner.close();
+        String sql = "UPDATE customer SET name = '" + newName + "' WHERE name = '" + oldName + "'";
+        stmt = conn.createStatement();
+        stmt.executeUpdate(sql);
+        stmt.close();
+    }
+
+    /**
+     * 修改顾客的密码
+     *
+     * @param userName 用户名
+     * @param password 密码
+     * @throws SQLException 数据库查询错误
+     */
+    public static void changeCustomerPassword(String userName, String password) throws SQLException {
+        String sql = "UPDATE customer SET password = '" + password + "' WHERE name = '" + userName + "'";
+        stmt = conn.createStatement();
+        stmt.executeUpdate(sql);
+        stmt.close();
+    }
+
+    /**
+     * 修改商家用户名
+     *
+     * @param oldName 旧用户名
+     * @param newName 新用户名
+     * @throws AppException 新用户名已存在
+     * @throws SQLException 数据库查询错误
+     */
+    public static void changeOwnerName(String oldName, String newName) throws AppException, SQLException {
+        String sqlCheckFromCustomer = "SELECT name FROM customer WHERE name = '" + newName + "'";
+        String sqlCheckFromOwner = "SELECT name FROM owner WHERE name = '" + newName + "'";
+        ResultSet rsCustomer = stmt.executeQuery(sqlCheckFromCustomer);
+        ResultSet rsOwner = stmt.executeQuery(sqlCheckFromOwner);
+        if (rsCustomer.next() || rsOwner.next()) {
+            throw new AppException("新用户名已存在");
+        }
+        rsCustomer.close();
+        rsOwner.close();
+        String sql = "UPDATE owner SET name = '" + newName + "' WHERE name = '" + oldName + "'";
+        stmt = conn.createStatement();
+        stmt.executeUpdate(sql);
+        stmt.close();
+    }
+
+    /**
+     * 修改商家用户密码
+     *
+     * @param userName 用户名
+     * @param password 密码
+     * @throws SQLException 数据库查询错误
+     */
+    public static void changeOwnerPassword(String userName, String password) throws SQLException {
+        String sql = "UPDATE owner SET password = '" + password + "' WHERE name = '" + userName + "'";
+        stmt = conn.createStatement();
+        stmt.executeUpdate(sql);
+        stmt.close();
+    }
+
+    /**
+     * 修改商家简介
+     *
+     * @param userName     用户名
+     * @param introduction 简介
+     * @throws SQLException 数据库查询错误
+     */
+    public static void changeOwnerIntroduction(String userName, String introduction) throws SQLException {
+        String sql = "UPDATE owner SET introduction = '" + introduction + "' WHERE name = '" + userName + "'";
+        stmt = conn.createStatement();
+        stmt.executeUpdate(sql);
+        stmt.close();
+    }
+
+    /**
      * 查询用户订单列表
      * 根据传入的顾客名查询数据库中的订单列表，并返回该订单列表
      *
@@ -349,6 +439,7 @@ public class Database {
             }
             rsFindDishList.close();
             order.setDishes(dishes);
+            orderList.add(order);
         }
         rs.close();
         stmt.close();
@@ -387,11 +478,40 @@ public class Database {
             owner.setName(rs.getString("name"));
             owner.setIntroduction(rs.getString("introduction"));
             owner.setRating(rs.getDouble("rating"));
+            owner.setVisit(rs.getInt("visit"));
             ownerList.add(owner);
         }
         rs.close();
         stmt.close();
         return ownerList;
+    }
+
+    /**
+     * 查询特定商家
+     *
+     * @param ownerName 商家名
+     * @return 商家
+     * @throws AppException 商家不存在
+     * @throws SQLException 数据库查询错误
+     */
+    public static Owner getOwner(String ownerName) throws AppException, SQLException {
+        String sql = "SELECT * FROM owner WHERE name = '" + ownerName + "'";
+        stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        if (rs.next()) {
+            Owner owner = new Owner();
+            owner.setName(rs.getString("name"));
+            owner.setIntroduction(rs.getString("introduction"));
+            owner.setRating(rs.getDouble("rating"));
+            owner.setVisit(rs.getInt("visit"));
+            rs.close();
+            stmt.close();
+            return owner;
+        } else {
+            rs.close();
+            stmt.close();
+            throw new AppException("商家不存在");
+        }
     }
 
     /**
@@ -446,6 +566,20 @@ public class Database {
         rs.close();
         stmt.close();
         return rating;
+    }
+
+    /**
+     * 访问商家
+     * 根据传入的商家名进行访问商家操作，将其访问量加1
+     *
+     * @param ownerName 商家名
+     * @throws SQLException 数据库查询错误
+     */
+    public static void visitOwner(String ownerName) throws SQLException {
+        String sql = "UPDATE owner SET visit = visit + 1 WHERE name = '" + ownerName + "'";
+        stmt = conn.createStatement();
+        stmt.executeUpdate(sql);
+        stmt.close();
     }
 
     /**

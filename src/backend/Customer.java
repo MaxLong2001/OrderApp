@@ -74,14 +74,14 @@ public class Customer extends User{
         List<Order> tmp_orders;
 
         // 这是一个临时设置的密码变量
-        String temp_password;
+        Map<String, String> temp_all;
 
         // 在这里将顾客的用户名设为登录注册页面传入的用户名。
         this.name = name;
 
         // 首先先检验用户名是否存在
         try{
-            temp_password = Database.getPassword(name);
+            temp_all = Database.getPassword(name);
         }catch (SQLException e){
             throw new AppException("数据库错误！！");
         }catch (AppException e){
@@ -89,8 +89,12 @@ public class Customer extends User{
             throw new AppException("用户名不存在！！");
         }
 
+        if(!temp_all.containsKey("customer")){
+            throw new AppException("用户名属于商家！！");
+        }
+
         // 如果获得密码与现密码不符
-        if(!temp_password.equals(password)){
+        if(!temp_all.get("customer").equals(password)){
             throw new AppException("密码错误！！");
         }
 
@@ -458,6 +462,17 @@ public class Customer extends User{
     public void modifyName(String newName) throws AppException {
 
         // 检验用户名格式
+        Constraint.CheckUname(newName);
+
+        // 将用户名插入数据库
+        try{
+            Database.changeCustomerName(this.name, newName);
+        }catch (SQLException e){
+            throw new AppException("数据库异常！！");
+        }
+
+        // 更改用户的用户名
+        this.name = newName;
     }
 
     /**
@@ -468,5 +483,14 @@ public class Customer extends User{
     @Override
     public void modifyPwd(String newPwd) throws AppException {
 
+        // 检验密码格式
+        Constraint.CheckPwd(newPwd);
+
+        // 将新密码写入数据库
+        try{
+            Database.changeCustomerPassword(this.name, newPwd);
+        }catch (SQLException e){
+            throw new AppException("数据库异常！！");
+        }
     }
 }

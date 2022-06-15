@@ -59,31 +59,36 @@ public class Database {
     /**
      * 根据用户名返回密码
      * 根据传入的用户名在顾客表和商家表中分别查找密码
-     * 如果找到则返回密码，否则抛出异常
+     * 如果找到则返回用户身份与密码的键值对，否则抛出异常
      *
      * @param userName 用户名
      * @return 用户对应的密码
      * @throws SQLException SQL异常
      * @throws AppException 通用异常
      */
-    public static String getPassword(String userName) throws SQLException, AppException {
+    public static Map<String, String> getPassword(String userName) throws SQLException, AppException {
         String sqlFromCustomer = "SELECT password FROM customer WHERE name = '" + userName + "'";
         String sqlFromOwner = "SELECT password FROM owner WHERE name = '" + userName + "'";
         stmt = conn.createStatement();
         ResultSet rsFromCustomer = stmt.executeQuery(sqlFromCustomer);
         ResultSet rsFromOwner = stmt.executeQuery(sqlFromOwner);
+
         String password;
+        Map<String, String> map = new HashMap<>();
         if (rsFromCustomer.next()) {
             password = rsFromCustomer.getString("password");
+            map.put("customer", password);
         } else if (rsFromOwner.next()) {
             password = rsFromOwner.getString("password");
+            map.put("owner", password);
         } else {
             throw new AppException("用户名不存在");
         }
+
         stmt.close();
         rsFromCustomer.close();
         rsFromOwner.close();
-        return password;
+        return map;
     }
 
     /**
@@ -263,6 +268,8 @@ public class Database {
 
     /**
      * 修改顾客的用户名
+     * 根据传入的用户名和新的用户名修改顾客数据库中的用户名
+     * 方法将先检查新用户名是否已经存在
      *
      * @param oldName 旧用户名
      * @param newName 新用户名
@@ -279,6 +286,7 @@ public class Database {
         }
         rsCustomer.close();
         rsOwner.close();
+
         String sql = "UPDATE customer SET name = '" + newName + "' WHERE name = '" + oldName + "'";
         stmt = conn.createStatement();
         stmt.executeUpdate(sql);
@@ -287,6 +295,7 @@ public class Database {
 
     /**
      * 修改顾客的密码
+     * 根据传入的用户名和新的密码修改顾客数据库中的密码
      *
      * @param userName 用户名
      * @param password 密码
@@ -301,6 +310,8 @@ public class Database {
 
     /**
      * 修改商家用户名
+     * 根据传入的用户名和新的用户名修改商家数据库中的用户名
+     * 方法将先检查新用户名是否已经存在
      *
      * @param oldName 旧用户名
      * @param newName 新用户名
@@ -317,6 +328,7 @@ public class Database {
         }
         rsCustomer.close();
         rsOwner.close();
+
         String sql = "UPDATE owner SET name = '" + newName + "' WHERE name = '" + oldName + "'";
         stmt = conn.createStatement();
         stmt.executeUpdate(sql);
@@ -325,6 +337,7 @@ public class Database {
 
     /**
      * 修改商家用户密码
+     * 根据传入的用户名和新的用户密码修改商家数据库中的用户密码
      *
      * @param userName 用户名
      * @param password 密码
@@ -339,6 +352,7 @@ public class Database {
 
     /**
      * 修改商家简介
+     * 根据传入的用户名和新的简介修改商家数据库中的简介
      *
      * @param userName     用户名
      * @param introduction 简介

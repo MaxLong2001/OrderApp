@@ -87,15 +87,34 @@ public class Customer {
      * 订单分成已完成订单和未完成订单列表。
      * 注：这个方法应该在图形化登录时使用。
      * @param name 用户名
+     * @param password 密码
      * @throws AppException 数据库异常
      */
-    public Customer(String name) throws AppException {
+    public Customer(String name, String password) throws AppException {
 
         // 设置临时订单列表变量用于分类
         List<Order> tmp_orders;
 
+        // 这是一个临时设置的密码变量
+        String temp_password;
+
         // 在这里将顾客的用户名设为登录注册页面传入的用户名。
         this.name = name;
+
+        // 首先先检验用户名是否存在
+        try{
+            temp_password = Database.getPassword(name);
+        }catch (SQLException e){
+            throw new AppException("数据库错误！！");
+        }catch (AppException e){
+            this.name = null;
+            throw new AppException("用户名不存在！！");
+        }
+
+        // 如果获得密码与现密码不符
+        if(!temp_password.equals(password)){
+            throw new AppException("密码错误！！");
+        }
 
         // 尝试从用户订单中获取电子钱包数额
         try{

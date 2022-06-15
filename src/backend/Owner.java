@@ -2,6 +2,7 @@ package backend;
 
 import backend.AppException.AppException;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 

@@ -9,7 +9,9 @@ import java.util.HashMap;
 public class Owner extends User{
     public String introduction;
     public double rating;
-    public ArrayList<Order> orders = new ArrayList<>();
+    public int visit;
+    public ArrayList<Order> orders_finished = new ArrayList<>();
+    public ArrayList<Order> orders_unfinished = new ArrayList<>();
     public ArrayList<Dish> dishes = new ArrayList<>();
     public ArrayList<String> comments = new ArrayList<>();
 
@@ -34,16 +36,23 @@ public class Owner extends User{
      * 这个方法用于商家修改菜品，传入对应的菜品
      * 修改成功则返回true
      */
-    public boolean modifyDishes(Dish dish)
+    public boolean modifyDishes(String name, double price, String type, String introduction)
     {
         int i=0;
+        Dish dish = new Dish();
+        dish.name = name;
+        dish.price = price;
+        dish.type = type;
+        dish.introduction = introduction;
+
         for(i=0; i<dishes.size(); i++)
         {
-            if(dishes.get(i).equals(dish)) {
+            if(dishes.get(i).name.equals(name)) {
                 dishes.set(i,dish);
                 return true;
             }
         }
+
         return false;
     }
 
@@ -106,6 +115,14 @@ public class Owner extends User{
      */
     public void setRating(double rating) {
         this.rating = rating;
+    }
+
+    public int getVisit() {
+        return visit;
+    }
+
+    public void setVisit(int visit) {
+        this.visit = visit;
     }
 
     @Override

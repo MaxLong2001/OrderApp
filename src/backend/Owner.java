@@ -34,11 +34,7 @@ public class Owner extends User{
         Owner owner = new Owner();
 
         // 这是一个临时设置的密码变量
-<<<<<<< HEAD
         Map<String, String> temp_all;
-=======
-        Map <String, String>temp_all;
->>>>>>> 29c6765e781180ef88a44883267611ff90a9a703
 
         // 在这里将顾客的用户名设为登录注册页面传入的用户名。
         this.name = name;
@@ -58,11 +54,7 @@ public class Owner extends User{
         }
 
         // 如果获得密码与现密码不符
-<<<<<<< HEAD
         if(!temp_all.get("customer").equals(password)){
-=======
-        if(!temp_all.get("owner").equals(password)){
->>>>>>> 29c6765e781180ef88a44883267611ff90a9a703
             throw new AppException("密码错误！！");
         }
 
@@ -119,7 +111,7 @@ public class Owner extends User{
      * 修改成功则返回true
      */
     public void modifyDishes(String nameOfOwner, String nameOfDish, double price, String type, String introduction) throws AppException {
-        int i = 0;
+        int i=0;
         try {
             dishes = Database.getDishList(nameOfOwner);
         }catch (SQLException e)
@@ -158,7 +150,7 @@ public class Owner extends User{
      * 查找到并删除成功则返回true
      */
     public void pullOffDishes(String nameOfOwner, String nameOfDish, double price, String type, String introduction) throws AppException {
-        int i = 0;
+        int i=0;
         try {
             dishes = Database.getDishList(nameOfOwner);
         }catch (SQLException e)

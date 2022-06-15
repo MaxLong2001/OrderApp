@@ -20,12 +20,12 @@ import backend.CustomerException.Order.SettleAll;
  * 顾客的行为被定义在顾客类中，顾客的属性也被定义在此。
  */
 
-public class Customer {
+public class Customer extends User{
 
     /**
      * 这是商家姓名定义的属性变量，出于系统安全考虑，我打算将此变量设为私有。
     */
-    private String name;
+//    private String name;
 
     /**
      * 这是顾客的电子钱包属性，通过这个属性，我们可以知道顾客的余额。
@@ -469,5 +469,15 @@ public class Customer {
         }catch (SQLException e){
             throw new AppException("删除订单失败！！");
         }
+    }
+
+    @Override
+    public void modifyName(String newName) throws AppException {
+
+    }
+
+    @Override
+    public void modifyPwd(String newPwd) throws AppException {
+
     }
 }

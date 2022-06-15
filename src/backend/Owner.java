@@ -1,10 +1,11 @@
 package backend;
 
+import backend.AppException.AppException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Owner {
-    public String name;
+public class Owner extends User{
     public String introduction;
     public double rating;
     public ArrayList<Order> orders = new ArrayList<>();
@@ -104,5 +105,15 @@ public class Owner {
      */
     public void setRating(double rating) {
         this.rating = rating;
+    }
+
+    @Override
+    public void modifyName(String newName) throws AppException {
+        //todo
+    }
+
+    @Override
+    public void modifyPwd(String newPwd) throws AppException {
+        //todo
     }
 }

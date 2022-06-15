@@ -3,7 +3,7 @@ package backend;
 import backend.AppException.AppException;
 
 /**
- *
+ * 用户基类，包括该系统可能用户的公共基本信息和公共方法
  */
 public abstract class User {
     protected String name;
@@ -24,9 +24,9 @@ public abstract class User {
      */
     public static void register(User newUser){
         if(newUser instanceof Customer){
-
-        }else{
-
+            //todo 这部分由负责Customer的完成
+        }else if(newUser instanceof Owner){
+            //todo 这部分由负责Owner的完成
         }
     }
 
@@ -42,5 +42,38 @@ public abstract class User {
      */
     public abstract void modifyPwd(String newPwd)throws AppException;
 
+    public String getName() {
+        return name;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setName(String name) {
+        //todo 加入约束
+        this.name = name;
+    }
+
+    public void setPassword(String password) {
+        //todo 加入约束
+        this.password = password;
+    }
+
+    /**
+     * 如果Name不合格则返回一个“xxx不合格”的异常
+     * @throws AppException 一个“用户名不合规”的异常
+     */
+    public void checkName() throws AppException {
+        //todo
+    }
+
+    /**
+     * 如果Name不合格则返回一个“xxx不合格”的异常
+     * @throws AppException 一个“密码不合规”的异常
+     */
+    public void checkPwd() throws AppException {
+        //todo
+    }
 
 }

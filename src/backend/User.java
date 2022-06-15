@@ -1,6 +1,9 @@
 package backend;
 
 import backend.AppException.AppException;
+import database.Database;
+
+import java.sql.SQLException;
 
 /**
  * 用户基类，包括该系统可能用户的公共基本信息和公共方法
@@ -23,10 +26,16 @@ public abstract class User {
      * @param newUser 一个已经包括了该用户基本信息的对象，但是尚未存入数据库
      */
     public static void register(User newUser) throws AppException{
-        if(newUser instanceof Customer){
-            //todo 这部分由负责Customer的完成
+        if(newUser instanceof Customer) {
 
-        }else if(newUser instanceof Owner){
+            // 将用户插入数据库
+            try{
+                Database.insertCustomer(newUser.getName(), newUser.getPassword());
+            }catch(SQLException e){
+              throw new AppException("数据库插入顾客异常！！");
+            }
+        }
+        if(newUser instanceof Owner){
             //todo 这部分由负责Owner的完成
         }
     }
@@ -51,30 +60,23 @@ public abstract class User {
         return password;
     }
 
-    public void setName(String name) {
-        //todo 加入约束
+    /**
+     * 用户输入用户名时实时监测
+     * @param name 输入姓名信息
+     * @throws AppException 用户名格式异常
+     */
+    public void setName(String name) throws AppException{
+        CheckLogin.CheckUname(name);
         this.name = name;
     }
 
-    public void setPassword(String password) {
-        //todo 加入约束
+    /**
+     * 用户输入密码实时检测
+     * @param password 输入密码信息
+     * @throws AppException 密码格式异常
+     */
+    public void setPassword(String password) throws AppException {
+        CheckLogin.CheckPwd(password);
         this.password = password;
     }
-
-    /**
-     * 如果Name不合格则返回一个“xxx不合格”的异常
-     * @throws AppException 一个“用户名不合规”的异常
-     */
-    public void checkName() throws AppException {
-        //todo
-    }
-
-    /**
-     * 如果Name不合格则返回一个“xxx不合格”的异常
-     * @throws AppException 一个“密码不合规”的异常
-     */
-    public void checkPwd() throws AppException {
-        //todo
-    }
-
 }

@@ -59,22 +59,6 @@ public class Customer extends User{
     private Order tmp_order;
 
     /**
-     * 这个类方法是注册专属的，
-     * 用来专门向数据库中加入对应用户的数据信息。
-     * @param name 注册用户的名字
-     * @param password 注册用户的密码
-     * @throws AppException 注册失败异常
-     */
-    public static void Register(String name, String password) throws AppException{
-        // 首先尝试将用户插入用户表中。
-        try{
-            Database.insertCustomer(name, password);
-        }catch (SQLException e){
-            throw new AppException("注册失败！！");
-        }
-    }
-
-    /**
      * 这个初始化方法可以初始化顾客的基本属性。
      * 这个方法中传入的参数来自登录注册界面中的用户名。
      * 通过用户名向数据库请求订单列表，方法可以自动将
@@ -465,11 +449,22 @@ public class Customer extends User{
         }
     }
 
+    /**
+     * 这个是User类中修改用户名的实现
+     * @param newName 要修改成的新用户名
+     * @throws AppException 通用异常
+     */
     @Override
     public void modifyName(String newName) throws AppException {
 
+        // 检验用户名格式
     }
 
+    /**
+     * 这个是User类中修改密码的实现
+     * @param newPwd 要修改成的新密码
+     * @throws AppException 通用异常
+     */
     @Override
     public void modifyPwd(String newPwd) throws AppException {
 

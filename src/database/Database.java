@@ -66,24 +66,27 @@ public class Database {
      * @throws SQLException SQL异常
      * @throws AppException 通用异常
      */
-    public static String getPassword(String userName) throws SQLException, AppException {
+    public static Map<String, String> getPassword(String userName) throws SQLException, AppException {
         String sqlFromCustomer = "SELECT password FROM customer WHERE name = '" + userName + "'";
         String sqlFromOwner = "SELECT password FROM owner WHERE name = '" + userName + "'";
         stmt = conn.createStatement();
         ResultSet rsFromCustomer = stmt.executeQuery(sqlFromCustomer);
         ResultSet rsFromOwner = stmt.executeQuery(sqlFromOwner);
         String password;
+        Map<String, String> map = new HashMap<>();
         if (rsFromCustomer.next()) {
             password = rsFromCustomer.getString("password");
+            map.put("customer", password);
         } else if (rsFromOwner.next()) {
             password = rsFromOwner.getString("password");
+            map.put("owner", password);
         } else {
             throw new AppException("用户名不存在");
         }
         stmt.close();
         rsFromCustomer.close();
         rsFromOwner.close();
-        return password;
+        return map;
     }
 
     /**

@@ -59,7 +59,7 @@ public class Database {
     /**
      * 根据用户名返回密码
      * 根据传入的用户名在顾客表和商家表中分别查找密码
-     * 如果找到则返回密码，否则抛出异常
+     * 如果找到则返回用户身份与密码的键值对，否则抛出异常
      *
      * @param userName 用户名
      * @return 用户对应的密码
@@ -72,6 +72,7 @@ public class Database {
         stmt = conn.createStatement();
         ResultSet rsFromCustomer = stmt.executeQuery(sqlFromCustomer);
         ResultSet rsFromOwner = stmt.executeQuery(sqlFromOwner);
+
         String password;
         Map<String, String> map = new HashMap<>();
         if (rsFromCustomer.next()) {
@@ -83,6 +84,7 @@ public class Database {
         } else {
             throw new AppException("用户名不存在");
         }
+
         stmt.close();
         rsFromCustomer.close();
         rsFromOwner.close();
@@ -266,6 +268,8 @@ public class Database {
 
     /**
      * 修改顾客的用户名
+     * 根据传入的用户名和新的用户名修改顾客数据库中的用户名
+     * 方法将先检查新用户名是否已经存在
      *
      * @param oldName 旧用户名
      * @param newName 新用户名
@@ -282,6 +286,7 @@ public class Database {
         }
         rsCustomer.close();
         rsOwner.close();
+
         String sql = "UPDATE customer SET name = '" + newName + "' WHERE name = '" + oldName + "'";
         stmt = conn.createStatement();
         stmt.executeUpdate(sql);
@@ -290,6 +295,7 @@ public class Database {
 
     /**
      * 修改顾客的密码
+     * 根据传入的用户名和新的密码修改顾客数据库中的密码
      *
      * @param userName 用户名
      * @param password 密码
@@ -304,6 +310,8 @@ public class Database {
 
     /**
      * 修改商家用户名
+     * 根据传入的用户名和新的用户名修改商家数据库中的用户名
+     * 方法将先检查新用户名是否已经存在
      *
      * @param oldName 旧用户名
      * @param newName 新用户名
@@ -320,6 +328,7 @@ public class Database {
         }
         rsCustomer.close();
         rsOwner.close();
+
         String sql = "UPDATE owner SET name = '" + newName + "' WHERE name = '" + oldName + "'";
         stmt = conn.createStatement();
         stmt.executeUpdate(sql);
@@ -328,6 +337,7 @@ public class Database {
 
     /**
      * 修改商家用户密码
+     * 根据传入的用户名和新的用户密码修改商家数据库中的用户密码
      *
      * @param userName 用户名
      * @param password 密码
@@ -342,6 +352,7 @@ public class Database {
 
     /**
      * 修改商家简介
+     * 根据传入的用户名和新的简介修改商家数据库中的简介
      *
      * @param userName     用户名
      * @param introduction 简介

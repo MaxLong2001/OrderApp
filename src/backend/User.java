@@ -22,9 +22,10 @@ public abstract class User {
      * 通过构造的对象（尚未存入数据库）来进行注册，即存入数据库
      * @param newUser 一个已经包括了该用户基本信息的对象，但是尚未存入数据库
      */
-    public static void register(User newUser){
+    public static void register(User newUser) throws AppException{
         if(newUser instanceof Customer){
             //todo 这部分由负责Customer的完成
+
         }else if(newUser instanceof Owner){
             //todo 这部分由负责Owner的完成
         }

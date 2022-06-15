@@ -21,12 +21,6 @@ import backend.CustomerException.Order.SettleAll;
  */
 
 public class Customer extends User{
-
-    /**
-     * 这是商家姓名定义的属性变量，出于系统安全考虑，我打算将此变量设为私有。
-    */
-//    private String name;
-
     /**
      * 这是顾客的电子钱包属性，通过这个属性，我们可以知道顾客的余额。
      * 处于安全考虑，我将属性设置称为private级别。

@@ -384,6 +384,9 @@ public class Customer extends User{
      */
     public void QuitOrder() throws AppException {
 
+        // 生成未完成订单的时间
+        tmp_order.orderTime = new Date(System.currentTimeMillis());
+
         // 向未完成订单列表中保存tmp_order
         this.orders_unfinished.add(tmp_order);
 

@@ -496,5 +496,8 @@ public class Customer extends User{
         }catch (SQLException e){
             throw new AppException("数据库异常！！");
         }
+
+        // 更改用户的密码
+        this.password = newPwd;
     }
 }

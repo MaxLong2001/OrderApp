@@ -37,7 +37,13 @@ public abstract class User {
             }
         }
         if(newUser instanceof Owner){
-            //todo 这部分由负责Owner的完成
+
+            // 将商家插入数据库
+            try{
+                Database.insertOwner(newUser.getName(), ((Owner) newUser).getIntroduction(), newUser.getPassword());
+            }catch(SQLException e){
+                throw new AppException("数据库插入顾客异常！！");
+            }
         }
     }
 

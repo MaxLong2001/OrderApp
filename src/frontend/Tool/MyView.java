@@ -1,4 +1,7 @@
-package frontend;
+package frontend.Tool;
+
+import frontend.Tool.MyEvent;
+import frontend.Tool.MyListener;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -30,7 +33,7 @@ public class MyView extends JPanel {
      * 添加一个事件监听器，只监听该类内部抛出的事件。配合抛出事件方法使用。
      * @param eventListener 要添加的事件监听器
      */
-    protected void addMyListener(MyListener eventListener){
+    public void addMyListener(MyListener eventListener){
         eventListenerList.add(eventListener);
     }
 }

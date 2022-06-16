@@ -1,5 +1,8 @@
 package frontend;
 
+import frontend.Tool.MyEvent;
+import frontend.Tool.MyView;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,7 +16,7 @@ public class Welcome extends MyView {
         JButton toRegister = new JButton("注册");
 //        add(new Order());
 //        add(text);
-//        add(toLogin);
+        add(toLogin);
         add(toRegister);
         toLogin.addActionListener(new ActionListener() {
             @Override

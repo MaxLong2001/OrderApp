@@ -56,13 +56,17 @@ public class Login extends MyView {
                 public void actionPerformed(ActionEvent e) {
                     userName = nameInput.getText();
                     pwd = pwdInput.getText();
-                    try{
-                        //todo 需要登录的实现
-//                        loginUser = User.login(userName, pwd);
-                        loginUser = new Customer(userName, pwd);
+                    if(Frontend.deBug){
                         dispatchMyEvent(new DoneLoginEvent(loginUser));
-                    }catch (AppException ex){
-                        JOptionPane.showConfirmDialog(Login.this, ex, "登录异常", JOptionPane.DEFAULT_OPTION);
+                    }else {
+                        try{
+                            //todo 需要登录的实现
+//                        loginUser = User.login(userName, pwd);
+                            loginUser = new Customer(userName, pwd);
+                            dispatchMyEvent(new DoneLoginEvent(loginUser));
+                        }catch (AppException ex){
+                            JOptionPane.showConfirmDialog(Login.this, ex, "登录异常", JOptionPane.DEFAULT_OPTION);
+                        }
                     }
                 }
             });

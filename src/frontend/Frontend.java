@@ -1,5 +1,6 @@
 package frontend;
 
+import frontend.Map.Map;
 import frontend.Tool.MyEvent;
 import frontend.Tool.MyListener;
 import frontend.Tool.MyView;
@@ -30,7 +31,12 @@ public class Frontend extends JFrame{
 //        nowView = new Order();
 //        nowView = new OwnerView();
 //        content.add(nowView);
-        changeView(new Welcome());
+
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setViewportView(new Map());
+        add(scrollPane);
+
+//        changeView(new Map());
         setVisible(true);
 
 
@@ -42,7 +48,7 @@ public class Frontend extends JFrame{
         nowView = newView;
         nowView.addMyListener(new ViewListener());
         add(nowView);
-        setSize(nowView.getPreferredSize().width, nowView.getPreferredSize().height + 40);
+        setSize(nowView.getPreferredSize().width + 20, nowView.getPreferredSize().height + 40);
         validate();
     }
 

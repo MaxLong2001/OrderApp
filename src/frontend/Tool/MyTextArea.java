@@ -28,4 +28,10 @@ public class MyTextArea extends JPanel {
     public void setPreferredSize(int width, int rows) {
         textArea.setPreferredSize(new Dimension(width, textArea.getPreferredSize().height * rows));
     }
+
+    public void setEditable(){
+        textArea.setEditable(true);
+        textArea.setFocusable(true);
+        textArea.setLineWrap(true);
+    }
 }

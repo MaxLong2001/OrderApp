@@ -74,7 +74,7 @@ public class OrderView extends MyView {
             owner.comments.add(comment);
             owner.comments.add(comment);
             this.currentOwner = owner;
-            openWindow(new CommentSubView(owner), "商家评论");
+            openWindow(new CommentSubView(owner, loginCustomer), "商家评论");
         }else{
             // 初始化数据
             this.loginCustomer = loginCustomer;

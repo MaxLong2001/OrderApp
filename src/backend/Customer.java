@@ -291,6 +291,7 @@ public class Customer extends User{
         }
 
         // 如果没有发现未完成订单，那么返回一个空值。
+        this.tmp_order = null;
         return null;
     }
 

@@ -5,63 +5,63 @@ import backend.AppException.AppException;
 /**
  * @version 1.0
  * @author JiangXingru
- * Õâ¸öÀàÎªÁË¼ìÑéÓÃ»§ÃûºÍÃÜÂë´æÔÚ
+ * è¿™ä¸ªç±»ä¸ºäº†æ£€éªŒç”¨æˆ·åå’Œå¯†ç å­˜åœ¨
  */
 public class Constraint {
 
     /**
-     * Õâ¸öÀàÓÃÀ´¼ìÑéÓÃ»§Ãû
-     * @param arg_name ÊäÈëµÄÃû³Æ²ÎÊý;
-     * @throws AppException ÓÃ»§Ãû²»ºÏ¹æÒì³£
-     * 1¡¢ÓÃ»§Ãû¹æÔò£¬´óÓÚµÈÓÚ4¸ö×Ö·ûÐ¡ÓÚµÈÓÚ10¸ö×Ö·û;
-     * 2¡¢ÖÐ¼äÃ»ÓÐ¿Õ¸ñ;
+     * è¿™ä¸ªç±»ç”¨æ¥æ£€éªŒç”¨æˆ·å
+     * @param arg_name è¾“å…¥çš„åç§°å‚æ•°;
+     * @throws AppException ç”¨æˆ·åä¸åˆè§„å¼‚å¸¸
+     * 1ã€ç”¨æˆ·åè§„åˆ™ï¼Œå¤§äºŽç­‰äºŽ4ä¸ªå­—ç¬¦å°äºŽç­‰äºŽ10ä¸ªå­—ç¬¦;
+     * 2ã€ä¸­é—´æ²¡æœ‰ç©ºæ ¼;
      */
     public static void CheckUname(String arg_name) throws AppException {
 
-        // Õâ¸öÊý×éÓÃÀ´×ª»¯String
+        // è¿™ä¸ªæ•°ç»„ç”¨æ¥è½¬åŒ–String
         char[] temp_name = arg_name.toCharArray();
 
-        // Èç¹û×Ö·ûÊý²»·ûºÏ¹æÔò
+        // å¦‚æžœå­—ç¬¦æ•°ä¸ç¬¦åˆè§„åˆ™
         if(temp_name.length < 4){
-            throw new AppException("ÓÃ»§Ãû²»ÄÜÐ¡ÓÚ4¸ö×Ö·û£¡£¡");
+            throw new AppException("ç”¨æˆ·åä¸èƒ½å°äºŽ4ä¸ªå­—ç¬¦ï¼ï¼");
         }
         if(temp_name.length > 10){
-            throw new AppException("ÓÃ»§Ãû²»ÄÜ´óÓÚ10¸ö×Ö·û£¡£¡");
+            throw new AppException("ç”¨æˆ·åä¸èƒ½å¤§äºŽ10ä¸ªå­—ç¬¦ï¼ï¼");
         }
 
-        // ¼ìÑéÓÃ»§ÃûÖÐ¼äÊÇ·ñÓÐ¿Õ¸ñ
+        // æ£€éªŒç”¨æˆ·åä¸­é—´æ˜¯å¦æœ‰ç©ºæ ¼
         if(arg_name.contains(" ")){
-            throw new AppException("ÓÃ»§Ãû²»ÄÜ³¬¹ý10¸ö×Ö·û£¡£¡");
+            throw new AppException("ç”¨æˆ·åä¸èƒ½è¶…è¿‡10ä¸ªå­—ç¬¦ï¼ï¼");
         }
     }
 
     /**
-     * Õâ¸öº¯ÊýÓÃÀ´¼ìÑéÃÜÂë
-     * @param arg_password ÃÜÂë²ÎÊý
-     * @throws AppException ÃÜÂë²»ÕýÈ·Òì³£
-     * 1¡¢ÃÜÂë¹æÔò£ºÃÜÂëÖÐ°üº¬×Ö·û£»
-     * 2¡¢ÃÜÂë¹æÔò£ºÃÜÂëÖÐ°üº¬Êý×Ö£»
-     * 3¡¢ÃÜÂë¹æÔò£ºÃÜÂëÖÐ°üº¬ÏÂ»®Ïß
+     * è¿™ä¸ªå‡½æ•°ç”¨æ¥æ£€éªŒå¯†ç 
+     * @param arg_password å¯†ç å‚æ•°
+     * @throws AppException å¯†ç ä¸æ­£ç¡®å¼‚å¸¸
+     * 1ã€å¯†ç è§„åˆ™ï¼šå¯†ç ä¸­åŒ…å«å­—ç¬¦ï¼›
+     * 2ã€å¯†ç è§„åˆ™ï¼šå¯†ç ä¸­åŒ…å«æ•°å­—ï¼›
+     * 3ã€å¯†ç è§„åˆ™ï¼šå¯†ç ä¸­åŒ…å«ä¸‹åˆ’çº¿
      */
     public static void CheckPwd(String arg_password) throws AppException{
 
-        // ÃÜÂëÖÐÓ¦¸Ã°üº¬Ó¢ÎÄ×ÖÄ¸
+        // å¯†ç ä¸­åº”è¯¥åŒ…å«è‹±æ–‡å­—æ¯
         String regex1 = ".*[a-zA-z].*";
         boolean result1 = arg_password.matches(regex1);
         if(!result1){
-            throw new AppException("ÃÜÂëÖÐÓ¦°üº¬Ó¢ÎÄ×ÖÄ¸£¡£¡");
+            throw new AppException("å¯†ç ä¸­åº”åŒ…å«è‹±æ–‡å­—æ¯ï¼ï¼");
         }
 
-        // ÃÜÂëÖÐÓ¦¸Ã°üº¬Êý×Ö
+        // å¯†ç ä¸­åº”è¯¥åŒ…å«æ•°å­—
         String regex2 = ".*[0-9].*";
         boolean result2 = arg_password.matches(regex2);
         if(!result2){
-            throw new AppException("ÃÜÂëÖÐÓ¦°üº¬Êý×Ö£¡£¡");
+            throw new AppException("å¯†ç ä¸­åº”åŒ…å«æ•°å­—ï¼ï¼");
         }
 
-        // ÃÜÂëÖÐÓ¦°üº¬ÏÂ»®Ïß
+        // å¯†ç ä¸­åº”åŒ…å«ä¸‹åˆ’çº¿
         if(!arg_password.contains("_")){
-            throw new AppException("ÃÜÂëÖÐÓ¦°üº¬ÏÂ»®Ïß£¡£¡");
+            throw new AppException("å¯†ç ä¸­åº”åŒ…å«ä¸‹åˆ’çº¿ï¼ï¼");
         }
     }
 }

@@ -49,9 +49,61 @@ public class Database {
      * @param userName 用户名
      * @throws SQLException SQL异常
      */
-    public static void insertCustomer(String userName, String password) throws SQLException {
-        String sql = "INSERT INTO customer (name, password) VALUES ('" + userName + "', '" + password + "')";
+    public static void insertCustomer(String userName, String password) throws SQLException, AppException {
+        String sqlFindCustomer = "SELECT * FROM customer WHERE name = '" + userName + "'";
+        String sqlFromOwner = "SELECT * FROM owner WHERE name = '" + userName + "'";
+        boolean isCustomer = false;
+        boolean isOwner = false;
         stmt = conn.createStatement();
+        ResultSet rsFromCustomer = stmt.executeQuery(sqlFindCustomer);
+        if (rsFromCustomer.next()) {
+            isCustomer = true;
+        }
+        ResultSet rsFromOwner = stmt.executeQuery(sqlFromOwner);
+        if (rsFromOwner.next()) {
+            isOwner = true;
+        }
+        if (isCustomer || isOwner) {
+            throw new AppException("用户名已存在");
+        }
+        rsFromCustomer.close();
+        rsFromOwner.close();
+
+        String sql = "INSERT INTO customer (name, password) VALUES ('" + userName + "', '" + password + "')";
+        stmt.executeUpdate(sql);
+        stmt.close();
+    }
+
+    /**
+     * 添加商家
+     * 根据传入的商家名和商家描述将其添加入数据库
+     *
+     * @param ownerName    商家名
+     * @param introduction 商家介绍
+     * @param password     商家密码
+     * @throws SQLException SQL异常
+     */
+    public static void insertOwner(String ownerName, String introduction, String password) throws SQLException, AppException {
+        String sqlFromCustomer = "SELECT * FROM customer WHERE name = '" + ownerName + "'";
+        String sqlFromOwner = "SELECT * FROM owner WHERE name = '" + ownerName + "'";
+        boolean isCustomer = false;
+        boolean isOwner = false;
+        stmt = conn.createStatement();
+        ResultSet rsFromCustomer = stmt.executeQuery(sqlFromCustomer);
+        if (rsFromCustomer.next()) {
+            isCustomer = true;
+        }
+        ResultSet rsFromOwner = stmt.executeQuery(sqlFromOwner);
+        if (rsFromOwner.next()) {
+            isOwner = true;
+        }
+        if (isCustomer || isOwner) {
+            throw new AppException("用户名已存在");
+        }
+        rsFromCustomer.close();
+        rsFromOwner.close();
+
+        String sql = "INSERT INTO owner (name, introduction, password) VALUES ('" + ownerName + "', '" + introduction + "', '" + password + "')";
         stmt.executeUpdate(sql);
         stmt.close();
     }
@@ -69,42 +121,29 @@ public class Database {
     public static Map<String, String> getPassword(String userName) throws SQLException, AppException {
         String sqlFromCustomer = "SELECT password FROM customer WHERE name = '" + userName + "'";
         String sqlFromOwner = "SELECT password FROM owner WHERE name = '" + userName + "'";
-        stmt = conn.createStatement();
-        ResultSet rsFromCustomer = stmt.executeQuery(sqlFromCustomer);
-        ResultSet rsFromOwner = stmt.executeQuery(sqlFromOwner);
-
         String password;
         Map<String, String> map = new HashMap<>();
+        stmt = conn.createStatement();
+        ResultSet rsFromCustomer = stmt.executeQuery(sqlFromCustomer);
         if (rsFromCustomer.next()) {
             password = rsFromCustomer.getString("password");
-            map.put("customer", password);
-        } else if (rsFromOwner.next()) {
+            map.put("customer", userName);
+            map.put("password", password);
+            stmt.close();
+            rsFromCustomer.close();
+            return map;
+        }
+        ResultSet rsFromOwner = stmt.executeQuery(sqlFromOwner);
+        if (rsFromOwner.next()) {
             password = rsFromOwner.getString("password");
-            map.put("owner", password);
-        } else {
-            throw new AppException("用户名不存在");
+            map.put("owner", userName);
+            map.put("password", password);
+            stmt.close();
+            rsFromOwner.close();
+            return map;
         }
 
-        stmt.close();
-        rsFromCustomer.close();
-        rsFromOwner.close();
-        return map;
-    }
-
-    /**
-     * 添加商家
-     * 根据传入的商家名和商家描述将其添加入数据库
-     *
-     * @param ownerName    商家名
-     * @param introduction 商家介绍
-     * @param password     商家密码
-     * @throws SQLException SQL异常
-     */
-    public static void insertOwner(String ownerName, String introduction, String password) throws SQLException {
-        String sql = "INSERT INTO owner (name, introduction, password) VALUES ('" + ownerName + "', '" + introduction + "', '" + password + "')";
-        stmt = conn.createStatement();
-        stmt.executeUpdate(sql);
-        stmt.close();
+        throw new AppException("用户名不存在");
     }
 
     /**
@@ -150,7 +189,7 @@ public class Database {
         String OwnerName = order.getNameOfOwner();
         double totalPrice = order.getPrice();
         boolean completed = order.isCompleted();
-        Date orderTime = order.getOrderTime();
+        java.util.Date orderTime = order.getOrderTime();
         HashMap<String, Integer> dishes = order.getDishes();
 
         String sqlFindThisOrder = "SELECT id FROM orders WHERE customer_id IN (SELECT id FROM customer WHERE name = '" + customerName + "' AND completed = false ORDER BY id DESC LIMIT 1)";

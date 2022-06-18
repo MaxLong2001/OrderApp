@@ -1,6 +1,7 @@
 package backend;
 
 import backend.AppException.AppException;
+import backend.Monitor.Constraint;
 import backend.Recommend.ForCustomer;
 import database.Database;
 
@@ -16,27 +17,15 @@ public class BackendTest {
         }
     }
 
-    public static void main(String[] args) throws SQLException, ClassNotFoundException{
+    public static void main(String[] args) throws SQLException, ClassNotFoundException {
 
         Database.init();
 
-        /*List<Owner> owners = null;
-        try{
-            owners = SearchAll.MySearch("new", Database.getAllOwner());
-        }catch (AppException e){
-            System.out.println(e);
-        }
-        assert owners != null;
-        print(owners);*/
-
-        List<Owner> owners = null;
+        // ≤‚ ‘Constraint
         try {
-            owners = ForCustomer.OwnerRecommend(Database.getAllOwner());
+            Constraint.CheckPwd("JASb_2");
         }catch (AppException e){
             System.out.println(e);
         }
-
-        assert false;
-        print(owners);
     }
 }

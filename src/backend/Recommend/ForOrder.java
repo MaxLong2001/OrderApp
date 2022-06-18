@@ -8,25 +8,25 @@ import java.util.List;
 /**
  * @version 1.0
  * @author JiangXingru
- * Õâ¸öÀàÊÇÎªÁËÔÚ´´½¨ÓÃ»§±íµÄÊ±ºò½«ÓÃ»§µÄ±íµ¥°´ÕÕÈÕÆÚÅÅĞò
+ * è¿™ä¸ªç±»æ˜¯ä¸ºäº†åœ¨åˆ›å»ºç”¨æˆ·è¡¨çš„æ—¶å€™å°†ç”¨æˆ·çš„è¡¨å•æŒ‰ç…§æ—¥æœŸæ’åº
  */
 
 public class ForOrder {
 
     /**
-     * °´ÕÕÈÕÆÚË³ĞòÅÅĞòÉÌ¼Ò¶©µ¥ÁĞ±í
-     * @param orders ÉÌ¼Ò¶©µ¥ÁĞ±í
+     * æŒ‰ç…§æ—¥æœŸé¡ºåºæ’åºå•†å®¶è®¢å•åˆ—è¡¨
+     * @param orders å•†å®¶è®¢å•åˆ—è¡¨
      */
     public static List<Order> OrderRecommend(List<Order> orders){
 
-        // ½«ÉÌ¼Ò¶©µ¥°´ÕÕÈÕÆÚÅÅĞò
+        // å°†å•†å®¶è®¢å•æŒ‰ç…§æ—¥æœŸæ’åº
         orders.sort(((o1, o2) -> {
             Date date1 = o1.orderTime;
             Date date2 = o2.orderTime;
             return date1.compareTo(date2);
         }));
 
-        // ·µ»ØÉÏÅÅĞòºÃµÄ¶©µ¥ÁĞ±í
+        // è¿”å›ä¸Šæ’åºå¥½çš„è®¢å•åˆ—è¡¨
         return orders;
     }
 }

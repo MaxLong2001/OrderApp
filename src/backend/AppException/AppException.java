@@ -3,27 +3,27 @@ package backend.AppException;
 /**
  * @version 1.0
  * @author JiangXingru
- * Ó¦×é³¤ÒªÇó£¬Õâ¸öÀàÓÃÀ´½«¡±ÉúÓ²¡°µÄÒì³£×ª»¯³ÉÎÒÃÇ±È½ÏÍ¨Ë×Ò×¶®µÄÒì³£¡£
+ * åº”ç»„é•¿è¦æ±‚ï¼Œè¿™ä¸ªç±»ç”¨æ¥å°†â€ç”Ÿç¡¬â€œçš„å¼‚å¸¸è½¬åŒ–æˆæˆ‘ä»¬æ¯”è¾ƒé€šä¿—æ˜“æ‡‚çš„å¼‚å¸¸ã€‚
  */
 
 public class AppException extends Exception{
 
     /**
-     * Õâ¸öÀàÐèÒªÒ»¸öÍ¨Ë×Ò×¶®µÄ±êÊ¶·û£¬
-     * ÐèÒªÓÃÒ»¸öË½ÓÐÊôÐÔÀ´±íÊ¾
+     * è¿™ä¸ªç±»éœ€è¦ä¸€ä¸ªé€šä¿—æ˜“æ‡‚çš„æ ‡è¯†ç¬¦ï¼Œ
+     * éœ€è¦ç”¨ä¸€ä¸ªç§æœ‰å±žæ€§æ¥è¡¨ç¤º
      */
     private final String warning;
 
     /**
-     * ÔÚ¹¹Ôì·½·¨ÖÐÊäÈëÄãÏëÒªµÄ×Ö·û´®£¬½«×Ö·û´®±£´æµ½Ë½ÓÐÊôÐÔÖÐ
-     * @param arg_warning ÓÃ»§×Ô¶¨ÒåµÄ¾¯¸æ±äÁ¿
+     * åœ¨æž„é€ æ–¹æ³•ä¸­è¾“å…¥ä½ æƒ³è¦çš„å­—ç¬¦ä¸²ï¼Œå°†å­—ç¬¦ä¸²ä¿å­˜åˆ°ç§æœ‰å±žæ€§ä¸­
+     * @param arg_warning ç”¨æˆ·è‡ªå®šä¹‰çš„è­¦å‘Šå˜é‡
      */
     public AppException(String arg_warning){
         warning = arg_warning;
     }
 
     /**
-     * Õâ¸öÀàÓÃÀ´Êä³öÎÒÃÇÏëÒªµÄÒì³£¶ÔÏó
+     * è¿™ä¸ªç±»ç”¨æ¥è¾“å‡ºæˆ‘ä»¬æƒ³è¦çš„å¼‚å¸¸å¯¹è±¡
      */
     @Override
     public String toString(){

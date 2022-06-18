@@ -4,6 +4,7 @@ import backend.AppException.AppException;
 import backend.Customer;
 import backend.User;
 import frontend.Tool.FormItem;
+import frontend.Tool.MyButton;
 import frontend.Tool.MyEvent;
 import frontend.Tool.MyView;
 
@@ -29,12 +30,14 @@ public class Login extends MyView {
         nameInput = new NameInput();
         pwdInput = new PwdInput();
         LoginBtn loginBtn = new LoginBtn();
+        JPanel btnPanel = new JPanel();
+        btnPanel.add(loginBtn);
 
 
         Box vBox = Box.createVerticalBox();
         vBox.add(nameInput);
         vBox.add(pwdInput);
-        vBox.add(loginBtn);
+        vBox.add(btnPanel);
 
         add(vBox);
     }
@@ -48,9 +51,10 @@ public class Login extends MyView {
             super("请输入密码", true);
         }
     }
-    class LoginBtn extends JButton {
+    class LoginBtn extends MyButton {
         public LoginBtn(){
             super("登录");
+
             addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -60,9 +64,7 @@ public class Login extends MyView {
                         dispatchMyEvent(new DoneLoginEvent(loginUser));
                     }else {
                         try{
-                            //todo 需要登录的实现
-//                        loginUser = User.login(userName, pwd);
-                            loginUser = new Customer(userName, pwd);
+                        loginUser = User.login(userName, pwd);
                             dispatchMyEvent(new DoneLoginEvent(loginUser));
                         }catch (AppException ex){
                             JOptionPane.showConfirmDialog(Login.this, ex, "登录异常", JOptionPane.DEFAULT_OPTION);

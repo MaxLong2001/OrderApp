@@ -17,7 +17,7 @@ import java.awt.*;
  * 程序窗口
  */
 public class Frontend extends JFrame{
-    public static boolean deBug = true;
+    public static boolean deBug = false;
 
 
     MyView nowView;

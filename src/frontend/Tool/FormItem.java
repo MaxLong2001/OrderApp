@@ -25,6 +25,7 @@ public class FormItem extends JPanel {
         label.setPreferredSize(new Dimension(leftWidth, getPreferredSize().height));
         label.setHorizontalAlignment(SwingConstants.RIGHT);
         label.setText(information);
+        label.setFont(MyFont.font1());
 
         if(isPwd){
             textField = new JPasswordField(textCol);
@@ -32,16 +33,18 @@ public class FormItem extends JPanel {
             textField = new JTextField(textCol);
         }
 //            textField.setPreferredSize(new Dimension(100, getFont().getSize()*2));
-        textField.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
-                new EmptyBorder(new Insets(15, 25, 15, 25))));
-
+//        textField.setBorder(BorderFactory.createCompoundBorder(
+//                new CustomeBorder(),
+//                new EmptyBorder(new Insets(15, 25, 15, 25))));
+        textField.setBorder(new EmptyBorder(new Insets(10, 20, 10, 20)));
+//        textField.setBorder(new CustomeBorder());
 
         box.add(label);
         box.add(Box.createHorizontalStrut(interval));
         box.add(textField);
-        setBackground(MyColor.color1());
+//        setBackground(MyColor.color1());
         add(box);
+
     }
     static class CustomeBorder extends AbstractBorder {
         @Override
@@ -50,8 +53,8 @@ public class FormItem extends JPanel {
             // TODO Auto-generated method stubs
             super.paintBorder(c, g, x, y, width, height);
             Graphics2D g2d = (Graphics2D)g;
-            g2d.setStroke(new BasicStroke(12));
-            g2d.setColor(Color.blue);
+            g2d.setStroke(new BasicStroke(10));
+            g2d.setColor(MyColor.color1());
             g2d.drawRoundRect(x, y, width - 1, height - 1, 25, 25);
         }
     }

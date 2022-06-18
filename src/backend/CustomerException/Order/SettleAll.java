@@ -1,7 +1,10 @@
 package backend.CustomerException.Order;
 
+import backend.AppException.AppException;
 import backend.Dish;
+import database.Database;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -43,6 +46,33 @@ public class SettleAll{
             if (temp.name.equals(name)) {
                 if (amount > temp.getRemainQuantity()) {
                     throw new AmountIllegal(temp, amount);
+                }
+            }
+        }
+    }
+
+    /**
+     * 这个参数用来更改菜品现存量和剩余量
+     * @param arg_dishes 菜品参数列表
+     * @param name  菜品名字
+     * @param amount 传入菜品数量
+     */
+    public static
+    void SetAmount(List<Dish> arg_dishes, String owner_name, String name, int amount)
+            throws AppException {
+        for (Dish temp : arg_dishes) {
+            if (temp.name.equals(name)) {
+
+                // 减少菜品剩余量
+                temp.remainQuantity -= amount;
+                // 增加菜品销量
+                temp.salesQuantity += amount;
+
+                // 向数据库中更新菜品信息
+                try {
+                    Database.changeDish(owner_name, temp);
+                }catch (SQLException e){
+                    throw new AppException("向数据库中保存食品信息错误！！");
                 }
             }
         }

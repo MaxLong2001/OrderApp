@@ -10,8 +10,8 @@ public class MyButton extends JButton {
     static final int Focus = 1;
     static final int Click = 2;
     int state = Normal;
-    int width = 200;
-    int height = 50;
+    int width = 160;
+    int height = 40;
     JLabel textLabel;
     Color colorNormal = new Color(MyColor.color3().getRed(), MyColor.color3().getGreen(), MyColor.color3().getBlue(), (int) (MyColor.color3().getAlpha() * 0.8));
     Color colorFocus = new Color(colorNormal.getRed(), colorNormal.getGreen(), colorNormal.getBlue(), (int) (colorNormal.getAlpha() * 0.8));
@@ -22,7 +22,7 @@ public class MyButton extends JButton {
         textLabel = new JLabel();
         textLabel.setFont(new Font("黑体", Font.PLAIN, 20));
         textLabel.setText(text);
-        setPreferredSize(new Dimension(200, 50));
+        setPreferredSize(new Dimension(width, height));
         add(textLabel);
         setContentAreaFilled(false);
         addMouseListener(new MouseAdapter() {

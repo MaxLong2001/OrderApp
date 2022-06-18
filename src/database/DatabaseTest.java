@@ -18,7 +18,7 @@ public class DatabaseTest {
             Order order = new Order();
             order.setNameOfCustomer("User1");
             order.setNameOfOwner("Owner1");
-
+            order.setOrderTime(date);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -35,7 +35,7 @@ public abstract class User {
         if(temp_all.containsKey("customer")){
 
             // 如果密码正确
-            if(temp_all.get("customer").equals(pwd)){
+            if(temp_all.get("password").equals(pwd)){
 
                 // 返回顾客类型变量
                 return new Customer(name, pwd);
@@ -45,7 +45,7 @@ public abstract class User {
             }
         } else if(temp_all.containsKey("owner")){
             // 如果密码正确
-            if(temp_all.get("owner").equals(pwd)){
+            if(temp_all.get("password").equals(pwd)){
 
                 // 返回商家类型变量
                 return new Owner(name, pwd);

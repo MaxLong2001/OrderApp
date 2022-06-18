@@ -1,6 +1,8 @@
 package frontend;
 
-import frontend.Map.Map;
+import backend.Customer;
+import frontend.Customer.order.OrderView;
+import frontend.Customer.OwnerView;
 import frontend.Tool.MyEvent;
 import frontend.Tool.MyListener;
 import frontend.Tool.MyView;
@@ -27,20 +29,23 @@ public class Frontend extends JFrame{
 //        setLayout(layout);
         setSize(1024, 768);
         setTitle("购餐系统");
-//        nowView = new Welcome();
-//        nowView = new Order();
-//        nowView = new OwnerView();
-//        content.add(nowView);
 
-        JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setViewportView(new Map());
-        add(scrollPane);
+        if(deBug){
+//            Customer customer = new Customer();
 
-//        changeView(new Map());
+    //        nowView = new Welcome();
+    //        nowView = new Order();
+    //        nowView = new OwnerView();
+    //        content.add(nowView);
+//            JScrollPane scrollPane = new JScrollPane();
+//            scrollPane.setViewportView(new Map());
+//            add(scrollPane);
+            changeView(new frontend.Owner.OwnerView());
+            changeView(new OrderView(null, null));
+        }else{
+            changeView(new Welcome());
+        }
         setVisible(true);
-
-
-
     }
 
     private void changeView(MyView newView){

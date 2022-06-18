@@ -1,7 +1,8 @@
-package frontend;
+package frontend.Customer;
 
 import backend.Owner;
 import backend.User;
+import frontend.Frontend;
 import frontend.Tool.MyColor;
 import frontend.Tool.MyItem;
 import frontend.Tool.MyView;

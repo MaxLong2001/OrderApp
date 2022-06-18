@@ -36,4 +36,11 @@ public class MyView extends JPanel {
     public void addMyListener(MyListener eventListener){
         eventListenerList.add(eventListener);
     }
+
+    /**
+     * 打开一个窗口
+     */
+    public void openWindow(MyView view){
+
+    }
 }

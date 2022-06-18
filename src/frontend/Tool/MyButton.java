@@ -35,7 +35,7 @@ public class MyButton extends JButton {
             @Override
             public void mouseExited(MouseEvent e) {
                 state = Normal;
-                System.out.println("exited");
+//                System.out.println("exited");
                 repaint();
             }
 
@@ -50,7 +50,7 @@ public class MyButton extends JButton {
                 if(e.getX() >= 0 && e.getX() <= getPreferredSize().width &&
                         e.getY() >= 0 && e.getY() <= getPreferredSize().height){
                     state = Focus;
-                    System.out.println("state = focus");
+//                    System.out.println("state = focus");
                 }else {
                     state = Normal;
                 }
@@ -94,7 +94,7 @@ public class MyButton extends JButton {
             case Focus -> renderColor = new Color(renderColor.getRed(), renderColor.getGreen(), renderColor.getBlue(), (int) (renderColor.getAlpha() * 0.8));
             case Click -> renderColor = new Color(renderColor.getRed(), renderColor.getGreen(), renderColor.getBlue(), (int) (renderColor.getAlpha() * 1.2));
         }
-        System.out.println(renderColor);
+//        System.out.println(renderColor);
 //        Graphics2D graphics2D = (Graphics2D) g;
 
 //        graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,

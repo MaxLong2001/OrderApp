@@ -774,10 +774,17 @@ public class Database {
      * @param ownerName 商家名
      * @param dish      菜品
      * @throws SQLException 数据库查询错误
+     * @throws AppException 商家修改出错
      */
-    public static void changeDish(String ownerName, Dish dish) throws SQLException {
-        String sql = "UPDATE dish SET name = '" + dish.getName() + "', price = '" + dish.getPrice() + "', introduction = '" + dish.getIntroduction() + "', type = '" + dish.getType() + "', sales = '" + dish.getSalesQuantity() + "', remain = '" + dish.getRemainQuantity() + "' WHERE owner_id = (SELECT id FROM owner WHERE name = '" + ownerName + "') AND name = '" + dish.getName() + "'";
+    public static void changeDish(String ownerName, Dish dish) throws SQLException, AppException {
+        String sqlFindDish = "SELECT * FROM dish WHERE name = '" + dish.getName() + "' AND owner_id = (SELECT id FROM owner WHERE name = '" + ownerName + "')";
         stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sqlFindDish);
+        if (!rs.next()) {
+            throw new AppException("该商家不存在该菜品");
+        }
+
+        String sql = "UPDATE dish SET name = '" + dish.getName() + "', price = '" + dish.getPrice() + "', introduction = '" + dish.getIntroduction() + "', type = '" + dish.getType() + "', sales = '" + dish.getSalesQuantity() + "', remain = '" + dish.getRemainQuantity() + "' WHERE owner_id = (SELECT id FROM owner WHERE name = '" + ownerName + "') AND name = '" + dish.getName() + "'";
         stmt.executeUpdate(sql);
         stmt.close();
     }
@@ -789,10 +796,17 @@ public class Database {
      * @param ownerName 商家名
      * @param dish      菜品
      * @throws SQLException 数据库查询错误
+     * @throws AppException 商家删除出错
      */
-    public static void deleteDish(String ownerName, Dish dish) throws SQLException {
-        String sql = "DELETE FROM dish WHERE owner_id = (SELECT id FROM owner WHERE name = '" + ownerName + "') AND name = '" + dish.getName() + "'";
+    public static void deleteDish(String ownerName, Dish dish) throws SQLException, AppException {
+        String sqlFindDish = "SELECT * FROM dish WHERE name = '" + dish.getName() + "' AND owner_id = (SELECT id FROM owner WHERE name = '" + ownerName + "')";
         stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sqlFindDish);
+        if (!rs.next()) {
+            throw new AppException("该商家不存在该菜品");
+        }
+
+        String sql = "DELETE FROM dish WHERE owner_id = (SELECT id FROM owner WHERE name = '" + ownerName + "') AND name = '" + dish.getName() + "'";
         stmt.executeUpdate(sql);
         stmt.close();
     }

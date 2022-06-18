@@ -44,7 +44,6 @@ public abstract class User {
                 throw new AppException("密码不正确！！");
             }
         } else if(temp_all.containsKey("owner")){
-
             // 如果密码正确
             if(temp_all.get("owner").equals(pwd)){
 

@@ -49,8 +49,7 @@ public class OwnerView extends MyView {
                 orders.add(order);
                 orders.add(order);
             }else {
-                // todo 改成show Uncooked
-                orders = loginOwner.ShowUnFinished();
+                orders = loginOwner.ShowUncooked();
             }
 
             for(Order o : orders){

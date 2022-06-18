@@ -50,13 +50,13 @@ public class DishItem extends MyItem {
 
 
         if(type == customerOrder){
-            addLeft(amount);
+//            addLeft(amount);
 
             addRight(minus);
             addRight(ordered);
             addRight(plus);
         }else if(type == ownerOrder){
-            addLeft(amount);
+//            addLeft(amount);
 
             addRight(ordered2);
         }else if(type == customerBrowse){

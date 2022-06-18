@@ -4,6 +4,7 @@ import backend.Dish;
 import backend.Order;
 import frontend.DishItem;
 import frontend.Frontend;
+import frontend.Tool.MyList;
 
 import javax.swing.*;
 import java.awt.*;
@@ -41,20 +42,13 @@ public class DishArea extends JPanel {
 /**
  * 已经存在滚动条
  */
-class DishList extends JPanel{
+class DishList extends MyList {
     List<Dish> dishes;
     Order order;
-
-
-    private int listWidth = 400;
-    private int listHeight = 400;
 
     public DishList(List<Dish> dishes, Order order){
         this.dishes = dishes;
         this.order = order;
-
-
-        Box vBox = Box.createVerticalBox();
 
         for(Dish d : dishes){
             DishItem dishItem;
@@ -66,12 +60,9 @@ class DishList extends JPanel{
                 orderedNum = 0;
             }
             dishItem = new DishItem(DishItem.customerBrowse, d, orderedNum);
-            vBox.add(dishItem);
+            addItem(dishItem);
         }
 
-        JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setPreferredSize(new Dimension(listWidth + 40, listHeight));
-        scrollPane.setViewportView(vBox);
-        add(scrollPane);
+        setHeight(400);
     }
 }

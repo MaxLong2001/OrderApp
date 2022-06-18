@@ -6,6 +6,7 @@ import frontend.DishItem;
 import frontend.Frontend;
 import frontend.Tool.MyColor;
 import frontend.Tool.MyItem;
+import frontend.Tool.MyList;
 
 import javax.swing.*;
 import java.awt.*;
@@ -59,14 +60,12 @@ class OrderCommit extends Box {
     }
 }
 
-class OrderItemList extends JPanel{
-    private int listWidth = 400;
-    private int listHeight = 400;
+class OrderItemList extends MyList {
 
     List<MyItem> orderItems = new ArrayList<>();
 
     public OrderItemList(Order order){
-        Box vBox = Box.createVerticalBox();
+//        Box vBox = Box.createVerticalBox();
         Set<Map.Entry<String, Integer>> entry = order.getDishes().entrySet();
         for(Map.Entry<String, Integer> i : entry){
             //todo
@@ -75,12 +74,8 @@ class OrderItemList extends JPanel{
             dish.setPrice(12.3);
             DishItem item = new DishItem(DishItem.customerOrder, dish ,i.getValue());
             orderItems.add(item);
-            vBox.add(item);
+            addItem(item);
         }
-
-        JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setPreferredSize(new Dimension(listWidth + 40, listHeight));
-        scrollPane.setViewportView(vBox);
-        add(scrollPane);
+        setHeight(400);
     }
 }

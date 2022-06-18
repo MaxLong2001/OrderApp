@@ -59,6 +59,7 @@ create table comments
     owner_id    int          not null,
     content     varchar(255) not null,
     rating      double default 5.0,
+    comment_time datetime default now(),
     foreign key (customer_id) references customer (id) on delete cascade,
     foreign key (owner_id) references owner (id) on delete cascade
 );

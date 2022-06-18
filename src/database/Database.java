@@ -1,6 +1,7 @@
 package database;
 
 import backend.AppException.AppException;
+import backend.Comment;
 import backend.Dish;
 import backend.Order;
 import backend.Owner;
@@ -155,21 +156,25 @@ public class Database {
      * @param ownerName 商家名
      * @throws SQLException SQL异常
      */
-    public static void insertDish(Dish dish, String ownerName) throws SQLException {
+    public static void insertDish(Dish dish, String ownerName) throws SQLException, AppException {
         String dishName = dish.getName();
         String introduction = dish.getIntroduction();
         double price = dish.getPrice();
         int sales = dish.getSalesQuantity();
         int remain = dish.getRemainQuantity();
         String type = dish.getType();
+
         String sqlFindOwnerId = "SELECT id FROM owner WHERE name = '" + ownerName + "'";
         stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(sqlFindOwnerId);
         int ownerId = 0;
-        while (rs.next()) {
+        if (rs.next()) {
             ownerId = rs.getInt("id");
+        } else {
+            throw new AppException("商家名不存在");
         }
         rs.close();
+
         String sql = "INSERT INTO dish(name, introduction, price, sales, remain, type, owner_id) VALUES ('" + dishName + "', '" + introduction + "', " + price + ", " + sales + ", " + remain + ", '" + type + "', " + ownerId + ")";
         stmt.executeUpdate(sql);
         stmt.close();
@@ -622,6 +627,61 @@ public class Database {
     }
 
     /**
+     * 返回商家评论
+     * 根据传入的商家名查询数据库中的商家记录，并返回该商家的评论
+     *
+     * @param ownerName 商家名
+     * @return 商家评论
+     * @throws SQLException 数据库查询错误
+     * @throws AppException 顾客查询出错
+     */
+    public static List<Comment> getOwnerComments(String ownerName) throws SQLException, AppException {
+        String sql = "SELECT * FROM comments WHERE owner_id = (SELECT id FROM owner WHERE name = '" + ownerName + "')";
+        stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        List<Comment> commentList = new ArrayList<>();
+        while (rs.next()) {
+            Comment comment = new Comment();
+            comment.setCustomerName(getCustomerName(rs.getInt("customer_id")));
+            comment.setOwnerName(ownerName);
+            comment.setRating(rs.getDouble("rating"));
+            comment.setContent(rs.getString("content"));
+            comment.setCommentTime(rs.getDate("comment_time"));
+            commentList.add(comment);
+        }
+        rs.close();
+        stmt.close();
+        return commentList;
+    }
+
+    /**
+     * 返回顾客评论
+     *
+     * @param customerName 顾客名
+     * @return 顾客评论
+     * @throws SQLException 数据库查询错误
+     * @throws AppException 商家查询出错
+     */
+    public static List<Comment> getCustomerComments(String customerName) throws SQLException, AppException {
+        String sql = "SELECT * FROM comments WHERE customer_id = (SELECT id FROM customer WHERE name = '" + customerName + "')";
+        stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        List<Comment> commentList = new ArrayList<>();
+        while (rs.next()) {
+            Comment comment = new Comment();
+            comment.setCustomerName(customerName);
+            comment.setOwnerName(getOwnerName(rs.getInt("owner_id")));
+            comment.setRating(rs.getDouble("rating"));
+            comment.setContent(rs.getString("content"));
+            comment.setCommentTime(rs.getDate("comment_time"));
+            commentList.add(comment);
+        }
+        rs.close();
+        stmt.close();
+        return commentList;
+    }
+
+    /**
      * 访问商家
      * 根据传入的商家名进行访问商家操作，将其访问量加1
      *
@@ -719,6 +779,46 @@ public class Database {
         stmt = conn.createStatement();
         stmt.executeUpdate(sql);
         stmt.close();
+    }
+
+    /**
+     * 根据商家id查询商家名
+     *
+     * @param ownerId 商家id
+     * @return 商家名
+     * @throws SQLException 数据库查询错误
+     * @throws AppException 商家id不存在
+     */
+    public static String getOwnerName(int ownerId) throws SQLException, AppException {
+        String sql = "SELECT name FROM owner WHERE id = " + ownerId;
+
+        stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        if (rs.next()) {
+            return rs.getString("name");
+        } else {
+            throw new AppException("商家id不存在");
+        }
+    }
+
+    /**
+     * 根据顾客id查询顾客名
+     *
+     * @param customerId 顾客id
+     * @return 顾客名
+     * @throws SQLException 数据库查询错误
+     * @throws AppException 顾客id不存在
+     */
+    public static String getCustomerName(int customerId) throws SQLException, AppException {
+        String sql = "SELECT name FROM customer WHERE id = " + customerId;
+
+        stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        if (rs.next()) {
+            return rs.getString("name");
+        } else {
+            throw new AppException("顾客id不存在");
+        }
     }
 
     /**

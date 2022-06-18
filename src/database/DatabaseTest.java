@@ -1,8 +1,10 @@
 package database;
 
 import backend.AppException.AppException;
+import backend.Order;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map;
 
 public class DatabaseTest {
@@ -11,9 +13,13 @@ public class DatabaseTest {
 
         Database.init();
         try {
-            Map<String, String> map = Database.getPassword("balabala");
-            System.out.println(map);
-        } catch (AppException e) {
+            java.util.Date date = new java.util.Date("2022-01-01 00:00:00");
+            Map<String, Integer> map = new HashMap<>();
+            Order order = new Order();
+            order.setNameOfCustomer("User1");
+            order.setNameOfOwner("Owner1");
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

@@ -48,7 +48,7 @@ public abstract class User {
             if(temp_all.get("owner").equals(pwd)){
 
                 // 返回商家类型变量
-                return new Owner().NewOwner(name, pwd);
+                return new Owner(name, pwd);
             } else{
 
                 throw new AppException("密码不正确！！");

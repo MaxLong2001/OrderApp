@@ -14,8 +14,12 @@ public class Owner extends User{
     public ArrayList<Order> orders_finished = new ArrayList<>();
     public ArrayList<Order> orders_unfinished = new ArrayList<>();
     public List<Dish> dishes = new ArrayList<>();
-    public ArrayList<String> comments = new ArrayList<>();
+    public ArrayList<Comment> comments = new ArrayList<>();
 
+
+    public Owner(){
+
+    }
     /**
      * 这个初始化方法可以初始化商家的基本属性。
      * 这个方法中传入的参数来自登录界面中的用户名。
@@ -24,10 +28,10 @@ public class Owner extends User{
      * 注：这个方法应该在图形化登录时使用。
      * @throws AppException 数据库异常
      */
-    public Owner NewOwner(String name, String password) throws AppException {
+    public Owner(String name, String password) throws AppException {
 
         //这是一个临时设置的owner对象，用于保存从数据库中获得的owner
-        Owner owner = new Owner();
+        Owner owner;
 
         // 这是一个临时设置的密码变量
         Map<String, String> temp_all;
@@ -60,15 +64,62 @@ public class Owner extends User{
         }catch (SQLException e){
             throw new AppException("获取商家信息失败！！");
         }
+        this.name = owner.name;
+        this.introduction = owner.introduction;
+        this.rating = owner.rating;
+        this.visit = owner.visit;
 
-        return owner;
+        List<Order> tmp_orders;
+        List<Dish> tmp_dishes;
+        List<Comment> tmp_comments;
+
+        // 尝试导出订单列表。
+        try{
+            tmp_orders = Database.getOwnerOrderList(name);
+        }catch(SQLException e){
+            throw new AppException("导出商家订单列表失败！！");
+        }
+
+        // 初始化order_finished和order_unfinished
+        this.orders_finished = new ArrayList<>();
+        this.orders_unfinished = new ArrayList<>();
+        // 将导出的订单列表按照是否完成进行分类
+        for(Order order: tmp_orders){
+            if(order.completed){
+                this.orders_finished.add(order);
+            }
+            else{
+                this.orders_unfinished.add(order);
+            }
+        }
+
+        // 尝试导出菜品列表。
+        try{
+            tmp_dishes = Database.getDishList(name);
+        }catch(SQLException e){
+            throw new AppException("导出商家菜品列表失败！！");
+        }
+
+        this.dishes = new ArrayList<>();
+        this.dishes.addAll(tmp_dishes);
+
+        // 尝试导出评论列表。
+        try{
+            tmp_comments = Database.getOwnerComments(name);
+        }catch(SQLException e){
+            throw new AppException("导出商家评论列表失败！！");
+        }
+
+        this.comments = new ArrayList<>();
+        this.comments.addAll(tmp_comments);
+
     }
         /**
          * 这个方法用于商家添加菜品，传入对应的菜品
          * 添加成功则返回true
          */
     public void addDishes(String nameOfOwner, String nameOfDish, double price, String type, String introduction) throws AppException {
-        int i=0;
+        int i;
         try {
             dishes = Database.getDishList(nameOfOwner);
         }catch (SQLException e)
@@ -89,6 +140,7 @@ public class Owner extends User{
         {
             if(dishes.get(i).getName().equals(dish.name)) {
                 flag = 1;
+                break;
             }
         }
         if(flag==0)
@@ -107,7 +159,7 @@ public class Owner extends User{
      * 修改成功则返回true
      */
     public void modifyDishes(String nameOfOwner, String nameOfDish, double price, String type, String introduction) throws AppException {
-        int i=0;
+        int i;
         try {
             dishes = Database.getDishList(nameOfOwner);
         }catch (SQLException e)
@@ -128,6 +180,7 @@ public class Owner extends User{
         {
             if(dishes.get(i).getName().equals(dish.name)) {
                 flag = 1;
+                break;
             }
         }
         if(flag==1)
@@ -146,7 +199,7 @@ public class Owner extends User{
      * 查找到并删除成功则返回true
      */
     public void pullOffDishes(String nameOfOwner, String nameOfDish, double price, String type, String introduction) throws AppException {
-        int i=0;
+        int i;
         try {
             dishes = Database.getDishList(nameOfOwner);
         }catch (SQLException e)
@@ -167,6 +220,7 @@ public class Owner extends User{
         {
             if(dishes.get(i).getName().equals(dish.name)) {
                 flag = 1;
+                break;
             }
         }
         if(flag == 1)
@@ -181,7 +235,43 @@ public class Owner extends User{
 
     }
 
+    /**
+     * 这个方法用于获取商家的每一类的菜品列表
+     */
+    public HashMap<String,List<Dish>> showDishes(String nameOfOwner) throws AppException {
+        List<Dish> dishes;
+        try{
+            dishes = Database.getDishList(nameOfOwner);
+        }
+        catch (SQLException e)
+        {
+            throw new AppException("获取菜品列表失败！！");
+        }
 
+
+        //一个hashmap，用于记录每个类型的菜品对应的列表
+        HashMap<String,List<Dish>> dishHashMap= new HashMap<>();
+        List<String> types = new ArrayList<>();
+        List<Dish> dishOfType = new ArrayList<>();
+        int i,j;
+        for(i=0; i<dishes.size(); i++)
+        {
+            String str = dishes.get(i).getType();
+            if (!types.contains(str)) {
+                types.add(str);
+                for (j=0; j<dishes.size(); j++)
+                {
+                    if(dishes.get(i).getType().equals(str))
+                    {
+                        dishOfType.add(dishes.get(i));
+                    }
+                }
+                dishHashMap.put(str,dishOfType);
+            }
+            dishOfType = new ArrayList<>();
+        }
+        return dishHashMap;
+    }
 
     /**
      * 这个方法用于获取商家的名称
@@ -234,62 +324,58 @@ public class Owner extends User{
     }
 
     /**
-     * 如果商家想要查看自己已完成订单的话，那么我们可以提供商家已完成的订单列表。
+     * 如果商家想要查看自己制作完成的订单，那么我们可以提供商家已完成的订单列表。
      * 注：按照时间排序(最近的在前）
      */
-    public List<Order> ShowFinished(){
-        orders_finished.sort(new Comparator<Order>() {
-            public int compare(Order o1, Order o2) {
-                try {
-                    if (o1.getOrderTime() == null || o2.getOrderTime() == null) {
-                        return 1;
-                    }
-                    Date dt1 = o1.getOrderTime();
-                    Date dt2 = o2.getOrderTime();
-
-                    if (dt1.getTime() < dt2.getTime()) {
-                        return -1;
-                    } else if (dt1.getTime() > dt2.getTime()) {
-                        return 1;
-                    } else {
-                        return 0;
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
+    public List<Order> ShowCooked(){
+        orders_finished.sort((o1, o2) -> {
+            try {
+                if (o1.getOrderTime() == null || o2.getOrderTime() == null) {
+                    return 1;
                 }
-                return 0;
+                Date dt1 = o1.getOrderTime();
+                Date dt2 = o2.getOrderTime();
+
+                if (dt1.getTime() < dt2.getTime()) {
+                    return -1;
+                } else if (dt1.getTime() > dt2.getTime()) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+            return 0;
         });
         return orders_finished;
     }
 
     /**
-     * 如果商家想要查看自己未完成订单的话，那么我们可以提供商家未完成的订单列表。
+     * 如果商家想要查看自己未制作的订单，那么我们可以提供商家未完成的订单列表。
      * 注：按照时间排序(最近的在前）
      */
 
-    public List<Order> ShowUnFinished(){
-        orders_unfinished.sort(new Comparator<Order>() {
-            public int compare(Order o1, Order o2) {
-                try {
-                    if (o1.getOrderTime() == null || o2.getOrderTime() == null) {
-                        return 1;
-                    }
-                    Date dt1 = o1.getOrderTime();
-                    Date dt2 = o2.getOrderTime();
-
-                    if (dt1.getTime() < dt2.getTime()) {
-                        return -1;
-                    } else if (dt1.getTime() > dt2.getTime()) {
-                        return 1;
-                    } else {
-                        return 0;
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
+    public List<Order> ShowUncooked(){
+        orders_unfinished.sort((o1, o2) -> {
+            try {
+                if (o1.getOrderTime() == null || o2.getOrderTime() == null) {
+                    return 1;
                 }
-                return 0;
+                Date dt1 = o1.getOrderTime();
+                Date dt2 = o2.getOrderTime();
+
+                if (dt1.getTime() < dt2.getTime()) {
+                    return -1;
+                } else if (dt1.getTime() > dt2.getTime()) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+            return 0;
         });
         return orders_unfinished;
     }

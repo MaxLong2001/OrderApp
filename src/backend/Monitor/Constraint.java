@@ -22,8 +22,8 @@ public class Constraint {
         char[] temp_name = arg_name.toCharArray();
 
         // 如果字符数不符合规则
-        if(temp_name.length < 4){
-            throw new AppException("用户名不能小于4个字符！！");
+        if(temp_name.length < 3){
+            throw new AppException("用户名不能小于3个字符！！");
         }
         if(temp_name.length > 10){
             throw new AppException("用户名不能大于10个字符！！");
@@ -31,7 +31,7 @@ public class Constraint {
 
         // 检验用户名中间是否有空格
         if(arg_name.contains(" ")){
-            throw new AppException("用户名不能超过10个字符！！");
+            throw new AppException("用户名不能含有空格！！");
         }
     }
 

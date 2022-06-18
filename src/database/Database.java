@@ -448,7 +448,7 @@ public class Database {
             order.setPrice(rs.getDouble("total"));
             order.setCompleted(rs.getBoolean("completed"));
             order.setCooked(rs.getBoolean("cooked"));
-            order.setOrderTime(rs.getDate("order_time"));
+            order.setOrderTime(rs.getTimestamp("order_time"));
 
             HashMap<String, Integer> dishList = getOrderDishList(rs.getInt("id"));
             order.setDishes(dishList);
@@ -482,7 +482,7 @@ public class Database {
             order.setPrice(rs.getDouble("total"));
             order.setCompleted(rs.getBoolean("completed"));
             order.setCooked(rs.getBoolean("cooked"));
-            order.setOrderTime(rs.getDate("order_time"));
+            order.setOrderTime(rs.getTimestamp("order_time"));
 
             HashMap<String, Integer> dishList = getOrderDishList(rs.getInt("id"));
             order.setDishes(dishList);
@@ -661,7 +661,7 @@ public class Database {
             comment.setOwnerName(ownerName);
             comment.setRating(rs.getDouble("rating"));
             comment.setContent(rs.getString("content"));
-            comment.setCommentTime(rs.getDate("comment_time"));
+            comment.setCommentTime(rs.getTimestamp("comment_time"));
             commentList.add(comment);
         }
         rs.close();
@@ -689,7 +689,7 @@ public class Database {
             comment.setOwnerName(getOwnerName(rs.getInt("owner_id")));
             comment.setRating(rs.getDouble("rating"));
             comment.setContent(rs.getString("content"));
-            comment.setCommentTime(rs.getDate("comment_time"));
+            comment.setCommentTime(rs.getTimestamp("comment_time"));
             commentList.add(comment);
         }
         rs.close();

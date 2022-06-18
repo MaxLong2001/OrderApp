@@ -628,7 +628,7 @@ public class Database {
 
     /**
      * 返回商家评论
-     * 根据传入的商家名查询数据库中的商家记录，并返回该商家的评论
+     * 根据传入的商家名查询数据库中该商家收到的评论记录，并返回该商家收到的评论列表
      *
      * @param ownerName 商家名
      * @return 商家评论
@@ -656,6 +656,7 @@ public class Database {
 
     /**
      * 返回顾客评论
+     * 根据传入的顾客名查询数据中该顾客对商家的评论记录，并返回该顾客的评论列表
      *
      * @param customerName 顾客名
      * @return 顾客评论

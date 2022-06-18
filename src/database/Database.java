@@ -194,10 +194,10 @@ public class Database {
         String OwnerName = order.getNameOfOwner();
         double totalPrice = order.getPrice();
         boolean completed = order.isCompleted();
-        java.util.Date orderTime = order.getOrderTime();
+        Timestamp orderTime = new Timestamp(order.getOrderTime().getTime());
         HashMap<String, Integer> dishes = order.getDishes();
 
-        String sqlFindThisOrder = "SELECT id FROM orders WHERE customer_id IN (SELECT id FROM customer WHERE name = '" + customerName + "' AND completed = false ORDER BY id DESC LIMIT 1)";
+        String sqlFindThisOrder = "SELECT id FROM orders WHERE customer_id IN (SELECT id FROM customer WHERE name = '" + customerName + "' AND completed = false ORDER BY id DESC)";
         stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(sqlFindThisOrder);
 
@@ -272,7 +272,6 @@ public class Database {
         stmt.close();
         rs.close();
     }
-
 
     /**
      * 根据用户名查询钱包余额

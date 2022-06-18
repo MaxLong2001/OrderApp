@@ -1,9 +1,11 @@
 package frontend;
 
 import backend.Customer;
+import backend.Owner;
 import backend.User;
 import frontend.Customer.home.HomeView;
 import frontend.Customer.home.OwnerArea;
+import frontend.Owner.OwnerView;
 import frontend.Tool.MyEvent;
 import frontend.Tool.MyListener;
 import frontend.Tool.MyView;
@@ -41,13 +43,16 @@ public class Frontend extends JFrame{
 //            JScrollPane scrollPane = new JScrollPane();
 //            scrollPane.setViewportView(new Map());
 //            add(scrollPane);
+            Owner owner = new Owner();
+            owner.setName("姜星如");
+
             Customer customer = new Customer();
             try{
                 customer.setName("赵正阳");
             }catch (Exception e){}
-            changeView(new frontend.Owner.OwnerView());
 //            changeView(new OrderView(null, null));
             changeView(new HomeView(customer));
+            changeView(new OwnerView(owner));
         }else{
             changeView(new Welcome());
         }

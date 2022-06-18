@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class MyList extends JPanel{
     JScrollPane scrollPane;
-//    private int width = 400;
+    private int width = 400;
     private int height = 400;
 
     List<JPanel> orderItems = new ArrayList<>();
@@ -19,6 +19,7 @@ public class MyList extends JPanel{
         vBox = Box.createVerticalBox();
         scrollPane = new JScrollPane();
         scrollPane.setViewportView(vBox);
+        scrollPane.setPreferredSize(new Dimension(width + 40, height));
         add(scrollPane);
     }
 

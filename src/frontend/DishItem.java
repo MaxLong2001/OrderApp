@@ -67,6 +67,13 @@ public class DishItem extends MyItem {
                 addRight(ordered);
             }
             addRight(plus);
+        }else if(type == ownerBrowse){
+            MyButton modify = new MyButton("修改菜品");
+
+            addLeft(remain);
+            addLeft(price);
+
+            addRight(modify);
         }
     }
 

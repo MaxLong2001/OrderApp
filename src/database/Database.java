@@ -434,7 +434,7 @@ public class Database {
      * @return 订单列表
      * @throws SQLException 数据库查询错误
      */
-    public static List<Order> getUserOrderList(String userName) throws SQLException {
+    public static List<Order> getUserOrderList(String userName) throws SQLException, AppException {
         String sql = "SELECT * FROM orders WHERE customer_id = (SELECT id FROM customer WHERE name = '" + userName + "')";
         stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(sql);
@@ -443,28 +443,14 @@ public class Database {
             Order order = new Order();
 
             order.setNameOfCustomer(userName);
-
-            String sqlFindOwnerName = "SELECT name FROM owner WHERE id = '" + rs.getInt("owner_id") + "'";
-            ResultSet rsFindOwnerName = stmt.executeQuery(sqlFindOwnerName);
-            while (rsFindOwnerName.next()) {
-                order.setNameOfOwner(rsFindOwnerName.getString("name"));
-            }
+            order.setNameOfOwner(getOwnerName(rs.getInt("owner_id")));
 
             order.setPrice(rs.getDouble("total"));
             order.setCompleted(rs.getBoolean("completed"));
             order.setCooked(rs.getBoolean("cooked"));
             order.setOrderTime(rs.getDate("order_time"));
 
-            String sqlFindDishList = "SELECT dish_id, amount FROM order_dish WHERE orders_id = '" + rs.getInt("id") + "'";
-            ResultSet rsFindDishList = stmt.executeQuery(sqlFindDishList);
-            HashMap<String, Integer> dishList = new HashMap<>();
-            while (rsFindDishList.next()) {
-                String sqlFindDishName = "SELECT name FROM dish WHERE id = '" + rsFindDishList.getInt("dish_id") + "'";
-                ResultSet rsFindDishName = stmt.executeQuery(sqlFindDishName);
-                while (rsFindDishName.next()) {
-                    dishList.put(rsFindDishName.getString("name"), rsFindDishList.getInt("amount"));
-                }
-            }
+            HashMap<String, Integer> dishList = getOrderDishList(rs.getInt("id"));
             order.setDishes(dishList);
 
             orderList.add(order);
@@ -482,7 +468,7 @@ public class Database {
      * @return 订单列表
      * @throws SQLException 数据库查询错误
      */
-    public static List<Order> getOwnerOrderList(String ownerName) throws SQLException {
+    public static List<Order> getOwnerOrderList(String ownerName) throws SQLException, AppException {
         String sql = "SELECT * FROM orders WHERE owner_id = (SELECT id FROM owner WHERE name = '" + ownerName + "')";
         stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(sql);
@@ -490,35 +476,46 @@ public class Database {
         while (rs.next()) {
             Order order = new Order();
 
-            order.setOrderTime(rs.getDate("order_time"));
-            order.setNameOfCustomer(rs.getString("customer_name"));
-            order.setNameOfOwner(rs.getString("owner_name"));
-            order.setPrice(rs.getDouble("total_price"));
+            order.setNameOfCustomer(getCustomerName(rs.getInt("customer_id")));
+            order.setNameOfOwner(ownerName);
+
+            order.setPrice(rs.getDouble("total"));
             order.setCompleted(rs.getBoolean("completed"));
             order.setCooked(rs.getBoolean("cooked"));
+            order.setOrderTime(rs.getDate("order_time"));
 
-            String sqlFindDishList = "SELECT * FROM order_dish WHERE orders_id = '" + rs.getInt("id") + "'";
-            ResultSet rsFindDishList = stmt.executeQuery(sqlFindDishList);
-            HashMap<String, Integer> dishes = new HashMap<>();
-            while (rsFindDishList.next()) {
-                String dishId = rsFindDishList.getString("dish_id");
-                int quantity = rsFindDishList.getInt("quantity");
-                String sqlGetDishName = "SELECT name FROM dish WHERE id = '" + dishId + "'";
-                ResultSet rsGetDishName = stmt.executeQuery(sqlGetDishName);
-                String dishName = "";
-                while (rsGetDishName.next()) {
-                    dishName = rsGetDishName.getString("name");
-                }
-                rsGetDishName.close();
-                dishes.put(dishName, quantity);
-            }
-            rsFindDishList.close();
-            order.setDishes(dishes);
+            HashMap<String, Integer> dishList = getOrderDishList(rs.getInt("id"));
+            order.setDishes(dishList);
+
             orderList.add(order);
         }
         rs.close();
         stmt.close();
         return orderList;
+    }
+
+    /**
+     * 返回订单菜品列表
+     * 根据传入的订单id查询数据库中的订单菜品列表，并返回该订单菜品列表
+     *
+     * @param orderId 订单id
+     * @return 订单菜品列表
+     * @throws SQLException 数据库查询错误
+     * @throws AppException 应用程序异常
+     */
+    public static HashMap<String, Integer> getOrderDishList(int orderId) throws SQLException, AppException {
+        String sql = "SELECT * FROM order_dish WHERE orders_id = '" + orderId + "'";
+        stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        HashMap<String, Integer> dishList = new HashMap<>();
+        while (rs.next()) {
+            String dishName = getDishName(rs.getInt("dish_id"));
+            String dishAmount = rs.getString("amount");
+            dishList.put(dishName, Integer.parseInt(dishAmount));
+        }
+        rs.close();
+        stmt.close();
+        return dishList;
     }
 
     /**
@@ -836,6 +833,26 @@ public class Database {
             return rs.getString("name");
         } else {
             throw new AppException("顾客id不存在");
+        }
+    }
+
+    /**
+     * 根据菜品id查询菜品名
+     *
+     * @param dishId 菜品id
+     * @return 菜品名
+     * @throws SQLException 数据库查询错误
+     * @throws AppException 菜品id不存在
+     */
+    public static String getDishName(int dishId) throws SQLException, AppException {
+        String sql = "SELECT name FROM dish WHERE id = " + dishId;
+
+        stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        if (rs.next()) {
+            return rs.getString("name");
+        } else {
+            throw new AppException("菜品id不存在");
         }
     }
 

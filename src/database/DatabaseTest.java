@@ -26,7 +26,7 @@ public class DatabaseTest {
 //            order.setDishes(map);
 //            Database.insertOrder(order);
 //            System.out.println("Insert order successfully!");
-            Database.changeCustomerPassword("Customer1", "10203040");
+            Database.changeOwnerPassword("Owner", "10203040");
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -4,16 +4,16 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.util.*;
 
-import backend.AppException.AppException;
+import database.Database;
 import backend.Monitor.Constraint;
+import backend.AppException.AppException;
+import backend.CustomerException.Order.SettleAll;
+import backend.CustomerException.Unfinish.Compare;
 import backend.CustomerException.Comment.UnQualified;
 import backend.CustomerException.Order.AmountIllegal;
 import backend.CustomerException.Order.DishUndefined;
 import backend.CustomerException.Unfinish.DetailInDetail;
 import backend.CustomerException.Unfinish.UnfinishedException;
-import database.Database;
-import backend.CustomerException.Unfinish.Compare;
-import backend.CustomerException.Order.SettleAll;
 
 /**
  * @author JiangXingru
@@ -272,7 +272,7 @@ public class Customer extends User{
      * {@link DetailInDetail}
      * 如果订单都已经完成，那么返回null;
      */
-    public DetailInDetail ReturnUnFinished() {
+    public DetailInDetail CurrentUnfinished() {
 
         // 遍历未完成订单表查找是否有未完成订单
         List<Order> tmp_unfinished = this.orders_unfinished;

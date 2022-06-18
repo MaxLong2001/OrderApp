@@ -58,6 +58,9 @@ public class Customer extends User{
      */
     private Order tmp_order;
 
+    /**默认构造方法，用于注册时新增一个空的顾客*/
+    public Customer(){}
+
     /**
      * 这个初始化方法可以初始化顾客的基本属性。
      * 这个方法中传入的参数来自登录注册界面中的用户名。

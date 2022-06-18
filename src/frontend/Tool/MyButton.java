@@ -16,7 +16,7 @@ public class MyButton extends JButton {
     Color colorNormal = new Color(MyColor.color3().getRed(), MyColor.color3().getGreen(), MyColor.color3().getBlue(), (int) (MyColor.color3().getAlpha() * 0.8));
     Color colorFocus = new Color(colorNormal.getRed(), colorNormal.getGreen(), colorNormal.getBlue(), (int) (colorNormal.getAlpha() * 0.8));
     Color colorPress = new Color(colorNormal.getRed(), colorNormal.getGreen(), colorNormal.getBlue(), (int) (colorNormal.getAlpha() * 1.2));
-    public MyButton(String text){
+    public MyButton(String text) {
         setBackground(MyColor.color3());
         setLayout(null);
         textLabel = new JLabel();
@@ -59,30 +59,6 @@ public class MyButton extends JButton {
         });
     }
 
-//    @Override
-//    public void setPreferredSize(Dimension preferredSize) {
-//        width = preferredSize.width;
-//        height = preferredSize.height;
-//        textLabel.setFont(new Font(textLabel.getFont().getFontName(), Font.PLAIN, height * 2 / 5));
-//        textLabel.setSize(textLabel.getPreferredSize());
-//        textLabel.setLocation((width - textLabel.getWidth()) / 2, (height - textLabel.getHeight()) / 2);
-//    }
-
-//    @Override
-//    public Dimension getPreferredSize() {
-//        return new Dimension(width, height);
-//    }
-//
-//    @Override
-//    public Dimension getMaximumSize() {
-//        return new Dimension(width, height);
-//    }
-//
-//    @Override
-//    public Dimension getMinimumSize() {
-//        return new Dimension(width, height);
-//    }
-
     @Override
     protected void paintComponent(Graphics g) {
         int width = getPreferredSize().width;
@@ -114,6 +90,7 @@ public class MyButton extends JButton {
         super.setPreferredSize(preferredSize);
         width = preferredSize.width;
         height = preferredSize.height;
+        textLabel.setFont(new Font("黑体", Font.PLAIN, height * 2 / 5));
         textLabel.setSize(textLabel.getPreferredSize());
         textLabel.setLocation((width - textLabel.getWidth()) / 2, (height - textLabel.getHeight()) / 2);
     }
@@ -132,13 +109,13 @@ public class MyButton extends JButton {
     }
 
     double darkFactor = 0.9;
-    public Color darker(Color c){
+    private Color darker(Color c){
         return new Color((int)(c.getRed() * darkFactor), (int)(c.getBlue() * darkFactor),
                 (int)(c.getGreen() * darkFactor), c.getAlpha());
     }
 
     double brightFactor = 1.1;
-    public Color brighter(Color c){
+    private Color brighter(Color c){
         return new Color(Math.min((int)(c.getRed() * darkFactor), 255), Math.min((int)(c.getBlue() * darkFactor), 255),
                 Math.min((int)(c.getGreen() * darkFactor), 255), c.getAlpha());
     }

@@ -13,6 +13,11 @@ public class DishItem extends MyItem {
     public static final int customerOrder = 2;
     public static final int ownerOrder = 3;
 
+//    public DishItem(int type, String dishName, int orderdNum){
+//        Dish dish = new Dish();
+//        dish.setName(dishName);
+//        this(type, dish, orderdNum);
+//    }
     public DishItem(int type, Dish dish, int orderdNum) {
 
 

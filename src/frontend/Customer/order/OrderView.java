@@ -4,10 +4,7 @@ import backend.Customer;
 import backend.Dish;
 import backend.Order;
 import backend.Owner;
-import frontend.DishItem;
-import frontend.Frontend;
-import frontend.Login;
-import frontend.TestDish;
+import frontend.*;
 import frontend.Tool.MyColor;
 import frontend.Tool.MyItem;
 import frontend.Tool.MyView;
@@ -71,6 +68,7 @@ public class OrderView extends MyView {
             dishes.add(new TestDish());
             dishMap = new TreeMap<>();
             dishMap.put("家常菜", dishes);
+            currentOrder = new TestOrder();
         }else{
             // 初始化数据
             this.loginCustomer = loginCustomer;
@@ -87,14 +85,14 @@ public class OrderView extends MyView {
 
         //绘制三大区域
 //        ownerArea = new OwnerArea(currentOwner);
-//        setDishArea();
         dishArea = new DishArea(dishMap, currentOrder);
+        orderArea = new OrderArea(currentOrder);
 //        setOrderArea();
 
         //排版组合
         Box hBox = Box.createHorizontalBox();
         hBox.add(dishArea);
-//        hBox.add(orderArea);
+        hBox.add(orderArea);
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 //        add(ownerArea);
@@ -113,23 +111,6 @@ public class OrderView extends MyView {
         orderArea.add(vBox);
     }
 
-//    private void setDishArea(){
-//
-//        tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
-//        Set<Map.Entry<String, List<Dish>>> dishSet = dishMap.entrySet();
-//        for(Map.Entry<String, List<Dish>> dishType : dishSet){
-//            DishList dishList = new DishList(dishType.getValue());
-//            dishLists.add(dishList);
-//            tabbedPane.addTab(dishType.getKey(), dishList);
-//            //向标签中嵌入组件
-////            JPanel tab = new JPanel();
-////            tab.add(new JLabel(dishType.getKey()));
-////            tabbedPane.setTabComponentAt(0, tab);
-//        }
-//
-//        dishArea = new JPanel();
-//        dishArea.add(tabbedPane);
-//    }
 
 
     class OrderCommit extends Box{

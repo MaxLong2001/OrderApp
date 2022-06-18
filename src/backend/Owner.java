@@ -1,6 +1,7 @@
 package backend;
 
 import backend.AppException.AppException;
+import backend.Monitor.Constraint;
 import database.Database;
 
 import java.sql.SQLException;
@@ -14,11 +15,6 @@ public class Owner extends User{
     public ArrayList<Order> orders_unfinished = new ArrayList<>();
     public List<Dish> dishes = new ArrayList<>();
     public ArrayList<String> comments = new ArrayList<>();
-
-
-    /**
-     * 无参数的构造方法
-     */
 
     /**
      * 这个初始化方法可以初始化商家的基本属性。
@@ -166,14 +162,14 @@ public class Owner extends User{
         dish.introduction = introduction;
 
         //记录数据库中是否有dish
-        int flag=0;
+        int flag = 0;
         for(i=0; i<dishes.size(); i++)
         {
             if(dishes.get(i).getName().equals(dish.name)) {
                 flag = 1;
             }
         }
-        if(flag==1)
+        if(flag == 1)
             dishes.remove(i);
         else throw new AppException("不存在这样的菜品！！");
 
@@ -242,7 +238,7 @@ public class Owner extends User{
      * 注：按照时间排序(最近的在前）
      */
     public List<Order> ShowFinished(){
-        Collections.sort(orders_finished, new Comparator<Order>() {
+        orders_finished.sort(new Comparator<Order>() {
             public int compare(Order o1, Order o2) {
                 try {
                     if (o1.getOrderTime() == null || o2.getOrderTime() == null) {
@@ -273,7 +269,7 @@ public class Owner extends User{
      */
 
     public List<Order> ShowUnFinished(){
-        Collections.sort(orders_unfinished, new Comparator<Order>() {
+        orders_unfinished.sort(new Comparator<Order>() {
             public int compare(Order o1, Order o2) {
                 try {
                     if (o1.getOrderTime() == null || o2.getOrderTime() == null) {
@@ -299,11 +295,33 @@ public class Owner extends User{
     }
     @Override
     public void modifyName(String newName) throws AppException {
+
+        // 检验用户名格式
+        Constraint.CheckUname(newName);
+
+        // 将用户名插入数据库
+        try{
+            Database.changeOwnerName(this.name, newName);
+        }catch (SQLException e){
+            throw new AppException("数据库异常！！");
+        }
+
         this.name = newName;
     }
 
     @Override
     public void modifyPwd(String newPwd) throws AppException {
+
+        // 检验密码格式
+        Constraint.CheckPwd(newPwd);
+
+        // 将新密码写入数据库
+        try{
+            Database.changeOwnerPassword(this.name, newPwd);
+        }catch (SQLException e){
+            throw new AppException("数据库异常！！");
+        }
+
         this.password = newPwd;
     }
 }

@@ -1,4 +1,4 @@
-package frontend;
+package frontend.Tool;
 
 import java.util.EventObject;
 

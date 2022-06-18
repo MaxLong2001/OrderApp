@@ -5,6 +5,7 @@ import backend.Monitor.Constraint;
 import database.Database;
 
 import java.sql.SQLException;
+import java.util.Map;
 
 /**
  * 用户基类，包括该系统可能用户的公共基本信息和公共方法
@@ -18,8 +19,43 @@ public abstract class User {
      * 输入用户名和密码来登录
      * @return 返回的User可能是Customer和Owner中的一种
      */
-    static public User login(String name, String pwd){
-        return null;
+    static public User login(String name, String pwd) throws AppException{
+
+        // 临时用户信息变量
+        Map<String, String> temp_all;
+
+        // 从数据库中获取<用户类型， 密码键值对>
+        try{
+            temp_all = Database.getPassword(name);
+        }catch (SQLException e){
+            throw new AppException("数据库查询信息异常！！");
+        }
+
+        // 如果是顾客类型、商家类型，进行新用户生成
+        if(temp_all.containsKey("customer")){
+
+            // 如果密码正确
+            if(temp_all.get("customer").equals(pwd)){
+
+                // 返回顾客类型变量
+                return new Customer(name, pwd);
+            } else{
+
+                throw new AppException("密码不正确！！");
+            }
+        } else if(temp_all.containsKey("owner")){
+            // 如果密码正确
+            if(temp_all.get("owner").equals(pwd)){
+
+                // 返回商家类型变量
+                return new Owner().NewOwner(name, pwd);
+            } else{
+
+                throw new AppException("密码不正确！！");
+            }
+        } else {
+            throw new AppException("所查找对象不属于任何类！！");
+        }
     }
 
     /**
@@ -37,7 +73,13 @@ public abstract class User {
             }
         }
         if(newUser instanceof Owner){
-            //todo 这部分由负责Owner的完成
+
+            // 将商家插入数据库
+            try{
+                Database.insertOwner(newUser.getName(), ((Owner) newUser).getIntroduction(), newUser.getPassword());
+            }catch(SQLException e){
+                throw new AppException("数据库插入顾客异常！！");
+            }
         }
     }
 

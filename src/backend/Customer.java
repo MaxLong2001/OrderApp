@@ -4,16 +4,16 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.util.*;
 
-import backend.AppException.AppException;
+import database.Database;
 import backend.Monitor.Constraint;
+import backend.AppException.AppException;
+import backend.CustomerException.Order.SettleAll;
+import backend.CustomerException.Unfinish.Compare;
 import backend.CustomerException.Comment.UnQualified;
 import backend.CustomerException.Order.AmountIllegal;
 import backend.CustomerException.Order.DishUndefined;
 import backend.CustomerException.Unfinish.DetailInDetail;
 import backend.CustomerException.Unfinish.UnfinishedException;
-import database.Database;
-import backend.CustomerException.Unfinish.Compare;
-import backend.CustomerException.Order.SettleAll;
 
 /**
  * @author JiangXingru
@@ -384,6 +384,9 @@ public class Customer extends User{
      */
     public void QuitOrder() throws AppException {
 
+        // 生成未完成订单的时间
+        tmp_order.orderTime = new Date(System.currentTimeMillis());
+
         // 向未完成订单列表中保存tmp_order
         this.orders_unfinished.add(tmp_order);
 
@@ -493,5 +496,8 @@ public class Customer extends User{
         }catch (SQLException e){
             throw new AppException("数据库异常！！");
         }
+
+        // 更改用户的密码
+        this.password = newPwd;
     }
 }

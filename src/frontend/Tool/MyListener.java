@@ -1,7 +1,8 @@
-package frontend;
+package frontend.Tool;
+
+import frontend.Tool.MyEvent;
 
 import java.util.EventListener;
-import java.util.EventObject;
 
 /**
  * 自定义事件监听器。

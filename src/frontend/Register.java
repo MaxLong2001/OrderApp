@@ -1,5 +1,9 @@
 package frontend;
 
+import frontend.Tool.FormItem;
+import frontend.Tool.MyColor;
+import frontend.Tool.MyView;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -7,22 +11,23 @@ import java.awt.event.ActionListener;
 
 public class Register extends MyView {
     public Register() {
-        Box box = Box.createVerticalBox();
-//        GridLayout layout = new GridLayout(4, 1);
-//        setLayout(layout);
-        UserName userName = new UserName();
         JLabel title = new JLabel("注册新用户");
-//        title.setBackground(new Color(15, 244, 244));
         title.setHorizontalAlignment(SwingConstants.CENTER);
+
+        UserName userName = new UserName();
+        Pwd pwd = new Pwd();
+        ConfirmPwd confirmPwd = new ConfirmPwd();
+        JButton registerBtn = new JButton("注册新用户");
+
+        Box box = Box.createVerticalBox();
         box.add(title);
         box.add(Box.createVerticalStrut(30));
         box.add(userName);
-        box.add(new Pwd());
-        box.add(new ConfirmPwd());
+        box.add(pwd);
+        box.add(confirmPwd);
         box.add(Box.createVerticalStrut(30));
-        box.add(new JButton("注册新用户"));
+        box.add(registerBtn);
         add(box);
-
     }
     class RegisterClick implements ActionListener{
         @Override
@@ -30,52 +35,20 @@ public class Register extends MyView {
 
         }
     }
-    class Item extends JPanel{
-        int textCol = 15;
-        int leftWidth = 150;
-        int interval = 20;
 
-        public Item(String information, boolean isPwd){
-            Box box = Box.createHorizontalBox();
-            Box.createHorizontalStrut(20);
-            FlowLayout layout = new FlowLayout();
-//            layout.setHgap(10);
-//            setLayout(layout);
-//            setPreferredSize(new Dimension(Register.this.getWidth()/2, getFont().getSize()));
-//            System.out.println(getHeight());
-            JLabel label = new JLabel();
-            label.setPreferredSize(new Dimension(leftWidth, getFont().getSize()*2));
-            label.setHorizontalAlignment(SwingConstants.TRAILING);
-            label.setText(information);
-            JTextField textField;
-            if(isPwd){
-                textField = new JPasswordField(textCol);
-            }else{
-                textField = new JTextField(textCol);
-            }
-            textField.setPreferredSize(new Dimension(100, getFont().getSize()*2));
-//            textField.setPreferredSize(new Dimension(Register.this.getWidth()/4, textField.getHeight()));
-//            textField.setPreferredSize(new Dimension(100, 40));
-            box.add(label);
-            box.add(Box.createHorizontalStrut(interval));
-            box.add(textField);
-            setBackground(new Color(15, 244, 244));
-            add(box);
-        }
-    }
-    class Pwd extends Item {
+    class Pwd extends FormItem {
         public Pwd() {
             super("请输入密码:", true);
         }
     }
-    class ConfirmPwd extends Item {
+    class ConfirmPwd extends FormItem {
         public ConfirmPwd() {
             super("请确认密码:", true);
         }
     }
-    class UserName extends Item {
+    class UserName extends FormItem {
         public UserName(){
-            super("请输入用户名:", false);
+            super("请输入用户名:");
         }
     }
 }

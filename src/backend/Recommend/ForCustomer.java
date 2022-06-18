@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * @version 1.0
  * @author JiangXingru
- * ÕâÊÇÒ»¸öÓÃÓÚÅÅĞòµÄÁÙÊ±Àà
+ * è¿™æ˜¯ä¸€ä¸ªç”¨äºæ’åºçš„ä¸´æ—¶ç±»
  */
 
 class ForSort{
@@ -20,70 +20,70 @@ class ForSort{
 }
 
 /**
- * Õâ¸öÀàÊÇ¹Ë¿ÍµÇÂ¼½øÏµÍ³µÄÄ¬ÈÏÍÆ¼öËã·¨¡£
+ * è¿™ä¸ªç±»æ˜¯é¡¾å®¢ç™»å½•è¿›ç³»ç»Ÿçš„é»˜è®¤æ¨èç®—æ³•ã€‚
  */
 
 public class ForCustomer{
 
     /**
-     * Õâ¸ö±äÁ¿ÓÃÓÚµ÷ÕûÍÆ¼öËã·¨µÄÈ¨ÖØ
+     * è¿™ä¸ªå˜é‡ç”¨äºè°ƒæ•´æ¨èç®—æ³•çš„æƒé‡
      */
     private static int define = 50;
 
     /**
-     * Õâ¸ö·½·¨ÓÃÀ´ÉèÖÃÈ¨ÖØ
-     * @param arg_define ²ÎÊıÈ¨ÖØ
+     * è¿™ä¸ªæ–¹æ³•ç”¨æ¥è®¾ç½®æƒé‡
+     * @param arg_define å‚æ•°æƒé‡
      */
     public static void setDefine(int arg_define){
         define = arg_define;
     }
 
     /**
-     * ÕâÀïÊÇÄ¬ÈÏµÄÍÆ¼öËã·¨
-     * @param owners ÉÌ¼ÒÁĞ±í
-     * @throws backend.AppException.AppException Í¨ÓÃÒì³£
+     * è¿™é‡Œæ˜¯é»˜è®¤çš„æ¨èç®—æ³•
+     * @param owners å•†å®¶åˆ—è¡¨
+     * @throws backend.AppException.AppException é€šç”¨å¼‚å¸¸
      */
     public static List<Owner> OwnerRecommend(List<Owner> owners) throws AppException {
 
-        // ÍÆ¼öÈ«ÊıÁĞ±í
+        // æ¨èå…¨æ•°åˆ—è¡¨
         List<ForSort> forSorts = new ArrayList<>();
 
-        // ±éÀúÉÌ¼Ò±í»ñÈ¡È¨ÖØ±í
+        // éå†å•†å®¶è¡¨è·å–æƒé‡è¡¨
         for (Owner owner : owners) {
 
-            // ÁÙÊ±ÉÌ¼Ò±äÁ¿
-            // ÁÙÊ±ÆÀ·Ö±äÁ¿
+            // ä¸´æ—¶å•†å®¶å˜é‡
+            // ä¸´æ—¶è¯„åˆ†å˜é‡
             double temp_rating;
 
-            // ÁÙÊ±È¨ÖØ±äÁ¿
+            // ä¸´æ—¶æƒé‡å˜é‡
             double rank;
 
-            // »ñÈ¡Ã¿¸öÉÌ¼ÒµÄÆÀ·Ö
+            // è·å–æ¯ä¸ªå•†å®¶çš„è¯„åˆ†
             try {
                 temp_rating = Database.getOwnerRating(owner.getName());
             } catch (SQLException e) {
-                throw new AppException("Êı¾İ¿âÒì³££¡£¡");
+                throw new AppException("æ•°æ®åº“å¼‚å¸¸ï¼ï¼");
             }
 
-            // ¼ÆËãÈ¨ÖØ
+            // è®¡ç®—æƒé‡
             rank = temp_rating * define + owner.visit * (100 - define);
 
-            // ½¨Á¢²¢²åÈë¡°È«Êı¡±
+            // å»ºç«‹å¹¶æ’å…¥â€œå…¨æ•°â€
             ForSort forSort = new ForSort();
             forSort.owner = owner;
             forSort.rank = rank;
             forSorts.add(forSort);
         }
 
-        // ¶Ô"È«ÊıÁĞ±í¡±½øĞĞ´Ó´óµ½Ğ¡ÅÅĞò
+        // å¯¹"å…¨æ•°åˆ—è¡¨â€è¿›è¡Œä»å¤§åˆ°å°æ’åº
         forSorts.sort(((o1, o2) -> (int) (o2.rank - o1.rank)));
 
-        // Çå¿ÕÒÔÇ°µÄÉÌ¼Ò±í
+        // æ¸…ç©ºä»¥å‰çš„å•†å®¶è¡¨
         owners.clear();
 
-        // ½«¡°È«Êı¡±±í£¬¸³¸øµ±Ç°ÉÌ¼Ò±í
+        // å°†â€œå…¨æ•°â€è¡¨ï¼Œèµ‹ç»™å½“å‰å•†å®¶è¡¨
         for (ForSort forSort : forSorts) {
-            // ÁÙÊ±ForSort±äÁ¿
+            // ä¸´æ—¶ForSortå˜é‡
             owners.add(forSort.owner);
         }
 

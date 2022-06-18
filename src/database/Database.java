@@ -1,6 +1,7 @@
 package database;
 
 import backend.AppException.AppException;
+import backend.Comment;
 import backend.Dish;
 import backend.Order;
 import backend.Owner;
@@ -49,9 +50,61 @@ public class Database {
      * @param userName 用户名
      * @throws SQLException SQL异常
      */
-    public static void insertCustomer(String userName, String password) throws SQLException {
-        String sql = "INSERT INTO customer (name, password) VALUES ('" + userName + "', '" + password + "')";
+    public static void insertCustomer(String userName, String password) throws SQLException, AppException {
+        String sqlFindCustomer = "SELECT * FROM customer WHERE name = '" + userName + "'";
+        String sqlFromOwner = "SELECT * FROM owner WHERE name = '" + userName + "'";
+        boolean isCustomer = false;
+        boolean isOwner = false;
         stmt = conn.createStatement();
+        ResultSet rsFromCustomer = stmt.executeQuery(sqlFindCustomer);
+        if (rsFromCustomer.next()) {
+            isCustomer = true;
+        }
+        ResultSet rsFromOwner = stmt.executeQuery(sqlFromOwner);
+        if (rsFromOwner.next()) {
+            isOwner = true;
+        }
+        if (isCustomer || isOwner) {
+            throw new AppException("用户名已存在");
+        }
+        rsFromCustomer.close();
+        rsFromOwner.close();
+
+        String sql = "INSERT INTO customer (name, password) VALUES ('" + userName + "', '" + password + "')";
+        stmt.executeUpdate(sql);
+        stmt.close();
+    }
+
+    /**
+     * 添加商家
+     * 根据传入的商家名和商家描述将其添加入数据库
+     *
+     * @param ownerName    商家名
+     * @param introduction 商家介绍
+     * @param password     商家密码
+     * @throws SQLException SQL异常
+     */
+    public static void insertOwner(String ownerName, String introduction, String password) throws SQLException, AppException {
+        String sqlFromCustomer = "SELECT * FROM customer WHERE name = '" + ownerName + "'";
+        String sqlFromOwner = "SELECT * FROM owner WHERE name = '" + ownerName + "'";
+        boolean isCustomer = false;
+        boolean isOwner = false;
+        stmt = conn.createStatement();
+        ResultSet rsFromCustomer = stmt.executeQuery(sqlFromCustomer);
+        if (rsFromCustomer.next()) {
+            isCustomer = true;
+        }
+        ResultSet rsFromOwner = stmt.executeQuery(sqlFromOwner);
+        if (rsFromOwner.next()) {
+            isOwner = true;
+        }
+        if (isCustomer || isOwner) {
+            throw new AppException("用户名已存在");
+        }
+        rsFromCustomer.close();
+        rsFromOwner.close();
+
+        String sql = "INSERT INTO owner (name, introduction, password) VALUES ('" + ownerName + "', '" + introduction + "', '" + password + "')";
         stmt.executeUpdate(sql);
         stmt.close();
     }
@@ -69,42 +122,29 @@ public class Database {
     public static Map<String, String> getPassword(String userName) throws SQLException, AppException {
         String sqlFromCustomer = "SELECT password FROM customer WHERE name = '" + userName + "'";
         String sqlFromOwner = "SELECT password FROM owner WHERE name = '" + userName + "'";
-        stmt = conn.createStatement();
-        ResultSet rsFromCustomer = stmt.executeQuery(sqlFromCustomer);
-        ResultSet rsFromOwner = stmt.executeQuery(sqlFromOwner);
-
         String password;
         Map<String, String> map = new HashMap<>();
+        stmt = conn.createStatement();
+        ResultSet rsFromCustomer = stmt.executeQuery(sqlFromCustomer);
         if (rsFromCustomer.next()) {
             password = rsFromCustomer.getString("password");
-            map.put("customer", password);
-        } else if (rsFromOwner.next()) {
+            map.put("customer", userName);
+            map.put("password", password);
+            stmt.close();
+            rsFromCustomer.close();
+            return map;
+        }
+        ResultSet rsFromOwner = stmt.executeQuery(sqlFromOwner);
+        if (rsFromOwner.next()) {
             password = rsFromOwner.getString("password");
-            map.put("owner", password);
-        } else {
-            throw new AppException("用户名不存在");
+            map.put("owner", userName);
+            map.put("password", password);
+            stmt.close();
+            rsFromOwner.close();
+            return map;
         }
 
-        stmt.close();
-        rsFromCustomer.close();
-        rsFromOwner.close();
-        return map;
-    }
-
-    /**
-     * 添加商家
-     * 根据传入的商家名和商家描述将其添加入数据库
-     *
-     * @param ownerName    商家名
-     * @param introduction 商家介绍
-     * @param password     商家密码
-     * @throws SQLException SQL异常
-     */
-    public static void insertOwner(String ownerName, String introduction, String password) throws SQLException {
-        String sql = "INSERT INTO owner (name, introduction, password) VALUES ('" + ownerName + "', '" + introduction + "', '" + password + "')";
-        stmt = conn.createStatement();
-        stmt.executeUpdate(sql);
-        stmt.close();
+        throw new AppException("用户名不存在");
     }
 
     /**
@@ -116,21 +156,25 @@ public class Database {
      * @param ownerName 商家名
      * @throws SQLException SQL异常
      */
-    public static void insertDish(Dish dish, String ownerName) throws SQLException {
+    public static void insertDish(Dish dish, String ownerName) throws SQLException, AppException {
         String dishName = dish.getName();
         String introduction = dish.getIntroduction();
         double price = dish.getPrice();
         int sales = dish.getSalesQuantity();
         int remain = dish.getRemainQuantity();
         String type = dish.getType();
+
         String sqlFindOwnerId = "SELECT id FROM owner WHERE name = '" + ownerName + "'";
         stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(sqlFindOwnerId);
         int ownerId = 0;
-        while (rs.next()) {
+        if (rs.next()) {
             ownerId = rs.getInt("id");
+        } else {
+            throw new AppException("商家名不存在");
         }
         rs.close();
+
         String sql = "INSERT INTO dish(name, introduction, price, sales, remain, type, owner_id) VALUES ('" + dishName + "', '" + introduction + "', " + price + ", " + sales + ", " + remain + ", '" + type + "', " + ownerId + ")";
         stmt.executeUpdate(sql);
         stmt.close();
@@ -150,7 +194,7 @@ public class Database {
         String OwnerName = order.getNameOfOwner();
         double totalPrice = order.getPrice();
         boolean completed = order.isCompleted();
-        Date orderTime = order.getOrderTime();
+        java.util.Date orderTime = order.getOrderTime();
         HashMap<String, Integer> dishes = order.getDishes();
 
         String sqlFindThisOrder = "SELECT id FROM orders WHERE customer_id IN (SELECT id FROM customer WHERE name = '" + customerName + "' AND completed = false ORDER BY id DESC LIMIT 1)";
@@ -583,6 +627,62 @@ public class Database {
     }
 
     /**
+     * 返回商家评论
+     * 根据传入的商家名查询数据库中该商家收到的评论记录，并返回该商家收到的评论列表
+     *
+     * @param ownerName 商家名
+     * @return 商家评论
+     * @throws SQLException 数据库查询错误
+     * @throws AppException 顾客查询出错
+     */
+    public static List<Comment> getOwnerComments(String ownerName) throws SQLException, AppException {
+        String sql = "SELECT * FROM comments WHERE owner_id = (SELECT id FROM owner WHERE name = '" + ownerName + "')";
+        stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        List<Comment> commentList = new ArrayList<>();
+        while (rs.next()) {
+            Comment comment = new Comment();
+            comment.setCustomerName(getCustomerName(rs.getInt("customer_id")));
+            comment.setOwnerName(ownerName);
+            comment.setRating(rs.getDouble("rating"));
+            comment.setContent(rs.getString("content"));
+            comment.setCommentTime(rs.getDate("comment_time"));
+            commentList.add(comment);
+        }
+        rs.close();
+        stmt.close();
+        return commentList;
+    }
+
+    /**
+     * 返回顾客评论
+     * 根据传入的顾客名查询数据中该顾客对商家的评论记录，并返回该顾客的评论列表
+     *
+     * @param customerName 顾客名
+     * @return 顾客评论
+     * @throws SQLException 数据库查询错误
+     * @throws AppException 商家查询出错
+     */
+    public static List<Comment> getCustomerComments(String customerName) throws SQLException, AppException {
+        String sql = "SELECT * FROM comments WHERE customer_id = (SELECT id FROM customer WHERE name = '" + customerName + "')";
+        stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        List<Comment> commentList = new ArrayList<>();
+        while (rs.next()) {
+            Comment comment = new Comment();
+            comment.setCustomerName(customerName);
+            comment.setOwnerName(getOwnerName(rs.getInt("owner_id")));
+            comment.setRating(rs.getDouble("rating"));
+            comment.setContent(rs.getString("content"));
+            comment.setCommentTime(rs.getDate("comment_time"));
+            commentList.add(comment);
+        }
+        rs.close();
+        stmt.close();
+        return commentList;
+    }
+
+    /**
      * 访问商家
      * 根据传入的商家名进行访问商家操作，将其访问量加1
      *
@@ -680,6 +780,46 @@ public class Database {
         stmt = conn.createStatement();
         stmt.executeUpdate(sql);
         stmt.close();
+    }
+
+    /**
+     * 根据商家id查询商家名
+     *
+     * @param ownerId 商家id
+     * @return 商家名
+     * @throws SQLException 数据库查询错误
+     * @throws AppException 商家id不存在
+     */
+    public static String getOwnerName(int ownerId) throws SQLException, AppException {
+        String sql = "SELECT name FROM owner WHERE id = " + ownerId;
+
+        stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        if (rs.next()) {
+            return rs.getString("name");
+        } else {
+            throw new AppException("商家id不存在");
+        }
+    }
+
+    /**
+     * 根据顾客id查询顾客名
+     *
+     * @param customerId 顾客id
+     * @return 顾客名
+     * @throws SQLException 数据库查询错误
+     * @throws AppException 顾客id不存在
+     */
+    public static String getCustomerName(int customerId) throws SQLException, AppException {
+        String sql = "SELECT name FROM customer WHERE id = " + customerId;
+
+        stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        if (rs.next()) {
+            return rs.getString("name");
+        } else {
+            throw new AppException("顾客id不存在");
+        }
     }
 
     /**

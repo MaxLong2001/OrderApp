@@ -12,7 +12,6 @@ import backend.CustomerException.Unfinish.Compare;
 import backend.CustomerException.Comment.UnQualified;
 import backend.CustomerException.Order.AmountIllegal;
 import backend.CustomerException.Order.DishUndefined;
-import backend.CustomerException.Unfinish.DetailInDetail;
 import backend.CustomerException.Unfinish.UnfinishedException;
 
 /**
@@ -269,10 +268,9 @@ public class Customer extends User{
      * 为了更加详细地向前端返回执行的情况，我决定新建类别来更详细地表述信息。
      * 详情请见{@link Compare}
      * {@link UnfinishedException}
-     * {@link DetailInDetail}
      * 如果订单都已经完成，那么返回null;
      */
-    public DetailInDetail ReturnUnFinished() {
+    public Order CurrentUnfinished() {
 
         // 遍历未完成订单表查找是否有未完成订单
         List<Order> tmp_unfinished = this.orders_unfinished;
@@ -288,14 +286,12 @@ public class Customer extends User{
                 this.tmp_order = order;
 
                 // 直接返回未完成的订单
-                DetailInDetail detailInDetail = new DetailInDetail();
-                detailInDetail.warning = exception.toString();
-                detailInDetail.missing = order;
-                return detailInDetail;
+                return this.tmp_order;
             }
         }
 
         // 如果没有发现未完成订单，那么返回一个空值。
+        this.tmp_order = null;
         return null;
     }
 

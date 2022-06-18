@@ -527,7 +527,8 @@ public class Database {
      * @throws SQLException 数据库查询错误
      */
     public static void deleteOrder(Order order) throws SQLException {
-        String sql = "DELETE FROM orders WHERE order_time = '" + order.getOrderTime() + "'";
+        Timestamp orderTime = new Timestamp(order.getOrderTime().getTime());
+        String sql = "DELETE FROM orders WHERE order_time = '" + orderTime + "'";
         stmt = conn.createStatement();
         stmt.executeUpdate(sql);
         stmt.close();

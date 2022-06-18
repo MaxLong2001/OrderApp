@@ -4,21 +4,30 @@ import backend.Comment;
 import backend.Customer;
 import backend.Owner;
 import frontend.Tool.MyItem;
+import frontend.Tool.MyList;
+import frontend.Tool.MyView;
 
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommentSubView extends JPanel {
+public class CommentSubView extends MyView {
 
     List<Comment> comments = new ArrayList<>();
 
+    MyList commentItemList;
+
     public CommentSubView(Owner owner){
+        commentItemList = new MyList();
+        commentItemList.setHeight(500);
 
         comments = owner.comments;
         for (Comment comment : comments){
-
+            CommentItem commentItem = new CommentItem(comment);
+            commentItemList.addItem(commentItem);
         }
+
+        add(commentItemList);
     }
 }
 class CommentItem extends MyItem{

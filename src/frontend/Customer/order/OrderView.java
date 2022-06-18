@@ -1,9 +1,6 @@
 package frontend.Customer.order;
 
-import backend.Customer;
-import backend.Dish;
-import backend.Order;
-import backend.Owner;
+import backend.*;
 import frontend.*;
 import frontend.Tool.MyColor;
 import frontend.Tool.MyItem;
@@ -62,7 +59,22 @@ public class OrderView extends MyView {
             owner.setRating(4.5);
             owner.setName("黑猫厨房");
             owner.setIntroduction("黑猫厨房黑猫厨房黑猫厨房黑猫厨房黑猫厨房黑猫厨房黑猫厨房");
+            owner.comments = new ArrayList<>();
+            Comment comment = new Comment();
+            comment.setCommentTime(new Date());
+            comment.setContent("真是太好吃了吧真是太好吃了吧真是太好吃了吧真是太好吃了吧真是太好吃了吧真是太好吃了吧真是太好吃了吧真是太好吃了吧真是太好吃了吧");
+            comment.setCustomerName("赵正阳");
+            comment.setRating(4.5);
+            owner.comments.add(comment);
+            owner.comments.add(comment);
+            owner.comments.add(comment);
+            owner.comments.add(comment);
+            owner.comments.add(comment);
+            owner.comments.add(comment);
+            owner.comments.add(comment);
+            owner.comments.add(comment);
             this.currentOwner = owner;
+            openWindow(new CommentSubView(owner), "商家评论");
         }else{
             // 初始化数据
             this.loginCustomer = loginCustomer;

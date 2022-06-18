@@ -4,6 +4,7 @@ import frontend.Tool.MyEvent;
 import frontend.Tool.MyListener;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,5 +36,16 @@ public class MyView extends JPanel {
      */
     public void addMyListener(MyListener eventListener){
         eventListenerList.add(eventListener);
+    }
+
+    /**
+     * 打开一个窗口
+     */
+    public void openWindow(JPanel view, String title){
+        JFrame jFrame = new JFrame();
+        jFrame.setSize(new Dimension(view.getPreferredSize()));
+        jFrame.setTitle(title);
+        jFrame.getContentPane().add(view);
+        jFrame.setVisible(true);
     }
 }

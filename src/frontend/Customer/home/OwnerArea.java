@@ -1,9 +1,8 @@
-package frontend;
+package frontend.Customer.home;
 
 import backend.Owner;
 import backend.User;
-import frontend.Tool.MyColor;
-import frontend.Tool.MyItem;
+import frontend.Frontend;
 import frontend.Tool.MyView;
 
 import javax.swing.*;
@@ -11,12 +10,9 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 顾客登陆后进入的界面，对于商家进行一个展示。
- */
-public class OwnerView extends MyView {
 
-    private User loginUser;
+public class OwnerArea extends MyView {
+
 
     private List<Owner> owners;
 
@@ -24,8 +20,7 @@ public class OwnerView extends MyView {
     OwnerList ownerList;
     Box topArea;
 
-    public OwnerView(User loginUser){
-        this.loginUser = loginUser;
+    public OwnerArea(){
         setOwners();
 
         JLabel number = new JLabel();
@@ -77,33 +72,5 @@ public class OwnerView extends MyView {
         }
     }
 
-    class OwnerList extends JPanel {
-        private int listWidth = 400;
-        private int listHeight = 400;
 
-        public OwnerList(List<Owner> owners){
-            Box vBox = Box.createVerticalBox();
-            for (Owner owner : owners){
-                vBox.add(new OwnerItem(owner));
-            }
-            add(vBox);
-        }
-        /**
-         * 菜品列表项。包括的内容有：菜品的名称、菜品的剩余数量、一个加号按钮。
-         */
-        class OwnerItem extends MyItem {
-            int itemWidth = 400;
-
-            public OwnerItem(Owner owner){
-                getNameLabel().setText(owner.getName());
-                getIntroductionArea().setText(owner.getIntroduction());
-
-                JButton enter = new JButton();
-                enter.setText("进入商家");
-
-                addRight(enter);
-            }
-
-        }
-    }
 }

@@ -9,7 +9,7 @@ import java.awt.*;
 /**
  * 一个从上到下分别为名称、简介、操作的Item
  */
-public class MyItem extends Box {
+public class MyItem extends JPanel {
     int itemWidth = 400;
 
     private JPanel nameArea;
@@ -40,7 +40,8 @@ public class MyItem extends Box {
     }
 
     public MyItem(){
-        super(BoxLayout.Y_AXIS);
+//        super(BoxLayout.Y_AXIS);
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         nameArea = new JPanel();
         nameArea.setLayout(new FlowLayout(FlowLayout.LEFT));
         name = new JLabel();

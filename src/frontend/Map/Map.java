@@ -1,7 +1,7 @@
 package frontend.Map;
 
+import backend.Owner;
 import frontend.Tool.MyColor;
-import frontend.Tool.MyTextArea;
 import frontend.Tool.MyView;
 import frontend.Tool.V2;
 
@@ -11,21 +11,47 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
+/**
+ * 一个地图应该包括三层
+ * 地图层（包括本城市地图的可视化显示）
+ * 地点层（显示饭店，点击可弹出详情并进入）
+ * 添加层（商家可以设置自己的位置和路线）
+ *
+ */
 public class Map extends MyView {
+    /**
+     * 地图的实际尺寸
+     */
+    int width = 1000;
+    int height = 1000;
 
     public Map() {
         setLayout(null);
+        setPreferredSize(new Dimension(width, height));
 
-        setPreferredSize(new Dimension(800, 800));
+        Point node1 = new Point(100, 100);
+        Point node2 = new Point(100, 200);
+        Point node3 = new Point(200, 200);
+        Point node4 = new Point(200, 100);
+        List<Edge> edges = new ArrayList<>();
+        edges.add(new Edge(node1, node2));
+        edges.add(new Edge(node2, node3));
+        edges.add(new Edge(node3, node4));
+        edges.add(new Edge(node4, node1));
+        edges.add(new Edge(node1, node3));
 
-        EdgeLayer edgeLayer = new EdgeLayer();
-        edgeLayer.addEdge(new Edge(100, 100, 200, 200));
+        MapStruct mapStruct = new MapStruct();
+        mapStruct.edges = edges;
+        mapStruct.compute();
+        System.out.println(mapStruct.factor);
 
-        add(new Plot(100, 100, "黑猫厨房"));
-        add(new Plot(200, 200, "黑猫厨房"));
-        add(edgeLayer);
+//        EdgeLayer edgeLayer = new EdgeLayer();
+//        edgeLayer.addEdge(new Edge(100, 100, 200, 200));
+
+        add(new PlotLayer(100, 100, "黑猫厨房"));
+        add(new PlotLayer(200, 200, "黑猫厨房"));
+//        add(edgeLayer);
 
 
 
@@ -41,7 +67,59 @@ public class Map extends MyView {
 
     }
 
-    class Plot extends JPanel{
+    /**
+     * 先向该类加入所有街道和地点，然后计算
+     */
+    class MapStruct {
+        public List<Edge> edges;
+        public List<frontend.Map.Plot> plots = new ArrayList<>();
+        int xOriginSize;
+        int yOriginSize;
+        int xOffset;
+        int yOffset;
+        double factor;
+        void compute(){
+            //先找到最小和最大的横纵坐标
+            int minx = 0x3fffffff;
+            int maxx = 0xffffffff;
+            int miny = 0x3fffffff;
+            int maxy = 0xffffffff;
+            for(Edge e : edges){
+                minx = Math.min(e.end.x, minx);
+                minx = Math.min(e.start.x, minx);
+                miny = Math.min(e.end.y, miny);
+                miny = Math.min(e.start.y, miny);
+                maxx = Math.max(e.end.x, maxx);
+                maxx = Math.max(e.start.x, maxx);
+                maxy = Math.max(e.end.y, maxy);
+                maxy = Math.max(e.start.y, maxy);
+                xOriginSize = maxx - minx;
+                yOriginSize = maxy - miny;
+                xOffset = - minx + 20;
+                yOffset = - miny + 20;
+
+                factor = Math.max(width, height) * 1.0 / Math.min(xOriginSize, yOriginSize);
+            }
+            for(Edge e : edges){
+                e.x1 = (int)((e.start.x + xOffset) * factor);
+                e.x2 = (int)((e.end.x + xOffset) * factor);
+                e.y1 = (int)((e.start.y + yOffset) * factor);
+                e.y2 = (int)((e.end.y + yOffset) * factor);
+            }
+            for (Plot p : plots){
+                double dx = Math.sqrt((p.distance + p.edge.end.y - p.edge.start.y) *
+                        (p.distance - p.edge.end.y + p.edge.start.y));
+                double xOrigin = p.edge.start.x + (p.edge.start.x > p.edge.end.x ? - dx : dx);
+                double dy = Math.sqrt((p.distance + p.edge.end.x - p.edge.start.x) *
+                        (p.distance - p.edge.end.x + p.edge.start.x));
+                double yOrigin = p.edge.start.y + (p.edge.start.y > p.edge.end.y ? - dy : dy);
+                p.x = (int)((xOrigin + xOffset) * factor);
+                p.y = (int)((yOrigin + yOffset) * factor);
+            }
+        }
+
+    }
+    class PlotLayer extends JPanel{
 
         /**为0或者1，小或者大*/
         private int state = 0;
@@ -53,7 +131,7 @@ public class Map extends MyView {
         /**文字区域的宽度*/
         private int width = smallR * 4;
 
-        public Plot(int x, int y, String name) {
+        public PlotLayer(int x, int y, String name) {
             Graph graph = new Graph(R);
             graph.setLocation(R, 0);
 
@@ -147,16 +225,39 @@ class EdgeLayer extends JPanel{
     }
 
 }
+class Plot {
+    /**
+     * 实际位置
+     */
+    int x;
+    int y;
+
+    Edge edge;
+    /**
+     * 与edge的起点的距离
+     */
+    int distance;
+    Owner owner;
+}
+
 class Edge {
+    Point start;
+    Point end;
+    String edgeName;
 
-    int x1, y1, x2, y2;
+    /**
+     * 实际位置
+     */
+    int x1;
+    int y1;
+    int x2;
+    int y2;
 
-    public Edge(int x1, int y1, int x2, int y2) {
-        this.x1 = x1;
-        this.y1 = y1;
-        this.x2 = x2;
-        this.y2 = y2;
+    public Edge(Point start, Point end) {
+        this.start = start;
+        this.end = end;
     }
+
 
     public void paint(Graphics g) {
         g.setColor(MyColor.color4());
@@ -168,15 +269,6 @@ class Edge {
         p.addPoint(x2 + (int)v1.x, y2 + (int)v1.y);
         p.addPoint(x2 - (int)v1.x, y2 - (int)v1.y);
         p.addPoint(x1 - (int)v1.x, y1 - (int)v1.y);
-//            p.addPoint(- (int)v1.x, - (int)v1.y);
-//            p.addPoint(x2 - x1 - (int)v1.x, y2 - y1  - (int)v1.y);
-//            p.addPoint(x2 -x1 + (int)v1.x, y2 - y1 + (int)v1.y);
-//            p.addPoint((int)v1.x,   (int)v1.y);
-
-//            Point p1 = new Point(x1, y1);
-//            Point p2 = new Point(x2, y2);
-
-//            p.addPoint();
         g.drawPolygon(p);
         g.fillPolygon(p);
         g.drawLine(0, 0, x2 - x1, y2 - y1);

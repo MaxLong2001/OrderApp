@@ -322,9 +322,18 @@ public class Database {
     public static void changeCustomerName(String oldName, String newName) throws SQLException, AppException {
         String sqlCheckFromCustomer = "SELECT name FROM customer WHERE name = '" + newName + "'";
         String sqlCheckFromOwner = "SELECT name FROM owner WHERE name = '" + newName + "'";
+        boolean isCustomer = false;
+        boolean isOwner = false;
+        stmt = conn.createStatement();
         ResultSet rsCustomer = stmt.executeQuery(sqlCheckFromCustomer);
+        if (rsCustomer.next()) {
+            isCustomer = true;
+        }
         ResultSet rsOwner = stmt.executeQuery(sqlCheckFromOwner);
-        if (rsCustomer.next() || rsOwner.next()) {
+        if (rsOwner.next()) {
+            isOwner = true;
+        }
+        if (isCustomer || isOwner) {
             throw new AppException("新用户名已存在");
         }
         rsCustomer.close();

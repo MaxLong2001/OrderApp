@@ -26,13 +26,12 @@ public class SearchAll {
     public static boolean FindDish(String key_word, List<Dish> dishes){
 
         // 将关键字转化为正则表达式待匹配项
-        String regex = key_word + "+";
 
         // 遍历菜品列表查找对应菜品
         for(Dish dish: dishes){
 
             // 如果菜品中含有关键字
-            if(dish.getName().matches(regex)){
+            if(dish.getName().contains(key_word)){
 
                 // 返回：找到了
                 return true;
@@ -58,7 +57,6 @@ public class SearchAll {
         }
 
         // 将关键字正式转化成为正则表达式中的待匹配表达式
-        String regex = key_word + "+";
 
         // 最终商家列表
         List<Owner> result = new ArrayList<>();
@@ -73,7 +71,7 @@ public class SearchAll {
         for(Owner owner: owners){
 
             // 如果商家名匹配关键字至少一次
-            if(owner.getName().matches(regex)){
+            if(owner.getName().contains(key_word)){
                 hasName.add(owner);
             } else{
 

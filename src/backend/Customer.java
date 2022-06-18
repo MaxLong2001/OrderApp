@@ -94,7 +94,7 @@ public class Customer extends User{
         }
 
         // 如果获得密码与现密码不符
-        if(!temp_all.get("customer").equals(password)){
+        if(!temp_all.get("password").equals(password)){
             throw new AppException("密码错误！！");
         }
 

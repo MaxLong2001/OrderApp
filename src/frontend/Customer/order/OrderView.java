@@ -69,6 +69,11 @@ public class OrderView extends MyView {
             dishMap = new TreeMap<>();
             dishMap.put("家常菜", dishes);
             currentOrder = new TestOrder();
+            Owner owner = new Owner();
+            owner.setRating(4.5);
+            owner.setName("黑猫厨房");
+            owner.setIntroduction("黑猫厨房黑猫厨房黑猫厨房黑猫厨房黑猫厨房黑猫厨房黑猫厨房");
+            this.currentOwner = owner;
         }else{
             // 初始化数据
             this.loginCustomer = loginCustomer;
@@ -76,18 +81,10 @@ public class OrderView extends MyView {
             getData();
         }
 
-
-
-        Owner owner = new Owner();
-        owner.setRating(4.5);
-        owner.setName("黑猫厨房");
-        owner.setIntroduction("黑猫厨房黑猫厨房黑猫厨房黑猫厨房黑猫厨房黑猫厨房黑猫厨房");
-
-        //绘制三大区域
-//        ownerArea = new OwnerArea(currentOwner);
+        // 绘制三大区域
+        ownerArea = new OwnerArea(this.currentOwner);
         dishArea = new DishArea(dishMap, currentOrder);
         orderArea = new OrderArea(currentOrder);
-//        setOrderArea();
 
         //排版组合
         Box hBox = Box.createHorizontalBox();
@@ -95,7 +92,7 @@ public class OrderView extends MyView {
         hBox.add(orderArea);
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-//        add(ownerArea);
+        add(ownerArea);
         add(hBox);
     }
 

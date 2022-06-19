@@ -19,6 +19,8 @@ import java.awt.*;
 public class Frontend extends JFrame{
     public static boolean deBug = false;
 
+    static Customer loginCustomer;
+    static Owner loginOwner;
 
     MyView nowView;
     Container content = getContentPane();
@@ -79,8 +81,23 @@ public class Frontend extends JFrame{
                 User user = ((Login.DoneLoginEvent) e).getLoginUser();
                 if(user instanceof Customer){
                     changeView(new HomeView((Customer)user));
-                }else{
-                    //todo
+                    loginCustomer = (Customer) user;
+                    loginOwner = null;
+                }else if (user instanceof Owner){
+                    changeView(new OwnerView((Owner) user));
+                    loginOwner = (Owner) user;
+                    loginCustomer = null;
+                }
+            } else if (e instanceof Register.DoneRegisterEvent) {
+                User user = ((Register.DoneRegisterEvent) e).getLoginUser();
+                if(user instanceof Customer){
+                    changeView(new HomeView((Customer)user));
+                    loginCustomer = (Customer) user;
+                    loginOwner = null;
+                }else if (user instanceof Owner){
+                    changeView(new OwnerView((Owner) user));
+                    loginOwner = (Owner) user;
+                    loginCustomer = null;
                 }
             }
         }
@@ -99,5 +116,12 @@ public class Frontend extends JFrame{
         }
     }
 
+    public static Customer getLoginCustomer() {
+        return loginCustomer;
+    }
+
+    public static Owner getLoginOwner() {
+        return loginOwner;
+    }
 
 }

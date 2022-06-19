@@ -1,5 +1,7 @@
 package backend.AppException;
 
+import javax.swing.*;
+
 /**
  * @version 1.0
  * @author JiangXingru
@@ -28,5 +30,10 @@ public class AppException extends Exception{
     @Override
     public String toString(){
         return this.warning;
+    }
+
+    public void message(JComponent component){
+        JOptionPane.showConfirmDialog(component,
+                this, "提示", JOptionPane.DEFAULT_OPTION);
     }
 }

@@ -9,6 +9,8 @@ import java.util.List;
  * 一个带有滚动条的列表
  */
 public class MyList extends JPanel{
+    List<JPanel> items = new ArrayList<>();
+
     JScrollPane scrollPane;
     private int width = 400;
     private int height = 400;
@@ -24,6 +26,7 @@ public class MyList extends JPanel{
     }
 
     public void addItem(JPanel item){
+        items.add(item);
         vBox.add(item);
         scrollPane.setPreferredSize(new Dimension(item.getPreferredSize().width + 40, height));
         repaint();
@@ -32,5 +35,9 @@ public class MyList extends JPanel{
         this.height = height;
         scrollPane.setPreferredSize(new Dimension(scrollPane.getPreferredSize().width, height));
         repaint();
+    }
+
+    public List<JPanel> getItems() {
+        return items;
     }
 }

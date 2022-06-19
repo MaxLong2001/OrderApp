@@ -3,13 +3,15 @@ package frontend.Owner;
 import backend.Dish;
 import backend.Order;
 import backend.Owner;
-import frontend.Frontend;
+import frontend.*;
 import frontend.Tool.MyButton;
 import frontend.Tool.MyItem;
 import frontend.Tool.MyView;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.nio.file.NotLinkException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,34 +38,25 @@ public class OwnerView extends MyView {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         add(ownerArea);
         add(contentArea);
-    }
 
-    class OrderList extends JPanel{
-        public OrderList() {
-            setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-            refresh();
-        }
-        private void refresh(){
-            List<Order> orders;
-            if(Frontend.deBug){
-                orders = new ArrayList<>();
-                Order order = new Order();
-                order.nameOfCustomer = "赵正阳";
-                order.orderTime = new Date();
-                order.cooked = false;
-                orders.add(order);
-                orders.add(order);
-                orders.add(order);
-            }else {
-                orders = loginOwner.ShowUncooked();
+        ownerArea.getModify().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openWindow(new ModifyView(loginOwner), "修改信息");
             }
-
-            for(Order o : orders){
-                OrderItem orderItem = new OrderItem(o);
-                add(orderItem);
+        });
+        ownerArea.getComment().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openWindow(new CommentSubView(loginOwner), "商家评论");
             }
-        }
+        });
+        contentArea.dishList.newDish.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openWindow(new ModifyDish(loginOwner), "新增菜品");
+            }
+        });
     }
-
 
 }

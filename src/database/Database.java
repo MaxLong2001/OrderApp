@@ -104,6 +104,9 @@ public class Database {
         rsFromCustomer.close();
         rsFromOwner.close();
 
+        if (introduction == null || introduction.equals("") || introduction.equals("null")) {
+            introduction = "暂无简介";
+        }
         String sql = "INSERT INTO owner (name, introduction, password) VALUES ('" + ownerName + "', '" + introduction + "', '" + password + "')";
         stmt.executeUpdate(sql);
         stmt.close();

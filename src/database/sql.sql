@@ -10,7 +10,7 @@ create table owner
 (
     id           int primary key auto_increment,
     name         varchar(20) not null unique,
-    introduction varchar(255) default null,
+    introduction varchar(255) default '暂无简介',
     visit        int          default 0,
     password     varchar(20) not null,
     rating       double       default 2.5

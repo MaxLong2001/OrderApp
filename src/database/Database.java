@@ -983,18 +983,4 @@ public class Database {
             throw new AppException("菜品id不存在");
         }
     }
-
-    /**
-     * 测试用方法
-     *
-     * @throws SQLException 数据库查询错误
-     */
-    public static void test_select() throws SQLException {
-        stmt = conn.createStatement();
-        String sql = "select id from test_table";
-        ResultSet rs = stmt.executeQuery(sql);
-        while (rs.next()) {
-            System.out.println(rs.getInt("id"));
-        }
-    }
 }

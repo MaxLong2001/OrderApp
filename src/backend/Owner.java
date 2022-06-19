@@ -289,9 +289,9 @@ public class Owner extends User{
                 types.add(str);
                 for (j=0; j<dishes.size(); j++)
                 {
-                    if(dishes.get(i).getType().equals(str))
+                    if(dishes.get(j).getType().equals(str))
                     {
-                        dishOfType.add(dishes.get(i));
+                        dishOfType.add(dishes.get(j));
                     }
                 }
                 dishHashMap.put(str,dishOfType);

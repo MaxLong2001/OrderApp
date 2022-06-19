@@ -816,6 +816,28 @@ public class Database {
     }
 
     /**
+     * 添加菜品剩余量
+     * 根据传入的商家名和菜品对象查询数据库中的菜品记录，并修改该菜品的剩余量
+     *
+     * @param ownerName 商家名
+     * @param dishName  菜品
+     * @SQLException 数据库查询错误
+     * @throws AppException 商家不存在该菜品
+     */
+    public static void addDishQuantity(String ownerName, String dishName) throws SQLException, AppException {
+        String sqlFindDish = "SELECT * FROM dish WHERE name = '" + dishName + "' AND owner_id = (SELECT id FROM owner WHERE name = '" + ownerName + "')";
+        stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sqlFindDish);
+        if (!rs.next()) {
+            throw new AppException("该商家不存在该菜品");
+        }
+
+        String sql = "UPDATE dish SET remain = remain + 1 WHERE owner_id = (SELECT id FROM owner WHERE name = '" + ownerName + "') AND name = '" + dishName + "'";
+        stmt.executeUpdate(sql);
+        stmt.close();
+    }
+
+    /**
      * 根据商家id查询商家名
      *
      * @param ownerId 商家id

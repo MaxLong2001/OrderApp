@@ -68,6 +68,7 @@ public class OwnerArea extends MyView {
             owners.add(owner);
             owners.add(owner);
         }else {
+
             // todo 获得商家列表
         }
     }

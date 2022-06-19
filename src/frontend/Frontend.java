@@ -79,8 +79,15 @@ public class Frontend extends JFrame{
                 User user = ((Login.DoneLoginEvent) e).getLoginUser();
                 if(user instanceof Customer){
                     changeView(new HomeView((Customer)user));
-                }else{
-                    //todo
+                }else if (user instanceof Owner){
+                    changeView(new OwnerView((Owner) user));
+                }
+            } else if (e instanceof Register.DoneRegisterEvent) {
+                User user = ((Register.DoneRegisterEvent) e).getLoginUser();
+                if(user instanceof Customer){
+                    changeView(new HomeView((Customer)user));
+                }else if (user instanceof Owner){
+                    changeView(new OwnerView((Owner) user));
                 }
             }
         }

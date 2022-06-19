@@ -37,33 +37,4 @@ public class OwnerView extends MyView {
         add(ownerArea);
         add(contentArea);
     }
-
-    class OrderList extends JPanel{
-        public OrderList() {
-            setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-            refresh();
-        }
-        private void refresh(){
-            List<Order> orders;
-            if(Frontend.deBug){
-                orders = new ArrayList<>();
-                Order order = new Order();
-                order.nameOfCustomer = "赵正阳";
-                order.orderTime = new Date();
-                order.cooked = false;
-                orders.add(order);
-                orders.add(order);
-                orders.add(order);
-            }else {
-                orders = loginOwner.ShowUncooked();
-            }
-
-            for(Order o : orders){
-                OrderItem orderItem = new OrderItem(o);
-                add(orderItem);
-            }
-        }
-    }
-
-
 }

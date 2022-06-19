@@ -13,7 +13,7 @@ create table owner
     introduction varchar(255) default null,
     visit        int          default 0,
     password     varchar(20) not null,
-    rating       double       default 5.0
+    rating       double       default 2.5
 );
 
 create table dish

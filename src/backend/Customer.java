@@ -379,10 +379,16 @@ public class Customer extends User{
         // 爬取当前商家的订单列表
         tmp_dishes = owner.dishes;
 
+        // 菜品数目变量
+        int amount = 0;
+
         // 测试错误情况
         // 我的笔记：
         // 错误情况无非是两种：1、菜品不存在；2、菜品数额不足。
         for(String name: tmp_order.dishes.keySet()){
+
+            amount += tmp_order.dishes.get(name);
+
             try{
                 SettleAll.TestExist(tmp_dishes, name);
                 SettleAll.TestAmount(tmp_dishes, name, tmp_order.dishes.get(name));
@@ -391,6 +397,11 @@ public class Customer extends User{
             }catch (AmountIllegal e){
                 return e.toString();
             }
+        }
+
+        // 如果订单中菜品数量为0
+        if(amount == 0){
+            return "您的订单为空";
         }
 
         // 如果测试都成功

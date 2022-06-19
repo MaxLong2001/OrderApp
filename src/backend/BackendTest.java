@@ -62,6 +62,6 @@ public class BackendTest {
             System.out.println(e);
         }
 
-        customer.Submit();
+        System.out.println(customer.Submit());
     }
 }

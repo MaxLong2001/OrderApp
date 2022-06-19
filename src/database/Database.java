@@ -776,15 +776,19 @@ public class Database {
      * @throws SQLException 数据库查询错误
      * @throws AppException 商家修改出错
      */
-    public static void changeDish(String ownerName, Dish dish) throws SQLException, AppException {
-        String sqlFindDish = "SELECT * FROM dish WHERE name = '" + dish.getName() + "' AND owner_id = (SELECT id FROM owner WHERE name = '" + ownerName + "')";
+    public static void changeDish(String ownerName, String oldDishName, Dish dish) throws SQLException, AppException {
+        String sqlFindDish = "SELECT * FROM dish WHERE name = '" + oldDishName + "' AND owner_id = (SELECT id FROM owner WHERE name = '" + ownerName + "')";
         stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(sqlFindDish);
         if (!rs.next()) {
             throw new AppException("该商家不存在该菜品");
         }
 
-        String sql = "UPDATE dish SET name = '" + dish.getName() + "', price = '" + dish.getPrice() + "', introduction = '" + dish.getIntroduction() + "', type = '" + dish.getType() + "', sales = '" + dish.getSalesQuantity() + "', remain = '" + dish.getRemainQuantity() + "' WHERE owner_id = (SELECT id FROM owner WHERE name = '" + ownerName + "') AND name = '" + dish.getName() + "'";
+        String newName = dish.getName();
+        double newPrice = dish.getPrice();
+        String newIntroduction = dish.getIntroduction();
+        String newType = dish.getType();
+        String sql = "UPDATE dish SET name = '" + newName + "', price = '" + newPrice + "', introduction = '" + newIntroduction + "', type = '" + newType + "' WHERE owner_id = (SELECT id FROM owner WHERE name = '" + ownerName + "') AND name = '" + oldDishName + "'";
         stmt.executeUpdate(sql);
         stmt.close();
     }

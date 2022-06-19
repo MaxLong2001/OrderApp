@@ -195,16 +195,29 @@ public class Owner extends User{
     }
 
     /**
-     * 这个方法用于商家增加菜品数量，传入商家名称和菜品名称
+     * 这个方法用于商家将对应菜品数量+1，传入商家名称和菜品名称
      */
     public void addDishQuantity(String ownerName, String dishName) throws AppException {
         try {
             Database.addDishQuantity(ownerName,dishName);
         }catch (SQLException e)
         {
-            throw new AppException("获取菜品列表失败！！");
+            throw new AppException("添加菜品失败！！");
         }
     }
+
+    /**
+     * 这个方法用于访问商家，传入商家名后将访问量+1
+     */
+    public void addVisit(String ownerName) throws AppException{
+        try {
+            Database.visitOwner(ownerName);
+        }catch (SQLException e)
+        {
+            throw new AppException("访问商家失败！！");
+        }
+    }
+
 
     /**
      * 这个方法用于商家下架菜品，传入对应的菜品
@@ -297,6 +310,18 @@ public class Owner extends User{
             throw new AppException("获得简介失败!!");
         }
         return introduction;
+    }
+
+    /**
+     * 这个方法用于传入商家的名称和新的简介内容，来修改简介。
+     */
+    public void updateIntroduction(String ownerName, String newIntroduction) throws AppException {
+        try {
+            Database.changeOwnerIntroduction(ownerName,newIntroduction);
+        }catch (SQLException e)
+        {
+            throw new AppException("修改简介失败!!");
+        }
     }
 
     /**

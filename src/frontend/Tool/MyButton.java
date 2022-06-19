@@ -67,8 +67,8 @@ public class MyButton extends JButton {
         Color renderColor = new Color(colorNormal.getRed(), colorNormal.getGreen(), colorNormal.getBlue(), (int) (colorNormal.getAlpha() * 0.8));
         switch (state){
 //            case Normal -> color();
-            case Focus -> renderColor = new Color(renderColor.getRed(), renderColor.getGreen(), renderColor.getBlue(), (int) (renderColor.getAlpha() * 0.8));
-            case Click -> renderColor = new Color(renderColor.getRed(), renderColor.getGreen(), renderColor.getBlue(), (int) (renderColor.getAlpha() * 1.2));
+//            case Focus -> renderColor = new Color(renderColor.getRed(), renderColor.getGreen(), renderColor.getBlue(), (int) (renderColor.getAlpha() * 0.8));
+//            case Click -> renderColor = new Color(renderColor.getRed(), renderColor.getGreen(), renderColor.getBlue(), (int) (renderColor.getAlpha() * 1.2));
         }
 //        System.out.println(renderColor);
 //        Graphics2D graphics2D = (Graphics2D) g;

@@ -170,6 +170,9 @@ public class Owner extends User{
             throw new AppException("获取菜品列表失败！！");
         }
 
+        if(newNameOfDish==""||price==0||type==""||introduction=="")
+            throw new AppException("无法修改！！");
+        
         //临时变量dish存储输入的参数
         Dish dish = new Dish();
         dish.name = newNameOfDish;

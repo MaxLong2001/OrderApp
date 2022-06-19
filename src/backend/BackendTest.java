@@ -56,12 +56,6 @@ public class BackendTest {
             System.out.println(e);
         }
 
-        try{
-            customer.DelInOrder();
-        }catch (AppException e){
-            System.out.println(e);
-        }
-
         System.out.println(customer.Submit());
     }
 }

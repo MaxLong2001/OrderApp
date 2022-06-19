@@ -172,7 +172,7 @@ public class Owner extends User{
 
         if(newNameOfDish==""||price==0||type==""||introduction=="")
             throw new AppException("无法修改！！");
-        
+
         //临时变量dish存储输入的参数
         Dish dish = new Dish();
         dish.name = newNameOfDish;
@@ -322,7 +322,9 @@ public class Owner extends User{
      * 这个方法用于传入商家的名称和新的简介内容，来修改简介。
      */
     public void updateIntroduction(String ownerName, String newIntroduction) throws AppException {
+
         try {
+            this.introduction = newIntroduction;
             Database.changeOwnerIntroduction(ownerName,newIntroduction);
         }catch (SQLException e)
         {

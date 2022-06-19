@@ -6,13 +6,14 @@ import database.Database;
 
 import java.sql.SQLException;
 import java.util.*;
+import backend.Recommend.*;
 
 public class Owner extends User{
     public String introduction;
     public double rating;
     public int visit;
-    public ArrayList<Order> orders_finished = new ArrayList<>();
-    public ArrayList<Order> orders_unfinished = new ArrayList<>();
+    public ArrayList<Order> orders_cooked = new ArrayList<>();
+    public ArrayList<Order> orders_uncooked = new ArrayList<>();
     public List<Dish> dishes = new ArrayList<>();
     public ArrayList<Comment> comments = new ArrayList<>();
 
@@ -80,18 +81,20 @@ public class Owner extends User{
             throw new AppException("导出商家订单列表失败！！");
         }
 
-        // 初始化order_finished和order_unfinished
-        this.orders_finished = new ArrayList<>();
-        this.orders_unfinished = new ArrayList<>();
+        // 初始化orders_cooked和orders_uncooked
+        this.orders_cooked = new ArrayList<>();
+        this.orders_uncooked = new ArrayList<>();
         // 将导出的订单列表按照是否完成进行分类
         for(Order order: tmp_orders){
             if(order.completed){
-                this.orders_finished.add(order);
+                this.orders_cooked.add(order);
             }
             else{
-                this.orders_unfinished.add(order);
+                this.orders_uncooked.add(order);
             }
         }
+        ForOrder.OrderRecommend(orders_cooked);
+        ForOrder.OrderRecommend(orders_uncooked);
 
         // 尝试导出菜品列表。
         try{
@@ -358,27 +361,7 @@ public class Owner extends User{
      * 注：按照时间排序(最近的在前）
      */
     public List<Order> ShowCooked(){
-        orders_finished.sort((o1, o2) -> {
-            try {
-                if (o1.getOrderTime() == null || o2.getOrderTime() == null) {
-                    return 1;
-                }
-                Date dt1 = o1.getOrderTime();
-                Date dt2 = o2.getOrderTime();
-
-                if (dt1.getTime() < dt2.getTime()) {
-                    return -1;
-                } else if (dt1.getTime() > dt2.getTime()) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return 0;
-        });
-        return orders_finished;
+        return orders_cooked;
     }
 
     /**
@@ -387,27 +370,7 @@ public class Owner extends User{
      */
 
     public List<Order> ShowUncooked(){
-        orders_unfinished.sort((o1, o2) -> {
-            try {
-                if (o1.getOrderTime() == null || o2.getOrderTime() == null) {
-                    return 1;
-                }
-                Date dt1 = o1.getOrderTime();
-                Date dt2 = o2.getOrderTime();
-
-                if (dt1.getTime() < dt2.getTime()) {
-                    return -1;
-                } else if (dt1.getTime() > dt2.getTime()) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return 0;
-        });
-        return orders_unfinished;
+        return orders_uncooked;
     }
 
     /**

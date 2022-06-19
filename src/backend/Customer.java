@@ -266,6 +266,46 @@ public class Customer extends User{
     }
 
     /**
+     * 订单自动生成计算方法：如果顾客点击菜品栏旁边的“-”，
+     * 在顾客进入此商家第一次点击时应该查看是否有订单，
+     * 往后，只要顾客发生点击事件，
+     * 那么应该向临时订单中实时减少菜品。
+     * @throws AppException 订单保存异常
+     */
+
+    public void DelInOrder() throws AppException {
+
+        // 如果当前订单尚未初始化，那么应该抛出通用异常
+        if(this.tmp_order == null){
+
+            throw new AppException("当前尚无可选订单！！");
+        }
+
+        // 遍历菜品哈希表，查看是否有重复？
+        HashMap<String, Integer>tmp_dishes = this.tmp_order.dishes;
+        String tmp_name = this.dish.name;
+
+        // 如果添加了菜品，那么将菜品的数量减1
+        if(tmp_dishes.get(tmp_name) != null){
+
+            tmp_dishes.put(tmp_name, tmp_dishes.get(tmp_name) - 1);
+        } else {
+
+            throw new AppException("您没有选择此菜品！！");
+        }
+
+        // 实时计算订单的价格
+        this.tmp_order.price -= dish.price;
+
+        // 实时向数据库中保存当前订单内容
+        try {
+            Database.insertOrder(tmp_order);
+        }catch (SQLException e){
+            throw new AppException("向数据库中保存订单内容失败！！");
+        }
+    }
+
+    /**
      * 未完成订单查询方法：如果用户点击商家开始点餐，
      * 如果用户在此商家尚有未完成订单，那么返回未完成订单对象。
      * 为了更加详细地向前端返回执行的情况，我决定新建类别来更详细地表述信息。
@@ -420,7 +460,7 @@ public class Customer extends User{
      * @throws AppException 数据库插入评论异常
      * @throws backend.CustomerException.Comment.UnQualified 用户没有资格评价异常
      */
-    public void Comment(double rating, String comment) throws UnQualified, AppException{
+    public void Comment(double rating, String comment) throws AppException{
 
         // 查看用户已完成订单中是否有当前商家的订单，这里需要遍历订单列表
         int i;
@@ -435,7 +475,7 @@ public class Customer extends User{
 
         // 如果没有，那么抛出无资格评价异常
         if(i == orders_finished.size()){
-            throw new UnQualified();
+            throw new AppException("您还没有用餐，没有资格评价");
         }
 
         // 如果用户有资格评论，将评论插入数据库

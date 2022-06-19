@@ -1,8 +1,6 @@
 package backend;
 
 import backend.AppException.AppException;
-import backend.Monitor.Constraint;
-import backend.Recommend.ForCustomer;
 import database.Database;
 
 import java.sql.SQLException;

@@ -23,7 +23,7 @@ public class Frontend extends JFrame{
 
     static Customer loginCustomer;
     static Owner loginOwner;
-    public static Order currentOrder;
+//    public static Order currentOrder;
     public static  Owner currentOwner;
 
     MyView nowView;

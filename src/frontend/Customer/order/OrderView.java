@@ -29,8 +29,8 @@ public class OrderView extends MyView {
 
     private void getData(){
         loginCustomer.SetOwner(currentOwner);
-        Frontend.currentOrder = loginCustomer.CurrentUnfinished();
-        if(Frontend.currentOrder != null) {
+//        Frontend.currentOrder = loginCustomer.CurrentUnfinished();
+        if(Frontend.getLoginCustomer().tmp_order != null) {
             JOptionPane.showConfirmDialog(this, "您有订单尚未完成，请继续完成", "提示", JOptionPane.DEFAULT_OPTION);
         }
         try{
@@ -57,7 +57,7 @@ public class OrderView extends MyView {
 
         // 绘制三大区域
         ownerArea = new OwnerArea(this.currentOwner);
-        dishArea = new DishArea(dishMap, Frontend.currentOrder);
+        dishArea = new DishArea(dishMap, Frontend.getLoginCustomer().tmp_order);
         orderArea = new OrderArea();
 
         //排版组合

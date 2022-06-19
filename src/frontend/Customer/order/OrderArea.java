@@ -53,8 +53,8 @@ class OrderCommit extends Box {
         super(BoxLayout.X_AXIS);
 
         total = new JLabel();
-        if(Frontend.currentOrder == null) total.setText("合计：￥ 0");
-        else total.setText("合计：￥" + Frontend.currentOrder.getPrice());
+        if(Frontend.getLoginCustomer().tmp_order == null) total.setText("合计：￥ 0");
+        else total.setText("合计：￥" + Frontend.getLoginCustomer().tmp_order.getPrice());
         JPanel totalArea = new JPanel();
         totalArea.setLayout(new FlowLayout(FlowLayout.LEFT));
         totalArea.add(total);
@@ -80,7 +80,7 @@ class OrderCommit extends Box {
         });
     }
     public void refresh(){
-        total.setText("合计：￥" + Frontend.currentOrder.getPrice());
+        total.setText("合计：￥" + Frontend.getLoginCustomer().tmp_order.getPrice());
         repaint();
     }
 }
@@ -90,8 +90,8 @@ class OrderItemList extends MyList {
     List<DishItem> orderItems = new ArrayList<>();
 
     public OrderItemList(){
-        if(Frontend.currentOrder != null){
-            Set<Map.Entry<String, Integer>> entry = Frontend.currentOrder.getDishes().entrySet();
+        if(Frontend.getLoginCustomer().tmp_order != null){
+            Set<Map.Entry<String, Integer>> entry = Frontend.getLoginCustomer().tmp_order.getDishes().entrySet();
             for(Map.Entry<String, Integer> i : entry){
                 Dish dish = new Dish();
                 dish.setName(i.getKey());
@@ -105,8 +105,8 @@ class OrderItemList extends MyList {
     }
 
     public void refresh() {
-        if(Frontend.currentOrder != null){
-            Set<Map.Entry<String, Integer>> entry = Frontend.currentOrder.getDishes().entrySet();
+        if(Frontend.getLoginCustomer().tmp_order != null){
+            Set<Map.Entry<String, Integer>> entry = Frontend.getLoginCustomer().tmp_order.getDishes().entrySet();
             for(Map.Entry<String, Integer> i : entry){
                 int flag = 0;
                 for(DishItem item : orderItems){

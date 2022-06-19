@@ -55,7 +55,7 @@ public class Customer extends User{
      * 这个属性是用户在浏览商家过程中生成的临时订单。
      * 为了保证属性的安全性，我将变量设为了私有。
      */
-    private Order tmp_order;
+    public Order tmp_order;
 
     /**默认构造方法，用于注册时新增一个空的顾客*/
     public Customer(){}

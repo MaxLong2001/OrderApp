@@ -4,6 +4,7 @@ import backend.AppException.AppException;
 import backend.Monitor.Constraint;
 import database.Database;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.*;
 import backend.Recommend.*;
@@ -124,7 +125,7 @@ public class Owner extends User{
     public void addDishes(String nameOfOwner, String nameOfDish, double price, String type, String introduction) throws AppException {
         int i;
         try {
-            this.dishes = Database.getDishList(nameOfOwner);
+            dishes = Database.getDishList(nameOfOwner);
         }catch (SQLException e)
         {
             throw new AppException("获取菜品列表失败！！");
@@ -139,9 +140,9 @@ public class Owner extends User{
 
         //记录数据库中是否有dish
         int flag=0;
-        for(i=0; i<this.dishes.size(); i++)
+        for(i=0; i<dishes.size(); i++)
         {
-            if(this.dishes.get(i).getName().equals(dish.name)) {
+            if(dishes.get(i).getName().equals(dish.name)) {
                 flag = 1;
                 break;
             }
@@ -167,7 +168,7 @@ public class Owner extends User{
     public void modifyDishes(String nameOfOwner, String oldNameOfDish, String newNameOfDish, double price, String type, String introduction) throws AppException {
         int i;
         try {
-            this.dishes = Database.getDishList(nameOfOwner);
+            dishes = Database.getDishList(nameOfOwner);
         }catch (SQLException e)
         {
             throw new AppException("获取菜品列表失败！！");
@@ -185,9 +186,9 @@ public class Owner extends User{
 
         //记录数据库中是否有dish
         int flag=0;
-        for(i=0; i<this.dishes.size(); i++)
+        for(i=0; i<dishes.size(); i++)
         {
-            if(this.dishes.get(i).getName().equals(oldNameOfDish)) {
+            if(dishes.get(i).getName().equals(oldNameOfDish)) {
                 flag = 1;
                 break;
             }
@@ -235,7 +236,7 @@ public class Owner extends User{
     public void pullOffDishes(String nameOfOwner, String nameOfDish, double price, String type, String introduction) throws AppException {
         int i;
         try {
-            this.dishes = Database.getDishList(nameOfOwner);
+            dishes = Database.getDishList(nameOfOwner);
         }catch (SQLException e)
         {
             throw new AppException("获取菜品列表失败！！");
@@ -250,9 +251,9 @@ public class Owner extends User{
 
         //记录数据库中是否有dish
         int flag = 0;
-        for(i=0; i<this.dishes.size(); i++)
+        for(i=0; i<dishes.size(); i++)
         {
-            if(this.dishes.get(i).getName().equals(dish.name)) {
+            if(dishes.get(i).getName().equals(dish.name)) {
                 flag = 1;
                 break;
             }
@@ -363,6 +364,57 @@ public class Owner extends User{
         return visit;
     }
 
+    /**
+     * 这个方法用于传入商家的名称，来获得菜品列表。
+     */
+    public List<Dish> obtainDishes(String ownerName) throws AppException {
+        // 尝试导出菜品列表。
+        List<Dish> tmp_dishes;
+        try {
+            tmp_dishes = Database.getDishList(ownerName);
+        } catch (SQLException e) {
+            throw new AppException("导出商家菜品列表失败！！");
+        }
+        return tmp_dishes;
+    }
+
+    /**
+     * 这个方法用于传入商家的名称，来获得商家的评论列表。
+     */
+    public List<Comment> getOwnerComments(String ownerName) throws AppException{
+        List<Comment> tmp_comments;
+        try {
+            tmp_comments = Database.getOwnerComments(ownerName);
+        } catch (SQLException e) {
+            throw new AppException("导出商家菜品列表失败！！");
+        }
+        return tmp_comments;
+    }
+
+    /**
+     * 这个方法用于传入商家的名称，来使订单状态变为已完成状态。
+     */
+    public void cookOrder(Date date) throws AppException{
+        Order tmp_order;
+        try{
+            tmp_order = Database.getOrderByTime(date);
+        }catch(SQLException e){
+            throw new AppException("获得商家订单失败！！");
+        }
+        
+        tmp_order.cooked = true;
+        // 将此订单加入已制作订单列表中
+        this.orders_cooked.add(tmp_order);
+        // 从未制作订单列表中删除此订单
+        this.orders_uncooked.remove(tmp_order);
+
+        // 向数据库中实时保存订单,并抓取可能发生的异常
+        try{
+            Database.insertOrder(tmp_order);
+        }catch (SQLException e){
+            throw new AppException("保存订单失败");
+        }
+    }
 
     /**
      * 如果商家想要查看自己制作完成的订单，那么我们可以提供商家已完成的订单列表。

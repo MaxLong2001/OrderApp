@@ -535,6 +535,35 @@ public class Database {
     }
 
     /**
+     * 根据订单时间查询订单
+     * 根据传入的订单时间查询数据库中的订单，并返回该订单
+     *
+     * @param orderTime 订单时间
+     * @return 订单
+     */
+    public static Order getOrderByTime(Date orderTime) throws SQLException, AppException {
+        String sql = "SELECT * FROM orders WHERE order_time = '" + orderTime + "'";
+        stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        Order order = new Order();
+        while (rs.next()) {
+            order.setNameOfCustomer(getCustomerName(rs.getInt("customer_id")));
+            order.setNameOfOwner(getOwnerName(rs.getInt("owner_id")));
+
+            order.setPrice(rs.getDouble("total"));
+            order.setCompleted(rs.getBoolean("completed"));
+            order.setCooked(rs.getBoolean("cooked"));
+            order.setOrderTime(rs.getTimestamp("order_time"));
+
+            HashMap<String, Integer> dishList = getOrderDishList(rs.getInt("id"));
+            order.setDishes(dishList);
+        }
+        rs.close();
+        stmt.close();
+        return order;
+    }
+
+    /**
      * 查询所有商家
      * 查询数据库中的所有商家，并返回该商家列表
      *

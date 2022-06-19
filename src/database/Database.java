@@ -167,7 +167,7 @@ public class Database {
         String sqlFindOwnerId = "SELECT id FROM owner WHERE name = '" + ownerName + "'";
         stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(sqlFindOwnerId);
-        int ownerId = 0;
+        int ownerId;
         if (rs.next()) {
             ownerId = rs.getInt("id");
         } else {
@@ -821,7 +821,7 @@ public class Database {
      *
      * @param ownerName 商家名
      * @param dishName  菜品
-     * @SQLException 数据库查询错误
+     * @throws SQLException 数据库查询错误
      * @throws AppException 商家不存在该菜品
      */
     public static void addDishQuantity(String ownerName, String dishName) throws SQLException, AppException {

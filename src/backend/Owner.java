@@ -124,7 +124,7 @@ public class Owner extends User{
     public void addDishes(String nameOfOwner, String nameOfDish, double price, String type, String introduction) throws AppException {
         int i;
         try {
-            dishes = Database.getDishList(nameOfOwner);
+            this.dishes = Database.getDishList(nameOfOwner);
         }catch (SQLException e)
         {
             throw new AppException("获取菜品列表失败！！");
@@ -139,9 +139,9 @@ public class Owner extends User{
 
         //记录数据库中是否有dish
         int flag=0;
-        for(i=0; i<dishes.size(); i++)
+        for(i=0; i<this.dishes.size(); i++)
         {
-            if(dishes.get(i).getName().equals(dish.name)) {
+            if(this.dishes.get(i).getName().equals(dish.name)) {
                 flag = 1;
                 break;
             }
@@ -164,7 +164,7 @@ public class Owner extends User{
     public void modifyDishes(String nameOfOwner, String oldNameOfDish, String newNameOfDish, double price, String type, String introduction) throws AppException {
         int i;
         try {
-            dishes = Database.getDishList(nameOfOwner);
+            this.dishes = Database.getDishList(nameOfOwner);
         }catch (SQLException e)
         {
             throw new AppException("获取菜品列表失败！！");
@@ -182,9 +182,9 @@ public class Owner extends User{
 
         //记录数据库中是否有dish
         int flag=0;
-        for(i=0; i<dishes.size(); i++)
+        for(i=0; i<this.dishes.size(); i++)
         {
-            if(dishes.get(i).getName().equals(oldNameOfDish)) {
+            if(this.dishes.get(i).getName().equals(oldNameOfDish)) {
                 flag = 1;
                 break;
             }
@@ -232,7 +232,7 @@ public class Owner extends User{
     public void pullOffDishes(String nameOfOwner, String nameOfDish, double price, String type, String introduction) throws AppException {
         int i;
         try {
-            dishes = Database.getDishList(nameOfOwner);
+            this.dishes = Database.getDishList(nameOfOwner);
         }catch (SQLException e)
         {
             throw new AppException("获取菜品列表失败！！");
@@ -247,9 +247,9 @@ public class Owner extends User{
 
         //记录数据库中是否有dish
         int flag = 0;
-        for(i=0; i<dishes.size(); i++)
+        for(i=0; i<this.dishes.size(); i++)
         {
-            if(dishes.get(i).getName().equals(dish.name)) {
+            if(this.dishes.get(i).getName().equals(dish.name)) {
                 flag = 1;
                 break;
             }

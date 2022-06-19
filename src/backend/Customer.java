@@ -457,8 +457,7 @@ public class Customer extends User{
      * 也可以输入评分内容。
      * @param rating 前端对商家的评分
      * @param comment 前端对商家的评分内容
-     * @throws AppException 数据库插入评论异常
-     * @throws backend.CustomerException.Comment.UnQualified 用户没有资格评价异常
+     * @throws AppException 数据库插入评论异常 没有资格评论异常
      */
     public void Comment(double rating, String comment) throws AppException{
 

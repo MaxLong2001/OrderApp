@@ -146,9 +146,12 @@ public class Owner extends User{
                 break;
             }
         }
-        if(flag==0)
-        this.dishes.add(dish);
-        else throw new AppException("菜品重复！！");
+        if(flag == 0) {
+            this.dishes.add(dish);
+        }
+        else {
+            throw new AppException("菜品重复！！");
+        }
 
         try {
             Database.insertDish(dish,nameOfOwner);

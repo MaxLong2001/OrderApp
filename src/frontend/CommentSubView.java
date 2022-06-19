@@ -4,6 +4,7 @@ import backend.AppException.AppException;
 import backend.Comment;
 import backend.Customer;
 import backend.Owner;
+import database.Database;
 import frontend.Tool.MyButton;
 import frontend.Tool.MyItem;
 import frontend.Tool.MyList;
@@ -28,7 +29,11 @@ public class CommentSubView extends MyView {
         commentItemList = new MyList();
         commentItemList.setHeight(500);
 
-        comments = owner.comments;
+        try{
+            comments = Database.getOwnerComments(owner.getName());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         for (Comment comment : comments){
             CommentItem commentItem = new CommentItem(comment);
             commentItemList.addItem(commentItem);
@@ -42,7 +47,12 @@ public class CommentSubView extends MyView {
         commentItemList = new MyList();
         commentItemList.setHeight(500);
 
-        comments = owner.comments;
+        try{
+            comments = Database.getOwnerComments(owner.getName());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         for (Comment comment : comments){
             CommentItem commentItem = new CommentItem(comment);
             commentItemList.addItem(commentItem);
@@ -92,6 +102,7 @@ public class CommentSubView extends MyView {
                         commentItemList.addItem(new CommentItem(comment));
                         repaint();
                         commentItemList.repaint();
+                        throw new AppException("发送评论成功");
                     }catch (AppException ex){
                         ex.message(NewCommentArea.this);
                     }

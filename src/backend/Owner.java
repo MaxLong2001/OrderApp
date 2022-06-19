@@ -360,6 +360,9 @@ public class Owner extends User{
         return visit;
     }
 
+    /**
+     * 这个方法用于传入商家的名称，来获得菜品列表。
+     */
     public List<Dish> obtainDishes(String ownerName) throws AppException {
         // 尝试导出菜品列表。
         List<Dish> tmp_dishes;
@@ -370,6 +373,20 @@ public class Owner extends User{
         }
         return tmp_dishes;
     }
+
+    /**
+     * 这个方法用于传入商家的名称，来获得商家的评论列表。
+     */
+    public List<Comment> getOwnerComments(String ownerName) throws AppException{
+        List<Comment> tmp_comments;
+        try {
+            tmp_comments = Database.getOwnerComments(ownerName);
+        } catch (SQLException e) {
+            throw new AppException("导出商家菜品列表失败！！");
+        }
+        return tmp_comments;
+    }
+    
     /**
      * 如果商家想要查看自己制作完成的订单，那么我们可以提供商家已完成的订单列表。
      * 注：按照时间排序(最近的在前）

@@ -382,7 +382,7 @@ public class Owner extends User{
     }
 
     /**
-     * 以下均是getter&setter方法
+     * 以下均是设置和获取方法
      * 这个方法用于获取商家的名称
      */
     public String getName() {

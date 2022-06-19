@@ -24,7 +24,7 @@ public class BackendTest {
         Customer customer = null;
         Owner owner = null;
 
-        // ²âÊÔConstraint
+        // æµ‹è¯•Constraint
         try {
             customer = new Customer("test_customer", "12");
         }catch (AppException e){

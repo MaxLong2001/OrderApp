@@ -162,6 +162,11 @@ public class Customer extends User{
      */
     public void SetOwner(Owner arg_owner){
         owner = arg_owner;
+        try{
+            Database.visitOwner(arg_owner.name);
+        }catch (SQLException e){
+            System.out.println("数据库出错了！！");
+        }
     }
 
     /**

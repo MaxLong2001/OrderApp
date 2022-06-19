@@ -353,6 +353,7 @@ public class Customer extends User{
 
             // 更改剩余量和销量
             try {
+
                 SettleAll.SetAmount(tmp_dishes, owner.name, name, tmp_order.dishes.get(name));
             } catch (AppException e){
                 return e.toString();

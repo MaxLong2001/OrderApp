@@ -5,6 +5,7 @@ import backend.Recommend.ForCustomer;
 import backend.User;
 import database.Database;
 import frontend.Frontend;
+import frontend.Owner.ContentArea;
 import frontend.Tool.MyView;
 
 import javax.swing.*;
@@ -12,6 +13,8 @@ import java.awt.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class OwnerArea extends MyView {
@@ -58,6 +61,8 @@ public class OwnerArea extends MyView {
         vBox.add(ownerList);
 
         add(vBox);
+
+
     }
 
     public void setOwners(){

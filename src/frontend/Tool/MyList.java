@@ -15,7 +15,6 @@ public class MyList extends JPanel{
     private int width = 400;
     private int height = 400;
 
-    List<JPanel> orderItems = new ArrayList<>();
     Box vBox;
     public MyList(){
         vBox = Box.createVerticalBox();
@@ -35,6 +34,11 @@ public class MyList extends JPanel{
         this.height = height;
         scrollPane.setPreferredSize(new Dimension(scrollPane.getPreferredSize().width, height));
         repaint();
+    }
+
+    @Override
+    public void removeAll() {
+        vBox.removeAll();
     }
 
     public List<JPanel> getItems() {

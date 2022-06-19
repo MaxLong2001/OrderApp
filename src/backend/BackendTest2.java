@@ -13,11 +13,11 @@ public class BackendTest2 {
         Database.init();
         Customer customer = null;
         Owner owner = null;
-        try {
-            owner.addDishes("Owner","糖醋里脊","",);
-        }catch (AppException e){
-            System.out.println(e);
-        }
+//        try {
+//            owner.addDishes("Owner","糖醋里脊","",);
+//        }catch (AppException e){
+//            System.out.println(e);
+//        }
 
     }
 }

@@ -1,15 +1,16 @@
 package frontend.Owner;
 
+import backend.Dish;
 import backend.Order;
+import frontend.DishItem;
 import frontend.Frontend;
 import frontend.Tool.MyButton;
 import frontend.Tool.MyItem;
 import frontend.Tool.MyList;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.Timer;
 
 public class OrderList extends MyList {
     List<Order> orders;
@@ -22,6 +23,16 @@ public class OrderList extends MyList {
             addItem(orderItem);
         }
         setHeight(400);
+
+
+    }
+    public void fresh(){
+        removeAll();
+        for(Order o : orders){
+            OrderItem orderItem = new OrderItem(o);
+            addItem(orderItem);
+        }
+        repaint();
     }
 //    private void refresh(){
 //        List<Order> orders;

@@ -1,13 +1,14 @@
-package frontend.Customer.order;
+package frontend.Tool;
 
 import backend.Dish;
 import backend.Order;
 import frontend.DishItem;
 import frontend.Frontend;
-import frontend.Tool.MyList;
+import frontend.ModifyDish;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,11 +18,13 @@ import java.util.Set;
  * 商家的菜品清单，有分类选项卡
  */
 public class DishArea extends JPanel {
+    public MyButton newDish;
 
     JTabbedPane tabbedPane;
     Map<String, DishList> dishListMap = new HashMap<>();
 
     public DishArea(Map<String, List<Dish>> dishMap, Order order) {
+
 
         tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
         Set<Map.Entry<String, List<Dish>>> dishSet = dishMap.entrySet();
@@ -36,6 +39,33 @@ public class DishArea extends JPanel {
         }
 
         add(tabbedPane);
+    }
+    // 给商家用
+    public DishArea(Map<String, List<Dish>> dishMap) {
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        newDish = new MyButton("添加菜品");
+
+        tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
+        Set<Map.Entry<String, List<Dish>>> dishSet = dishMap.entrySet();
+        for(Map.Entry<String, List<Dish>> dishType : dishSet){
+            DishList dishList = new DishList(dishType.getValue());
+            dishListMap.put(dishType.getKey(), dishList);
+            tabbedPane.addTab(dishType.getKey(), dishList);
+            //向标签中嵌入组件
+//            JPanel tab = new JPanel();
+//            tab.add(new JLabel(dishType.getKey()));
+//            tabbedPane.setTabComponentAt(0, tab);
+        }
+
+        add(newDish);
+        add(tabbedPane);
+
+        newDish.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MyView.openWindow(new ModifyDish(Frontend.getLoginOwner()), "新增菜品");
+            }
+        });
     }
 }
 
@@ -60,6 +90,24 @@ class DishList extends MyList {
                 orderedNum = 0;
             }
             dishItem = new DishItem(DishItem.customerBrowse, d, orderedNum);
+            addItem(dishItem);
+        }
+
+        setHeight(400);
+    }
+    public DishList(List<Dish> dishes){
+        this.dishes = dishes;
+
+        for(Dish d : dishes){
+            DishItem dishItem;
+            int orderedNum;
+            if(order != null){
+                if(order.dishes.get(d.getName()) == null)orderedNum = 0;
+                else orderedNum = order.dishes.get(d.getName());
+            }else{
+                orderedNum = 0;
+            }
+            dishItem = new DishItem(DishItem.ownerBrowse, d, orderedNum);
             addItem(dishItem);
         }
 

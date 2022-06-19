@@ -13,9 +13,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.nio.file.NotLinkException;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
+import java.util.Timer;
 
 /**
  * 登录商家后进入的界面
@@ -30,33 +30,23 @@ public class OwnerView extends MyView {
     private ContentArea contentArea;
 
     public OwnerView(Owner owner) {
-        loginOwner = owner;
+        loginOwner = Frontend.getLoginOwner();
 
-        ownerArea = new OwnerArea(owner);
-        contentArea = new ContentArea(owner);
+        ownerArea = new OwnerArea();
+        contentArea = new ContentArea();
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         add(ownerArea);
         add(contentArea);
 
-        ownerArea.getModify().addActionListener(new ActionListener() {
+        ownerArea.getRefresh().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                openWindow(new ModifyView(loginOwner), "修改信息");
+                contentArea.refresh();
             }
         });
-        ownerArea.getComment().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                openWindow(new CommentSubView(loginOwner), "商家评论");
-            }
-        });
-        contentArea.dishList.newDish.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                openWindow(new ModifyDish(loginOwner), "新增菜品");
-            }
-        });
+
+
     }
 
 }

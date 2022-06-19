@@ -2,12 +2,10 @@ package frontend.Customer.order;
 
 import backend.*;
 import frontend.*;
-import frontend.Tool.MyColor;
-import frontend.Tool.MyItem;
+import frontend.Tool.DishArea;
 import frontend.Tool.MyView;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 

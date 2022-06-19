@@ -71,7 +71,7 @@ public class SettleAll{
                 // 向数据库中更新菜品信息
                 try {
 
-                    Database.changeDish(owner_name, temp);
+                    Database.changeDish(owner_name, temp.name, temp);
                 }catch (SQLException e){
                     throw new AppException("向数据库中保存食品信息错误！！");
                 }

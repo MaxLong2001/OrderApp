@@ -6,6 +6,8 @@ import frontend.Tool.MyButton;
 import frontend.Tool.MyItem;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class OwnerArea extends MyItem {
 
@@ -21,5 +23,13 @@ public class OwnerArea extends MyItem {
 
         addRight(comment);
         addRight(modify);
+
+
+        modify.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
     }
 }

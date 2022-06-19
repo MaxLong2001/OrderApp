@@ -9,7 +9,6 @@ import backend.Monitor.Constraint;
 import backend.AppException.AppException;
 import backend.CustomerException.Order.SettleAll;
 import backend.CustomerException.Unfinish.Compare;
-import backend.CustomerException.Comment.UnQualified;
 import backend.CustomerException.Order.AmountIllegal;
 import backend.CustomerException.Order.DishUndefined;
 import backend.CustomerException.Unfinish.UnfinishedException;

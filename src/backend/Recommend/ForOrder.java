@@ -17,16 +17,14 @@ public class ForOrder {
      * 按照日期顺序排序商家订单列表
      * @param orders 商家订单列表
      */
-    public static List<Order> OrderRecommend(List<Order> orders){
+    public static void OrderRecommend(List<Order> orders){
 
         // 将商家订单按照日期排序
         orders.sort(((o1, o2) -> {
             Date date1 = o1.orderTime;
             Date date2 = o2.orderTime;
-            return date1.compareTo(date2);
+            return date2.compareTo(date1);
         }));
 
-        // 返回上排序好的订单列表
-        return orders;
     }
 }

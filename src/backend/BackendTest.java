@@ -1,6 +1,7 @@
 package backend;
 
 import backend.AppException.AppException;
+import backend.Recommend.ForOrder;
 import database.Database;
 
 import java.sql.SQLException;
@@ -8,10 +9,10 @@ import java.util.List;
 
 public class BackendTest {
 
-    public static void print(List<Owner> owners){
+    public static void print(List<Order> orders){
 
-        for(Owner owner: owners){
-            System.out.println(owner.name + " " + owner.rating + " " + owner.visit);
+        for(Order order: orders){
+            System.out.println(order.orderTime);
         }
     }
 
@@ -44,18 +45,13 @@ public class BackendTest {
 
         customer.SetDish(dishes.get(0));
 
-        /*try{
-            customer.DelInOrder();
-        }catch (AppException e){
-            System.out.println(e);
-        }*/
+        System.out.println(customer.ShowFinished());
 
-        try{
-            customer.AddInOrder();
-        }catch (AppException e){
-            System.out.println(e);
-        }
+        print(customer.ShowFinished());
 
-        System.out.println(customer.Submit());
+        ForOrder.OrderRecommend(customer.ShowFinished());
+
+        print(customer.ShowFinished());
+
     }
 }

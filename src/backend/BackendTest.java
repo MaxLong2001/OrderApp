@@ -21,11 +21,37 @@ public class BackendTest {
 
         Database.init();
 
+
+        Customer customer = null;
+        Owner owner = null;
+
         // ≤‚ ‘Constraint
         try {
-            Constraint.CheckPwd("JASb_2");
+            customer = new Customer("test_customer", "12");
         }catch (AppException e){
             System.out.println(e);
         }
+
+        try {
+            owner = new Owner("test_owner", "");
+        }catch (AppException e){
+            System.out.println(e);
+        }
+
+        customer.SetOwner(owner);
+
+        List<Dish> dishes = Database.getDishList(owner.name);
+
+        customer.CurrentUnfinished();
+
+        customer.SetDish(dishes.get(0));
+
+        try{
+            customer.AddInOrder();
+        }catch (AppException e){
+            System.out.println(e);
+        }
+
+        customer.Submit();
     }
 }

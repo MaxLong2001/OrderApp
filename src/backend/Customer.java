@@ -348,6 +348,18 @@ public class Customer extends User{
 
         // 如果测试都成功
 
+        // 更改菜品的剩余量和销量
+        for(String name: tmp_order.dishes.keySet()){
+
+            // 更改剩余量和销量
+            try {
+
+                SettleAll.SetAmount(tmp_dishes, owner.name, name, tmp_order.dishes.get(name));
+            } catch (AppException e){
+                return e.toString();
+            }
+        }
+
         // 首先设置arg_order中的一系列数据
 
         // 将此订单设置称为已完成

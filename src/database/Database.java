@@ -794,6 +794,52 @@ public class Database {
     }
 
     /**
+     * 修改菜品余量
+     * 根据传入的商家名和菜品名查询数据库中的菜品记录，并修改该菜品的余量
+     *
+     * @param ownerName         商家名
+     * @param dishName          菜品名
+     * @param newRemainQuantity 新的余量
+     * @throws SQLException 数据库查询错误
+     * @throws AppException 商家修改出错
+     */
+    public static void changeDishRemainQuantity(String ownerName, String dishName, int newRemainQuantity) throws SQLException, AppException {
+        String sqlFindDish = "SELECT * FROM dish WHERE name = '" + dishName + "' AND owner_id = (SELECT id FROM owner WHERE name = '" + ownerName + "')";
+        stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sqlFindDish);
+        if (!rs.next()) {
+            throw new AppException("该商家不存在该菜品");
+        }
+
+        String sql = "UPDATE dish SET remain = '" + newRemainQuantity + "' WHERE owner_id = (SELECT id FROM owner WHERE name = '" + ownerName + "') AND name = '" + dishName + "'";
+        stmt.executeUpdate(sql);
+        stmt.close();
+    }
+
+    /**
+     * 修改菜品销量
+     * 根据传入的商家名和菜品名查询数据库中的菜品记录，并修改该菜品的销量
+     *
+     * @param ownerName        商家名
+     * @param dishName         菜品名
+     * @param newSalesQuantity 新的销量
+     * @throws SQLException 数据库查询错误
+     * @throws AppException 商家修改出错
+     */
+    public static void changeDishSalesQuantity(String ownerName, String dishName, int newSalesQuantity) throws SQLException, AppException {
+        String sqlFindDish = "SELECT * FROM dish WHERE name = '" + dishName + "' AND owner_id = (SELECT id FROM owner WHERE name = '" + ownerName + "')";
+        stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sqlFindDish);
+        if (!rs.next()) {
+            throw new AppException("该商家不存在该菜品");
+        }
+
+        String sql = "UPDATE dish SET sales = '" + newSalesQuantity + "' WHERE owner_id = (SELECT id FROM owner WHERE name = '" + ownerName + "') AND name = '" + dishName + "'";
+        stmt.executeUpdate(sql);
+        stmt.close();
+    }
+
+    /**
      * 商家删除菜品
      * 根据传入的商家名和菜品对象查询数据库中的菜品记录，并删除该菜品
      *

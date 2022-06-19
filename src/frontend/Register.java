@@ -39,6 +39,8 @@ public class Register extends MyView {
         box.add(btnPanel);
 
         add(box);
+        setPreferredSize(new Dimension(500, 500));
+
 
         registerBtn.addActionListener(new ActionListener() {
             @Override

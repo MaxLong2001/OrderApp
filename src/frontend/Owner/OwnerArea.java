@@ -17,8 +17,9 @@ public class OwnerArea extends MyItem {
     MyButton comment;
     MyButton modify;
     MyButton refresh;
+    Owner owner;
     public OwnerArea() {
-        Owner owner = Frontend.getLoginOwner();
+        owner = Frontend.getLoginOwner();
         getNameLabel().setText(owner.getName());
         getIntroductionArea().setText(owner.getIntroduction());
 
@@ -58,5 +59,11 @@ public class OwnerArea extends MyItem {
 
     public MyButton getRefresh() {
         return refresh;
+    }
+
+    public void refresh() {
+        getNameLabel().setText(owner.getName());
+        getIntroductionArea().setText(owner.getIntroduction());
+        repaint();
     }
 }

@@ -10,6 +10,7 @@ import frontend.Tool.MyItem;
 import frontend.Tool.MyView;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -30,11 +31,19 @@ public class DishItem extends MyItem {
     MyButton modify;
     MyButton ownerPlus;
     MyButton customerMinus;
-    MyButton customerPlus;
-    Dish dish;
+    public MyButton customerPlus;
+    public Dish dish;
+    public JLabel ordered;
+    public int orderdNum;
     public DishItem(int type, Dish dish, int orderdNum) {
+        this.orderdNum = orderdNum;
         this.customer = Frontend.getLoginCustomer();
-        this.owner = Frontend.getLoginOwner();
+        if(type == customerBrowse || type == customerOrder){
+            this.owner = Frontend.currentOwner;
+        }else{
+            this.owner = Frontend.getLoginOwner();
+
+        }
         this.dish = dish;
 
         getNameLabel().setText(dish.getName());
@@ -48,43 +57,53 @@ public class DishItem extends MyItem {
 
         JLabel remain = new JLabel();
         remain.setText("剩余数量 : " + dish.getRemainQuantity());
+        remain.setFont(new Font("黑体", Font.PLAIN, 15));
 
         JLabel price = new JLabel();
         price.setText("￥" + dish.getPrice());
+        price.setFont(new Font("黑体", Font.PLAIN, 15));
+
 
         JLabel amount = new JLabel();
         amount.setText("￥" + dish.getPrice() * orderdNum);
+        amount.setFont(new Font("黑体", Font.PLAIN, 15));
 
-        MyButton plus = new MyButton("+");
-        MyButton minus = new MyButton("-");
 
-        JLabel ordered = new JLabel();
+
+        ordered = new JLabel();
         ordered.setText("" + orderdNum);
+        ordered.setFont(new Font("黑体", Font.PLAIN, 15));
         JLabel ordered2 = new JLabel();
-        ordered.setText("数量 : " + orderdNum);
+        ordered2.setText("数量 : " + orderdNum);
+        ordered2.setFont(new Font("黑体", Font.PLAIN, 15));
 
         customerPlus = new MyButton("+");
+        customerPlus.setPreferredSize(new Dimension(30, 30));
         customerMinus = new MyButton("-");
+        customerMinus.setPreferredSize(new Dimension(30, 30));
         modify = new MyButton("修改菜品");
+        modify.setPreferredSize(new Dimension(50, 30));
         ownerPlus = new MyButton("+");
+        ownerPlus.setPreferredSize(new Dimension(30, 30));
+
 
 
         if(type == customerOrder){
 
-            addRight(customerMinus);
+//            addRight(customerMinus);
             addRight(ordered);
-            addRight(customerPlus);
+//            addRight(customerPlus);
         }else if(type == ownerOrder){
 //            addLeft(amount);
 
             addRight(ordered2);
         }else if(type == customerBrowse){
-            addLeft(remain);
+//            addLeft(remain);
             addLeft(price);
-            if(orderdNum > 0){
-                addRight(customerMinus);
-                addRight(ordered);
-            }
+//            if(orderdNum > 0){
+//                addRight(customerMinus);
+//                addRight(ordered);
+//            }
             addRight(customerPlus);
         }else if(type == ownerBrowse){
             addLeft(remain);
@@ -96,13 +115,15 @@ public class DishItem extends MyItem {
         customerPlus.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try{
-                    customer.SetDish(dish);
-                    customer.AddInOrder();
-                }catch (AppException ex){
-                    JOptionPane.showConfirmDialog(DishItem.this,
-                            ex, "错误提示", JOptionPane.DEFAULT_OPTION);
-                }
+//                try{
+//                    customer.SetDish(dish);
+//                    customer.AddInOrder();
+//                    todo 刷新order界面
+//
+//                }catch (AppException ex){
+//                    JOptionPane.showConfirmDialog(DishItem.this,
+//                            ex, "错误提示", JOptionPane.DEFAULT_OPTION);
+//                }
             }
         });
         customerMinus.addActionListener(new ActionListener() {
@@ -123,6 +144,9 @@ public class DishItem extends MyItem {
             public void actionPerformed(ActionEvent e) {
                 try{
                     owner.addDishQuantity(owner.getName(), dish.getName());
+                    dish.setRemainQuantity(dish.getRemainQuantity() + 1);
+                    remain.setText("剩余数量 : " + dish.getRemainQuantity());
+                    remain.repaint();
                 }catch (AppException ex){
                     ex.message(DishItem.this);
                 }
@@ -134,6 +158,9 @@ public class DishItem extends MyItem {
                 MyView.openWindow(new ModifyDish(owner, dish.name), "修改菜品");
             }
         });
+
+        setPreferredSize(new Dimension(400, 150));
+        setMaximumSize(new Dimension(400, 150));
     }
 
 
@@ -144,4 +171,12 @@ public class DishItem extends MyItem {
     public Dish getDish() {
         return dish;
     }
+
+    public void addOrderNum(){
+        orderdNum ++;
+        ordered.setText("" + orderdNum);
+        ordered.repaint();
+        repaint();
+    }
+
 }

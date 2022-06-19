@@ -76,11 +76,11 @@ public class ModifyDish extends JPanel {
                     String name = changeName.getText();
                     String intro = changIntro.getText();
                     String typeStr = changType.getText();
-                    Double price;
+                    Double price = 0.0;
                     try{
                         price = Double.parseDouble(changePrice.getText());
                     }catch (Exception exx){
-                        throw new AppException("价格格式错误");
+                        if(type == 1) throw new AppException("价格格式错误");
                     }
 
                     if(type == 1){

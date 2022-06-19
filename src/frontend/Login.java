@@ -9,6 +9,7 @@ import frontend.Tool.MyEvent;
 import frontend.Tool.MyView;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -17,6 +18,7 @@ import java.awt.event.ActionListener;
  * 当点击登录后该类如果获得登录的对象则传给
  */
 public class Login extends MyView {
+
 
     private String userName;
     private String pwd;
@@ -40,6 +42,7 @@ public class Login extends MyView {
         vBox.add(btnPanel);
 
         add(vBox);
+        setPreferredSize(new Dimension(500, 500));
     }
     class NameInput extends FormItem {
         public NameInput(){

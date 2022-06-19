@@ -42,7 +42,17 @@ public class OwnerView extends MyView {
         ownerArea.getRefresh().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 contentArea.refresh();
+                ownerArea.refresh();
+//                remove(ownerArea);
+//                remove(contentArea);
+
+//                ownerArea = new OwnerArea();
+//                contentArea = new ContentArea();
+//                add(ownerArea);
+//                add(contentArea);
+                repaint();
             }
         });
 

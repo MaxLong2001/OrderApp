@@ -15,7 +15,7 @@ public class MyList extends JPanel{
     private int width = 400;
     private int height = 400;
 
-    Box vBox;
+    public Box vBox;
     public MyList(){
         vBox = Box.createVerticalBox();
         scrollPane = new JScrollPane();

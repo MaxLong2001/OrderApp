@@ -35,7 +35,7 @@ public class ModifyView extends MyView {
         changeName = new FormItem("修改用户名");
         changPwd = new FormItem("修改密码", true);
         confirmPwd = new FormItem("确认新密码", true);
-        changeIntro = new FormItem("修改简介", true);
+        changeIntro = new FormItem("修改简介");
 
 
 
@@ -72,7 +72,7 @@ public class ModifyView extends MyView {
                         else  owner.modifyPwd(changPwd.getText());
                     }
                     if(!(changeIntro.getText() == null || changeIntro.getText().equals(""))){
-                        if(owner == null)owner.updateIntroduction(owner.getName(), changeIntro.getText());
+                        if(owner != null)owner.updateIntroduction(owner.getName(), changeIntro.getText());
                     }
                     JOptionPane.showConfirmDialog(ModifyView.this,
                             "修改成功！", "修改成功", JOptionPane.DEFAULT_OPTION);

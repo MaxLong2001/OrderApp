@@ -1,10 +1,12 @@
 package frontend;
 
 import backend.Customer;
+import backend.Order;
 import backend.Owner;
 import backend.User;
 import frontend.Customer.home.HomeView;
 import frontend.Customer.home.OwnerArea;
+import frontend.Customer.order.OrderView;
 import frontend.Owner.OwnerView;
 import frontend.Tool.MyEvent;
 import frontend.Tool.MyListener;
@@ -21,6 +23,8 @@ public class Frontend extends JFrame{
 
     static Customer loginCustomer;
     static Owner loginOwner;
+    public static Order currentOrder;
+    public static  Owner currentOwner;
 
     MyView nowView;
     Container content = getContentPane();
@@ -101,6 +105,9 @@ public class Frontend extends JFrame{
                     changeView(new OwnerView((Owner) user));
 
                 }
+            }else if (e instanceof OwnerArea.EnterOwner){
+                currentOwner = ((OwnerArea.EnterOwner)e).owner;
+                changeView(new OrderView(((OwnerArea.EnterOwner)e).owner));
             }
         }
     }

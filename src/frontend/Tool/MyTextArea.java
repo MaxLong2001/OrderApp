@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class MyTextArea extends JPanel {
-    private JTextArea textArea;
+    public JTextArea textArea;
     public MyTextArea(){
         textArea = new JTextArea();
         textArea.setEditable(false);

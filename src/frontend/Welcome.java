@@ -42,6 +42,8 @@ public class Welcome extends MyView {
         add(toLoginArea);
         add(Box.createVerticalStrut(30));
         add(toRegisterArea);
+        setPreferredSize(new Dimension(500, 500));
+
 
         toLogin.addActionListener(new ActionListener() {
             @Override

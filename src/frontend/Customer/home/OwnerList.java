@@ -1,6 +1,7 @@
 package frontend.Customer.home;
 
 import backend.Owner;
+import frontend.Tool.MyButton;
 import frontend.Tool.MyItem;
 import frontend.Tool.MyList;
 
@@ -20,13 +21,15 @@ public class OwnerList extends MyList {
 }
 class OwnerItem extends MyItem {
     int itemWidth = 400;
+    public MyButton enter;
+    public Owner owner;
 
     public OwnerItem(Owner owner){
+        this.owner = owner;
         getNameLabel().setText(owner.getName());
         getIntroductionArea().setText(owner.getIntroduction());
 
-        JButton enter = new JButton();
-        enter.setText("进入商家");
+        enter = new MyButton("进入商家");
 
         addRight(enter);
     }

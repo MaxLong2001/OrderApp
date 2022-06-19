@@ -6,10 +6,14 @@ import backend.User;
 import database.Database;
 import frontend.Frontend;
 import frontend.Owner.ContentArea;
+import frontend.Tool.MyEvent;
+import frontend.Tool.MyItem;
 import frontend.Tool.MyView;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +67,16 @@ public class OwnerArea extends MyView {
         add(vBox);
 
 
+//        List<JPanel> ownerItems = ownerList.getItems();
+//        for(JPanel item : ownerItems){
+//            ((OwnerItem)item).enter.addActionListener(new ActionListener() {
+//                @Override
+//                public void actionPerformed(ActionEvent e) {
+//                    dispatchMyEvent(new EnterOwner(((OwnerItem) item).owner));
+//                }
+//            });
+//        }
+
     }
 
     public void setOwners(){
@@ -85,5 +99,11 @@ public class OwnerArea extends MyView {
         }
     }
 
+    public static class EnterOwner extends MyEvent{
+        public Owner owner;
+        EnterOwner(Owner owner){
+            this.owner = owner;
+        }
+    }
 
 }

@@ -45,11 +45,14 @@ public class MyItem extends JPanel {
         nameArea = new JPanel();
         nameArea.setLayout(new FlowLayout(FlowLayout.LEFT));
         name = new JLabel();
+        name.setFont(new Font("黑体", Font.PLAIN, 30));
         nameArea.add(name);
-        nameArea.setBackground(MyColor.color2());
+        nameArea.setBackground(MyColor.color5());
 
         introductionArea = new MyTextArea();
         introductionArea.setPreferredSize(itemWidth, 2);
+        introductionArea.textArea.setFont(new Font("黑体", Font.ITALIC, 20));
+
 
         left = new JPanel();
         right = new JPanel();
@@ -67,9 +70,11 @@ public class MyItem extends JPanel {
 //        vBox.add(hBox);
 //
 //        add(vBox);
-        setBackground(MyColor.color1());
+//        setBackground(MyColor.color1());
         add(nameArea);
         add(introductionArea);
         add(bottomArea);
+
+        setBorder(BorderFactory.createLineBorder(MyColor.color7()));
     }
 }

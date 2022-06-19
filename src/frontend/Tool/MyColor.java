@@ -22,5 +22,8 @@ public class MyColor {
     static public Color color6(){
         return new Color(20, 148, 92);
     }
+    static public Color color7(){
+        return new Color(139, 139, 23);
+    }
 
 }

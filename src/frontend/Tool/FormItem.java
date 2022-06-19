@@ -54,7 +54,7 @@ public class FormItem extends JPanel {
             super.paintBorder(c, g, x, y, width, height);
             Graphics2D g2d = (Graphics2D)g;
             g2d.setStroke(new BasicStroke(10));
-            g2d.setColor(MyColor.color1());
+//            g2d.setColor(MyColor.color1());
             g2d.drawRoundRect(x, y, width - 1, height - 1, 25, 25);
         }
     }

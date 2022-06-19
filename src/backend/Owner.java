@@ -158,7 +158,7 @@ public class Owner extends User{
      * 这个方法用于商家修改菜品，传入对应的菜品
      * 修改成功则返回true
      */
-    public void modifyDishes(String nameOfOwner, String nameOfDish, double price, String type, String introduction) throws AppException {
+    public void modifyDishes(String nameOfOwner, String oldNameOfDish, String newNameOfDish, double price, String type, String introduction) throws AppException {
         int i;
         try {
             dishes = Database.getDishList(nameOfOwner);
@@ -169,7 +169,7 @@ public class Owner extends User{
 
         //临时变量dish存储输入的参数
         Dish dish = new Dish();
-        dish.name = nameOfDish;
+        dish.name = newNameOfDish;
         dish.price = price;
         dish.type = type;
         dish.introduction = introduction;
@@ -178,7 +178,7 @@ public class Owner extends User{
         int flag=0;
         for(i=0; i<dishes.size(); i++)
         {
-            if(dishes.get(i).getName().equals(dish.name)) {
+            if(dishes.get(i).getName().equals(oldNameOfDish)) {
                 flag = 1;
                 break;
             }
@@ -188,9 +188,21 @@ public class Owner extends User{
         else throw new AppException("不存在这样的菜品！！");
 
         try {
-            Database.changeDish(nameOfOwner,dish);
+            Database.changeDish(nameOfOwner,oldNameOfDish,dish);
         }catch (SQLException e){
             throw new AppException("更新菜品内容失败！！");
+        }
+    }
+
+    /**
+     * 这个方法用于商家增加菜品数量，传入商家名称和菜品名称
+     */
+    public void addDishQuantity(String ownerName, String dishName) throws AppException {
+        try {
+            Database.addDishQuantity(ownerName,dishName);
+        }catch (SQLException e)
+        {
+            throw new AppException("获取菜品列表失败！！");
         }
     }
 
@@ -274,54 +286,47 @@ public class Owner extends User{
     }
 
     /**
-     * 这个方法用于获取商家的名称
+     * 这个方法用于传入商家的名称，来获得简介。
      */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * 这个方法用于修改商家的名称
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * 这个方法用于获取商家的简介
-     */
-    public String getIntroduction() {
+    public String obtainIntroduction(String ownerName) throws AppException {
+        String introduction;
+        try {
+            introduction = Database.getOwner(ownerName).getIntroduction();
+        }catch (SQLException e)
+        {
+            throw new AppException("获得简介失败!!");
+        }
         return introduction;
     }
 
     /**
-     * 这个方法用于修改商家的简介
+     * 这个方法用于传入商家的名称，来获得评分。
      */
-    public void setIntroduction(String introduction) {
-        this.introduction = introduction;
-    }
-
-    /**
-     * 这个方法用于返回商家的评分
-     */
-    public double getRating() {
+    public double obtainRating(String ownerName) throws AppException {
+        double rating;
+        try {
+            rating = Database.getOwner(ownerName).getRating();
+        }catch (SQLException e)
+        {
+            throw new AppException("获得简介失败!!");
+        }
         return rating;
     }
 
     /**
-     * 这个方法用于修改商家的评分
+     * 这个方法用于传入商家的名称，来获得访问量。
      */
-    public void setRating(double rating) {
-        this.rating = rating;
-    }
-
-    public int getVisit() {
+    public int obtainVisit(String ownerName) throws AppException {
+        int visit;
+        try {
+            visit = Database.getOwner(ownerName).getVisit();
+        }catch (SQLException e)
+        {
+            throw new AppException("获得简介失败!!");
+        }
         return visit;
     }
 
-    public void setVisit(int visit) {
-        this.visit = visit;
-    }
 
     /**
      * 如果商家想要查看自己制作完成的订单，那么我们可以提供商家已完成的订单列表。
@@ -379,6 +384,61 @@ public class Owner extends User{
         });
         return orders_unfinished;
     }
+
+    /**
+     * 以下均是getter&setter方法
+     * 这个方法用于获取商家的名称
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * 这个方法用于修改商家的名称
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * 这个方法用于获取商家的简介
+     */
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    /**
+     * 这个方法用于修改商家的简介
+     */
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
+    }
+
+    /**
+     * 这个方法用于返回商家的评分
+     */
+    public double getRating() {
+        return rating;
+    }
+
+    /**
+     * 这个方法用于修改商家的评分
+     */
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public int getVisit() {
+        return visit;
+    }
+
+    public void setVisit(int visit) {
+        this.visit = visit;
+    }
+
+    /**
+     * 这个方法用于修改商家的名称
+     */
     @Override
     public void modifyName(String newName) throws AppException {
 
@@ -395,6 +455,9 @@ public class Owner extends User{
         this.name = newName;
     }
 
+    /**
+     * 这个方法用于修改商家的密码
+     */
     @Override
     public void modifyPwd(String newPwd) throws AppException {
 
@@ -411,3 +474,5 @@ public class Owner extends User{
         this.password = newPwd;
     }
 }
+
+

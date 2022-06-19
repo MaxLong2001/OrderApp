@@ -72,8 +72,7 @@ public class ModifyView extends MyView {
                         else  owner.modifyPwd(changPwd.getText());
                     }
                     if(!(changeIntro.getText() == null || changeIntro.getText().equals(""))){
-                        //todo
-//                        if(owner == null)owner.modifyIntro(changeIntro.getText());
+                        if(owner == null)owner.updateIntroduction(owner.getName(), changeIntro.getText());
                     }
                     JOptionPane.showConfirmDialog(ModifyView.this,
                             "修改成功！", "修改成功", JOptionPane.DEFAULT_OPTION);

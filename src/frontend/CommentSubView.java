@@ -1,5 +1,6 @@
 package frontend;
 
+import backend.AppException.AppException;
 import backend.Comment;
 import backend.Customer;
 import backend.Owner;
@@ -9,8 +10,11 @@ import frontend.Tool.MyList;
 import frontend.Tool.MyView;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class CommentSubView extends MyView {
 
@@ -62,11 +66,29 @@ class NewCommentArea extends MyItem{
         getIntroductionArea().setEditable();
 
         //打分区域
-        JTextArea rating = new JTextArea();
+        JTextField rating = new JTextField();
         MyButton commitBtn = new MyButton("发送评论");
 
         addLeft(rating);
         addRight(commitBtn);
+
+        commitBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try{
+                    Double ratingNum;
+                    try{
+                        ratingNum = Double.parseDouble(rating.getText());
+                    }catch (Exception exx){
+                        throw new AppException("评分格式错误");
+                    }
+                    Frontend.getLoginCustomer().Comment(ratingNum, getIntroductionArea().getText());
+                }catch (AppException ex){
+                    ex.message(NewCommentArea.this);
+                }
+
+            }
+        });
     }
 }
 class CommentItem extends MyItem{

@@ -41,7 +41,7 @@ public class MyView extends JPanel {
     /**
      * 打开一个窗口
      */
-    public void openWindow(JPanel view, String title){
+    public static void openWindow(JPanel view, String title){
         JFrame jFrame = new JFrame();
         jFrame.setSize(new Dimension(view.getPreferredSize()));
         jFrame.setTitle(title);

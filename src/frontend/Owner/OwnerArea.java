@@ -10,15 +10,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class OwnerArea extends MyItem {
-
+    MyButton comment;
+    MyButton modify;
     public OwnerArea(Owner owner) {
         getNameLabel().setText(owner.getName());
         getIntroductionArea().setText(owner.getIntroduction());
 
 
-        MyButton comment = new MyButton("查看评论");
+        comment = new MyButton("查看评论");
         comment.setPreferredSize(new Dimension(120, 30));
-        MyButton modify = new MyButton("修改信息");
+        modify = new MyButton("修改信息");
         modify.setPreferredSize(new Dimension(120, 30));
 
         addRight(comment);
@@ -31,5 +32,13 @@ public class OwnerArea extends MyItem {
 
             }
         });
+    }
+
+    public MyButton getComment() {
+        return comment;
+    }
+
+    public MyButton getModify() {
+        return modify;
     }
 }

@@ -1,12 +1,15 @@
 package frontend.Customer.home;
 
 import backend.Owner;
+import backend.Recommend.ForCustomer;
 import backend.User;
+import database.Database;
 import frontend.Frontend;
 import frontend.Tool.MyView;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,21 +26,22 @@ public class OwnerArea extends MyView {
     public OwnerArea(){
         setOwners();
 
+
         JLabel number = new JLabel();
-        number.setText("为您找到 " + owners.size() + " 个商家");
+        number.setText("为您推荐 " + owners.size() + " 个商家");
         JPanel numberArea = new JPanel();
         numberArea.add(number);
         numberArea.setLayout(new FlowLayout(FlowLayout.LEFT));
 
-        JComboBox type = new JComboBox();
+//        JComboBox type = new JComboBox();
 //        type.setText("排序方式");
-        JLabel type1 = new JLabel();
-        type1.setText("综合排序");
-        type.addItem("综合排序");
+//        JLabel type1 = new JLabel();
+//        type1.setText("综合排序");
+//        type.addItem("综合排序");
 
         JPanel typeArea = new JPanel();
         typeArea.setLayout(new FlowLayout(FlowLayout.RIGHT));
-        typeArea.add(type);
+//        typeArea.add(type);
 
 
 
@@ -68,8 +72,11 @@ public class OwnerArea extends MyView {
             owners.add(owner);
             owners.add(owner);
         }else {
-
-            // todo 获得商家列表
+            try{
+                owners = ForCustomer.OwnerRecommend(Database.getAllOwner());
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 

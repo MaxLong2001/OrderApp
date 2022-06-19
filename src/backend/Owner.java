@@ -147,7 +147,7 @@ public class Owner extends User{
             }
         }
         if(flag==0)
-        dishes.add(dish);
+        this.dishes.add(dish);
         else throw new AppException("菜品重复！！");
 
         try {
@@ -190,7 +190,7 @@ public class Owner extends User{
             }
         }
         if(flag==1)
-            dishes.set(i,dish);
+            this.dishes.set(i,dish);
         else throw new AppException("不存在这样的菜品！！");
 
         try {
@@ -255,7 +255,7 @@ public class Owner extends User{
             }
         }
         if(flag == 1)
-            dishes.remove(i);
+            this.dishes.remove(i);
         else throw new AppException("不存在这样的菜品！！");
 
         try {

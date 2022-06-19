@@ -10,6 +10,7 @@ import frontend.Tool.MyList;
 import frontend.Tool.MyView;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -53,44 +54,55 @@ public class CommentSubView extends MyView {
     }
 
 
-}
-class NewCommentArea extends MyItem{
-    private Owner owner;
-    private Customer customer;
+    class NewCommentArea extends MyItem{
+        private Owner owner;
+        private Customer customer;
 
-    public NewCommentArea(Owner owner, Customer customer){
-        this.owner = owner;
-        this.customer = customer;
+        public NewCommentArea(Owner owner, Customer customer){
+            this.owner = owner;
+            this.customer = customer;
 
-        getNameLabel().setText("新增评论");
-        getIntroductionArea().setEditable();
+            getNameLabel().setText("新增评论");
+            getIntroductionArea().setEditable();
 
-        //打分区域
-        JTextField rating = new JTextField();
-        MyButton commitBtn = new MyButton("发送评论");
+            //打分区域
+            JTextField rating = new JTextField();
+            rating.setPreferredSize(new Dimension(60, 30));
+            MyButton commitBtn = new MyButton("发送评论");
+            commitBtn.setPreferredSize(new Dimension(60, 30));
 
-        addLeft(rating);
-        addRight(commitBtn);
+            addLeft(rating);
+            addRight(commitBtn);
 
-        commitBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try{
-                    Double ratingNum;
+            commitBtn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
                     try{
-                        ratingNum = Double.parseDouble(rating.getText());
-                    }catch (Exception exx){
-                        throw new AppException("评分格式错误");
+                        Double ratingNum;
+                        try{
+                            ratingNum = Double.parseDouble(rating.getText());
+                        }catch (Exception exx){
+                            throw new AppException("评分格式错误");
+                        }
+                        Frontend.getLoginCustomer().Comment(ratingNum, getIntroductionArea().getText());
+                        Comment comment = new Comment();
+                        comment.setRating(ratingNum);
+                        comment.setCustomerName(Frontend.getLoginCustomer().getName());
+                        comment.setContent(getIntroductionArea().getText());
+                        commentItemList.addItem(new CommentItem(comment));
+                        repaint();
+                        commentItemList.repaint();
+                    }catch (AppException ex){
+                        ex.message(NewCommentArea.this);
                     }
-                    Frontend.getLoginCustomer().Comment(ratingNum, getIntroductionArea().getText());
-                }catch (AppException ex){
-                    ex.message(NewCommentArea.this);
-                }
 
-            }
-        });
+                }
+            });
+        }
     }
+
 }
+
 class CommentItem extends MyItem{
     public CommentItem(Comment comment){
         getNameLabel().setText(comment.getCustomerName() + "的评论");

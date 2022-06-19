@@ -237,6 +237,7 @@ public class Customer extends User{
             this.tmp_order.price = 0;
             this.tmp_order.completed = false;
             this.tmp_order.cooked = false;
+            this.tmp_order.dishes = new HashMap<>();
 
             // 暂时先将这一元素设置为null，等待之后提交订单的时候再赋值。
             this.tmp_order.orderTime = null;
@@ -246,16 +247,19 @@ public class Customer extends User{
         HashMap<String, Integer>tmp_dishes = this.tmp_order.dishes;
         String tmp_name = this.dish.name;
 
-        // 如果菜品还没有添加，那么添加菜品
-        tmp_dishes.putIfAbsent(tmp_name, 1);
-
         // 如果添加了菜品，那么将菜品的数量加 1
         if(tmp_dishes.get(tmp_name) != null){
             tmp_dishes.put(tmp_name, tmp_dishes.get(tmp_name) + 1);
         }
 
+        // 如果菜品还没有添加，那么添加菜品
+        tmp_dishes.putIfAbsent(tmp_name, 1);
+
         // 实时计算订单的价格
         this.tmp_order.price += dish.price;
+
+        // 设置订单时间为实时时间
+        this.tmp_order.orderTime = new Date(System.currentTimeMillis());
 
         // 实时向数据库中保存当前订单内容
         try {
@@ -296,6 +300,9 @@ public class Customer extends User{
 
         // 实时计算订单的价格
         this.tmp_order.price -= dish.price;
+
+        // 设置订单时间为当前时间
+        this.tmp_order.orderTime = new Date(System.currentTimeMillis());
 
         // 实时向数据库中保存当前订单内容
         try {

@@ -34,4 +34,7 @@ public class MyTextArea extends JPanel {
         textArea.setFocusable(true);
         textArea.setLineWrap(true);
     }
+    public String getText(){
+        return textArea.getText();
+    }
 }

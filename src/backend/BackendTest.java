@@ -44,8 +44,20 @@ public class BackendTest {
 
         customer.SetDish(dishes.get(0));
 
+        /*try{
+            customer.DelInOrder();
+        }catch (AppException e){
+            System.out.println(e);
+        }*/
+
         try{
             customer.AddInOrder();
+        }catch (AppException e){
+            System.out.println(e);
+        }
+
+        try{
+            customer.DelInOrder();
         }catch (AppException e){
             System.out.println(e);
         }

@@ -86,10 +86,10 @@ public class Owner extends User{
         this.orders_uncooked = new ArrayList<>();
         // 将导出的订单列表按照是否完成进行分类
         for(Order order: tmp_orders){
-            if(order.completed){
+            if(order.completed&&order.cooked){
                 this.orders_cooked.add(order);
             }
-            else{
+            else if(order.completed&&!order.cooked){
                 this.orders_uncooked.add(order);
             }
         }

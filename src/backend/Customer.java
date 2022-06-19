@@ -376,7 +376,11 @@ public class Customer extends User{
         List<Dish> tmp_dishes;
 
         // 爬取当前商家的订单列表
-        tmp_dishes = owner.dishes;
+        try {
+            tmp_dishes = Database.getDishList(owner.name);
+        }catch (SQLException e){
+            return "导出菜品列表失败！！";
+        }
 
         // 菜品数目变量
         int amount = 0;

@@ -104,6 +104,9 @@ public class Database {
         rsFromCustomer.close();
         rsFromOwner.close();
 
+        if (introduction == null || introduction.equals("") || introduction.equals("null")) {
+            introduction = "暂无简介";
+        }
         String sql = "INSERT INTO owner (name, introduction, password) VALUES ('" + ownerName + "', '" + introduction + "', '" + password + "')";
         stmt.executeUpdate(sql);
         stmt.close();
@@ -809,14 +812,23 @@ public class Database {
         String sqlFindDish = "SELECT * FROM dish WHERE name = '" + oldDishName + "' AND owner_id = (SELECT id FROM owner WHERE name = '" + ownerName + "')";
         stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(sqlFindDish);
+        String oldName;
+        double oldPrice;
+        String oldIntroduction;
+        String oldType;
         if (!rs.next()) {
             throw new AppException("该商家不存在该菜品");
+        } else {
+            oldName = rs.getString("name");
+            oldPrice = rs.getDouble("price");
+            oldIntroduction = rs.getString("introduction");
+            oldType = rs.getString("type");
         }
 
-        String newName = dish.getName();
-        double newPrice = dish.getPrice();
-        String newIntroduction = dish.getIntroduction();
-        String newType = dish.getType();
+        String newName = dish.getName().equals("") ? oldName : dish.getName();
+        double newPrice = dish.getPrice() == 0 ? oldPrice : dish.getPrice();
+        String newIntroduction = dish.getIntroduction().equals("") ? oldIntroduction : dish.getIntroduction();
+        String newType = dish.getType().equals("") ? oldType : dish.getType();
         String sql = "UPDATE dish SET name = '" + newName + "', price = '" + newPrice + "', introduction = '" + newIntroduction + "', type = '" + newType + "' WHERE owner_id = (SELECT id FROM owner WHERE name = '" + ownerName + "') AND name = '" + oldDishName + "'";
         stmt.executeUpdate(sql);
         stmt.close();
@@ -969,20 +981,6 @@ public class Database {
             return rs.getString("name");
         } else {
             throw new AppException("菜品id不存在");
-        }
-    }
-
-    /**
-     * 测试用方法
-     *
-     * @throws SQLException 数据库查询错误
-     */
-    public static void test_select() throws SQLException {
-        stmt = conn.createStatement();
-        String sql = "select id from test_table";
-        ResultSet rs = stmt.executeQuery(sql);
-        while (rs.next()) {
-            System.out.println(rs.getInt("id"));
         }
     }
 }
